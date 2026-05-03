@@ -96,9 +96,11 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
     <div className="flex flex-col h-screen bg-gray-50 font-sans overflow-hidden">
       {/* Floating Header */}
       <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 backdrop-blur-md shadow-lg rounded-full z-20">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-          <Image src="/daegu_logo.png" alt="EduMaps Logo" width={36} height={36} className="object-contain rounded-full" />
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">EduMaps</h1>
+        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/')}>
+          <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
+            <Image src="/daegu_logo.png" alt="EduMaps Logo" fill className="object-contain rounded-full" />
+          </div>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">EduMaps</h1>
         </div>
         <nav className="hidden sm:flex gap-2">
           <div className="group relative">
@@ -462,6 +464,25 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 </a>
               </div>
               <div className="flex gap-2">
+                <button 
+                  onClick={() => {
+                    const url = window.location.origin;
+                    if (navigator.share) {
+                      navigator.share({
+                        title: 'EduMaps - 대구 에듀테크 지도',
+                        text: '대구의 체험학습과 온라인 학습 자원을 한눈에 확인하세요!',
+                        url: url,
+                      }).catch(() => {});
+                    } else {
+                      navigator.clipboard.writeText(url).then(() => {
+                        alert('사이트 주소가 복사되었습니다.');
+                      });
+                    }
+                  }}
+                  className="px-6 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold rounded-full hover:bg-emerald-100 transition-colors text-sm flex items-center gap-2"
+                >
+                  <Navigation className="w-4 h-4 rotate-45" /> 공유하기
+                </button>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdFO6QElrq-wHApWi8RUl6bDhlGDJC_IuRHIPyWvl5f9sGenA/viewform" target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 bg-white border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-colors text-sm">의견 남기기</a>
                 <button onClick={() => setIsModalOpen(false)} className="px-6 py-2.5 bg-slate-800 text-white font-semibold rounded-full hover:bg-slate-700 transition-colors text-sm">닫기</button>
               </div>
