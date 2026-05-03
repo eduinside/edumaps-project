@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   title: "EduMaps - Educational Resources for Kids",
   description: "A curated directory of local field trip locations and self-directed learning resources tailored to the elementary curriculum.",
   icons: {
-    icon: '/favicon.ico',
+    icon: '/daegu_logo.png',
+    apple: '/daegu_logo.png',
   },
 };
 
