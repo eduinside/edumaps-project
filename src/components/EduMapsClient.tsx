@@ -164,6 +164,43 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         <div className={`absolute top-24 left-4 z-10 w-full max-w-[340px] transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+2rem)]'}`}>
           <div className="bg-white/90 backdrop-blur-md rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
             <div className="p-7 pb-4">
+              {/* 모바일 전용 탭 네비게이션 */}
+              <div className="sm:hidden grid grid-cols-3 gap-1.5 mb-4 p-1.5 bg-slate-100 rounded-2xl">
+                <button
+                  onClick={() => handleTabChange("visitmap")}
+                  className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
+                    activeTab === "OFFLINE"
+                      ? "bg-white text-emerald-600 shadow-sm"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <MapPin className="w-4 h-4" />
+                  <span>체험학습</span>
+                </button>
+                <button
+                  onClick={() => handleTabChange("online")}
+                  className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
+                    activeTab === "ONLINE"
+                      ? "bg-white text-emerald-600 shadow-sm"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <MonitorPlay className="w-4 h-4" />
+                  <span>온라인</span>
+                </button>
+                <button
+                  onClick={() => handleTabChange("roadmap")}
+                  className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
+                    activeTab === "GRADE"
+                      ? "bg-white text-emerald-600 shadow-sm"
+                      : "text-slate-500 hover:text-slate-700"
+                  }`}
+                >
+                  <BookOpen className="w-4 h-4" />
+                  <span>로드맵</span>
+                </button>
+              </div>
+
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-slate-800">
                   {activeTab === "OFFLINE" ? "장소" : activeTab === "ONLINE" ? "온라인" : "로드맵"}
@@ -248,9 +285,9 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
         {/* Floating Detail Panel */}
         {selectedResource && (
-          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
-            ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-3rem)] max-w-[500px] shadow-emerald-200/50"
-            : "top-24 right-4 w-[calc(100%-2rem)] sm:w-[350px] slide-in-from-right-4"
+          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white shadow-2xl border border-slate-100 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
+            ? "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[calc(100%-3rem)] sm:max-w-[500px] sm:max-h-[calc(100vh-8rem)] shadow-emerald-200/50"
+            : "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-auto sm:right-4 sm:w-[350px] sm:max-h-[85vh] slide-in-from-right-4"
             }`}>
             {/* Top Image Banner */}
             {selectedResource.image_url && (
@@ -340,14 +377,30 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-5">
+                <div className="space-y-4">
                   <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
                     <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
                   </div>
+
+                  {/* 온라인 탭 전용: 권장 학년 배지 */}
+                  {activeTab === "ONLINE" && selectedResource.recommended_grade?.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-2 px-1">
+                      <span className="text-xs font-bold text-slate-400">권장 학년</span>
+                      {selectedResource.recommended_grade.map((g: number) => (
+                        <span
+                          key={g}
+                          className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
+                        >
+                          {g}학년
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 
-              {selectedResource.recommended_grade?.length > 0 && (
+              {/* 비온라인 탭: 기존 구분선 형태 권장 학년 */}
+              {activeTab !== "ONLINE" && selectedResource.recommended_grade?.length > 0 && (
                 <div className="flex items-center gap-3 text-xs text-slate-400 font-bold px-2 py-4">
                   <div className="h-px flex-1 bg-slate-100"></div>
                   <span>권장 학년: {selectedResource.recommended_grade.join(', ')}학년</span>
@@ -433,13 +486,11 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               </section>
             </div>
 
-            <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
-              <div className="flex flex-col">
-                <a href="https://www.dge.go.kr/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                  <Image src="/daegu_logo.png" alt="대구교육청" width={60} height={60} className="object-contain" />
-                </a>
-              </div>
-              <div className="flex gap-2">
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex flex-row items-center justify-between gap-3">
+              <a href="https://www.dge.go.kr/" target="_blank" rel="noopener noreferrer" className="shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <Image src="/daegu_logo.png" alt="대구교육청" width={60} height={60} className="object-contain" />
+              </a>
+              <div className="flex flex-wrap justify-end gap-2">
                 <button
                   onClick={() => {
                     const url = window.location.origin;
@@ -455,12 +506,12 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                       });
                     }
                   }}
-                  className="px-6 py-2.5 bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold rounded-full hover:bg-emerald-100 transition-colors text-sm flex items-center gap-2"
+                  className="px-4 py-2 bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold rounded-full hover:bg-emerald-100 transition-colors text-sm flex items-center gap-1.5"
                 >
-                  <Navigation className="w-4 h-4 rotate-45" /> 공유하기
+                  <Navigation className="w-3.5 h-3.5 rotate-45" /> 공유하기
                 </button>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdFO6QElrq-wHApWi8RUl6bDhlGDJC_IuRHIPyWvl5f9sGenA/viewform" target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 bg-white border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-colors text-sm">의견 남기기</a>
-                <button onClick={() => setIsModalOpen(false)} className="px-6 py-2.5 bg-slate-800 text-white font-semibold rounded-full hover:bg-slate-700 transition-colors text-sm">닫기</button>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdFO6QElrq-wHApWi8RUl6bDhlGDJC_IuRHIPyWvl5f9sGenA/viewform" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-colors text-sm">의견 남기기</a>
+                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-slate-800 text-white font-semibold rounded-full hover:bg-slate-700 transition-colors text-sm">닫기</button>
               </div>
             </div>
           </div>
