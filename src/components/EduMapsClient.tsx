@@ -166,7 +166,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             <div className="p-7 pb-4">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-slate-800">
-                  {activeTab === "OFFLINE" ? "체험 장소" : activeTab === "ONLINE" ? "온라인 자원" : "로드맵"}
+                  {activeTab === "OFFLINE" ? "장소" : activeTab === "ONLINE" ? "온라인" : "로드맵"}
                   <span className="text-emerald-500 text-base ml-2">{filteredResources.length}</span>
                 </h2>
                 <button onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition-colors">
@@ -181,7 +181,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 {activeTab === "OFFLINE" && ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"].map(region => (
                   <button key={region} onClick={() => setSelectedCategory(region === selectedCategory ? null : region)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
                 ))}
-                {activeTab === "ONLINE" && ["언어", "수리", "디지털", "과학", "예체능", "자료검색"].map(cat => (
+                {activeTab === "ONLINE" && ["언어", "수리", "디지털", "과학", "예체능", "더 알아보기"].map(cat => (
                   <button key={cat} onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === cat ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{cat}</button>
                 ))}
               </div>
@@ -248,11 +248,10 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
         {/* Floating Detail Panel */}
         {selectedResource && (
-          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-300 ${
-            activeTab === "ONLINE" 
-              ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-3rem)] max-w-[500px] shadow-emerald-200/50" 
-              : "top-24 right-4 w-[calc(100%-2rem)] sm:w-[350px] slide-in-from-right-4"
-          }`}>
+          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
+            ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-3rem)] max-w-[500px] shadow-emerald-200/50"
+            : "top-24 right-4 w-[calc(100%-2rem)] sm:w-[350px] slide-in-from-right-4"
+            }`}>
             {/* Top Image Banner */}
             {selectedResource.image_url && (
               <div className={`relative w-full shrink-0 ${activeTab === "ONLINE" ? "h-64" : "h-48"}`}>
@@ -263,7 +262,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 </button>
                 <div className="absolute bottom-6 left-8">
                   <span className="px-3 py-1 bg-emerald-500 text-white text-[11px] font-black rounded-lg mb-3 inline-block shadow-lg shadow-emerald-500/30">
-                    {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인학습"}
+                    {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인 학습"}
                   </span>
                   <h2 className="text-2xl font-black text-white drop-shadow-xl tracking-tight">{selectedResource.title}</h2>
                 </div>
@@ -275,7 +274,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               <div className="p-8 pb-0 flex justify-between items-start shrink-0">
                 <div>
                   <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[11px] font-black rounded-lg mb-3 inline-block">
-                    {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인학습"}
+                    {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인 학습"}
                   </span>
                   <h2 className="text-2xl font-black text-slate-900 tracking-tight">{selectedResource.title}</h2>
                 </div>
@@ -298,7 +297,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
-                      <span className="text-base font-black text-emerald-800">학년 학습 로드맵</span>
+                      <span className="text-base font-black text-emerald-800">학년</span>
                     </div>
                     <div className="flex gap-1.5">
                       {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).subject && (
@@ -343,12 +342,11 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               ) : (
                 <div className="space-y-5">
                   <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
-                    <h5 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">장소 및 자원 소개</h5>
                     <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
                   </div>
                 </div>
               )}
-              
+
               {selectedResource.recommended_grade?.length > 0 && (
                 <div className="flex items-center gap-3 text-xs text-slate-400 font-bold px-2 py-4">
                   <div className="h-px flex-1 bg-slate-100"></div>
@@ -362,11 +360,11 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               <div className={`${activeTab === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
                 {selectedResource.external_url && (
                   <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 transition-all shadow-xl active:scale-95 ${activeTab === "ONLINE" ? "w-full" : ""}`}>
-                    <ExternalLink className="w-5 h-5" /> 웹사이트 바로가기
+                    <ExternalLink className="w-5 h-5" /> 웹사이트
                   </a>
                 )}
                 {selectedResource.type === "OFFLINE" && (
-                  <button 
+                  <button
                     onClick={() => {
                       const url = `https://map.kakao.com/link/to/${selectedResource.title},${selectedResource.location.lat},${selectedResource.location.lng}`;
                       window.open(url, '_blank');
@@ -388,7 +386,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
               <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <Map className="w-6 h-6 text-emerald-500" /> EduMaps 가이드
+                <Map className="w-6 h-6 text-emerald-500" /> EduMaps 이용방법
               </h2>
               <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
                 <X className="w-5 h-5" />
@@ -412,7 +410,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   <HelpCircle className="w-5 h-5 text-emerald-500" /> 소중한 의견을 들려주세요
                 </h3>
                 <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
-                  <p className="text-sm text-slate-600 leading-relaxed">EduMaps는 선생님들과 학생들을 위해 계속해서 발전하고 있습니다. 사용 중 불편한 점이나 추가되었으면 하는 장소가 있다면 아래 &apos;의견 남기기&apos;를 통해 알려주세요!</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">EduMaps는 대구광역시교육청의 사교육비 줄이기 대책의 일환으로 '초등 자기주도학습 정보모아' 팀에서 개발하였습니다. <br></br>자료 사용 중 불편한 점이나 추가되었으면 하는 장소가 있다면 아래 &apos;의견 남기기&apos;를 통해 알려주세요!</p>
                 </div>
               </section>
 
@@ -442,7 +440,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 </a>
               </div>
               <div className="flex gap-2">
-                <button 
+                <button
                   onClick={() => {
                     const url = window.location.origin;
                     if (navigator.share) {
@@ -450,7 +448,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         title: 'EduMaps - 대구 에듀테크 지도',
                         text: '대구의 체험학습과 온라인 학습 자원을 한눈에 확인하세요!',
                         url: url,
-                      }).catch(() => {});
+                      }).catch(() => { });
                     } else {
                       navigator.clipboard.writeText(url).then(() => {
                         alert('사이트 주소가 복사되었습니다.');
