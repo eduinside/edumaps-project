@@ -1,5 +1,6 @@
 import EduMapsClient from "../../components/EduMapsClient";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 // 1시간마다 데이터 캐시 갱신 (3600초)
 export const revalidate = 3600;
@@ -47,7 +48,11 @@ export default async function TabPage({ params }: { params: Promise<{ tab: strin
 
   const updatedTime = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
-  return <EduMapsClient initialData={resources} updatedTime={updatedTime} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EduMapsClient initialData={resources} updatedTime={updatedTime} />
+    </Suspense>
+  );
 }
 
 export async function generateStaticParams() {
