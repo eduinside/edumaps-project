@@ -8,11 +8,9 @@ export const revalidate = 3600;
 const ALLOWED_TABS = ["visitmap", "online", "roadmap"];
 
 export default async function TabPage({ params }: { params: Promise<{ tab: string }> }) {
-  // Next.js 15+ 규칙: params는 Promise이므로 await가 필요합니다.
   const resolvedParams = await params;
   const tab = resolvedParams.tab;
 
-  // 허용되지 않은 경로는 404 페이지를 보여줍니다.
   if (!ALLOWED_TABS.includes(tab)) {
     notFound();
   }
@@ -28,21 +26,23 @@ export default async function TabPage({ params }: { params: Promise<{ tab: strin
       });
       if (res.ok) {
         resources = await res.json();
-      } else {
-        throw new Error("Failed to fetch from GAS");
       }
-    } else {
-      const localResources = await import("../../data/resources.json");
-      resources = localResources.default;
+    } 
+    
+    // GAS 호출에 실패했거나 URL이 없는 경우 로컬 데이터 시도
+    if (!resources || resources.length === 0) {
+      try {
+        // Vercel 환경에서는 resources.json이 없을 수 있으므로 예외 처리
+        const localResources = await import("../../data/resources.json");
+        resources = localResources.default;
+      } catch (e) {
+        console.warn("No local fallback data found, using empty list.");
+        resources = [];
+      }
     }
   } catch (error) {
-    console.error("Data fetch failed, using fallback:", error);
-    try {
-      const fallback = await import("../../data/resources.json");
-      resources = fallback.default;
-    } catch (e) {
-      resources = [];
-    }
+    console.error("Data fetch process failed:", error);
+    resources = [];
   }
 
   const updatedTime = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
