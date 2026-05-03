@@ -98,7 +98,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
       <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 backdrop-blur-md shadow-lg rounded-full z-20">
         <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/')}>
           <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
-            <Image src="/daegu_logo.png" alt="EduMaps Logo" fill className="object-contain rounded-full" />
+            <Image src="/images/daegu_logo.webp" alt="EduMaps Logo" fill className="object-contain rounded-full" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">EduMaps</h1>
         </div>
@@ -488,7 +488,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
             <div className="p-4 border-t border-slate-100 bg-slate-50 flex flex-row items-center justify-between gap-3">
               <a href="https://www.dge.go.kr/" target="_blank" rel="noopener noreferrer" className="shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <Image src="/daegu_logo.png" alt="대구교육청" width={60} height={60} className="object-contain" />
+                <Image src="/images/daegu_logo.webp" alt="대구교육청" width={60} height={60} className="object-contain" />
               </a>
               <div className="flex flex-wrap justify-end gap-2">
                 <button
