@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Lexend:wght@600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.map-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAwxoPB_p_lFO7MrZ8AOBuDs7PwKkFBOmfM7ZuiisnCXRdwIImKuwFYMjaO9t8neS3W1KOob8XrfETi2ymhPlu5jAUlx7jps9Gq90XQmev4EF7iS34i7BEoBzejdJFA14739B24b58ldMz7lZYHYMctHXfx51w640P0-hgjczgGK53uedZ_ZxNi8iG8-HR-Ycs8L7lrp9afTMUOZwjhaPFi_sKdbkbOMn5R3DlEotTbDTFhhuJrWJExhlijkwzjKg4zlURdusiQmyIB);
+    background-size: cover;
+    background-position: center
+    }</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#fabd00",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "on-error": "#ffffff",
+                        "surface-container": "#edeeef",
+                        "secondary": "#006e1c",
+                        "outline-variant": "#c2c6d3",
+                        "inverse-on-surface": "#f0f1f2",
+                        "background": "#f8f9fa",
+                        "secondary-fixed": "#94f990",
+                        "outline": "#737783",
+                        "on-secondary-fixed-variant": "#005313",
+                        "secondary-fixed-dim": "#78dc77",
+                        "surface": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#205daf",
+                        "on-secondary-fixed": "#002204",
+                        "secondary-container": "#91f78e",
+                        "on-secondary-container": "#00731e",
+                        "tertiary-fixed": "#ffdf9e",
+                        "on-surface-variant": "#424751",
+                        "on-primary-container": "#dce6ff",
+                        "inverse-primary": "#aac7ff",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d7e3ff",
+                        "on-primary-fixed-variant": "#00458e",
+                        "inverse-surface": "#2e3132",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#004d9d",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-container": "#2c66b8",
+                        "on-tertiary-container": "#ffe3ae",
+                        "tertiary-container": "#836200",
+                        "surface-bright": "#f8f9fa",
+                        "surface-variant": "#e1e3e4",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191c1d",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "primary-fixed-dim": "#aac7ff",
+                        "on-primary-fixed": "#001b3e",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#664b00",
+                        "surface-container-high": "#e7e8e9",
+                        "on-tertiary-fixed": "#261a00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "20px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "xs": "4px",
+                        "map-overlay-gap": "12px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Lexend"],
+                        "h3": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "h2": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h1": ["32px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "h3": ["18px", {"lineHeight": "1.5", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background font-body-md text-on-surface overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 border-b bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold text-blue-700 dark:text-blue-300 font-['Plus_Jakarta_Sans'] antialiased">
+                EduMap 대구
+            </div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold h-16 flex items-center px-1" href="#">온라인 맵</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors h-16 flex items-center px-1" href="#">지역 체험 맵</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 transition-colors h-16 flex items-center px-1" href="#">이용 안내</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container border-none rounded-full text-body-md focus:ring-2 focus:ring-primary transition-all w-64" placeholder="교육 장소 검색..." type="text"/>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Map Canvas -->
+<main class="relative w-full h-screen pt-16 map-bg" data-location="Daegu, South Korea">
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+<!-- Grade Filter Bar (Top Center Overlay) -->
+<div class="absolute top-6 left-1/2 -translate-x-1/2 z-40">
+<div class="bg-surface-container-lowest/90 backdrop-blur-md shadow-[16px_blur_8%_rgba(44,102,184,0.05)] p-1.5 rounded-full flex gap-1 border border-outline-variant/30">
+<button class="px-5 py-2 rounded-full text-label-caps bg-primary text-on-primary shadow-sm transition-all">전체</button>
+<button class="px-5 py-2 rounded-full text-label-caps text-on-surface-variant hover:bg-surface-container transition-all">1학년</button>
+<button class="px-5 py-2 rounded-full text-label-caps text-on-surface-variant hover:bg-surface-container transition-all">2학년</button>
+<button class="px-5 py-2 rounded-full text-label-caps text-on-surface-variant hover:bg-surface-container transition-all">3학년</button>
+<button class="px-5 py-2 rounded-full text-label-caps text-on-surface-variant hover:bg-surface-container transition-all">4학년</button>
+<button class="px-5 py-2 rounded-full text-label-caps text-on-surface-variant hover:bg-surface-container transition-all">5학년</button>
+<button class="px-5 py-2 rounded-full text-label-caps text-on-surface-variant hover:bg-surface-container transition-all">6학년</button>
+</div>
+</div>
+<!-- Map Markers (Simulated) -->
+<div class="absolute top-[40%] left-[60%] -translate-x-1/2 -translate-y-1/2 group cursor-pointer">
+<div class="relative flex flex-col items-center">
+<div class="bg-primary text-on-primary p-2 rounded-full shadow-lg scale-110 border-2 border-white ring-4 ring-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="mt-2 bg-white px-3 py-1 rounded-lg shadow-md border border-slate-100">
+<span class="text-xs font-bold text-primary whitespace-nowrap">시민안전테마파크</span>
+</div>
+</div>
+</div>
+<div class="absolute top-[55%] left-[45%] group cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+<div class="bg-secondary text-on-secondary p-2 rounded-full shadow-md border-2 border-white">
+<span class="material-symbols-outlined text-[20px]">local_library</span>
+</div>
+</div>
+<div class="absolute top-[30%] left-[35%] group cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
+<div class="bg-tertiary-container text-on-tertiary-container p-2 rounded-full shadow-md border-2 border-white">
+<span class="material-symbols-outlined text-[20px]">museum</span>
+</div>
+</div>
+<!-- Resource Detail Panel (Left Sidebar Overlay) -->
+<aside class="absolute left-container-margin top-8 bottom-container-margin w-[400px] z-40 bg-surface-container-lowest/95 backdrop-blur-xl rounded-xl shadow-[0_16px_32px_rgba(44,102,184,0.12)] border border-white flex flex-col overflow-hidden transition-all">
+<div class="relative h-56 bg-surface-variant overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center bg-slate-200">
+<div class="text-center">
+<span class="material-symbols-outlined text-slate-400 text-5xl mb-2">image_search</span>
+<p class="text-body-md text-slate-500 font-medium">현장 이미지 준비 중</p>
+</div>
+</div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase tracking-wider">OFFLINE</span>
+<span class="bg-secondary px-3 py-1 rounded-full text-[10px] font-bold text-white tracking-wider">체험 가능</span>
+</div>
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur shadow-sm p-2 rounded-full hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">favorite</span>
+</button>
+</div>
+<div class="p-lg flex-1 overflow-y-auto space-y-lg custom-scrollbar">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface mb-2">대구시민안전테마파크</h2>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="px-2 py-1 bg-primary-fixed text-on-primary-fixed-variant rounded text-[11px] font-bold">1학년 권장</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded text-[11px] font-bold">교과: 사람들</span>
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant rounded text-[11px] font-bold">지도시기: 4월</span>
+</div>
+<div class="flex gap-2">
+<span class="text-primary font-medium text-body-md">#화재</span>
+<span class="text-primary font-medium text-body-md">#재난</span>
+<span class="text-primary font-medium text-body-md">#안전</span>
+</div>
+</div>
+<div class="space-y-md">
+<div class="bg-surface-container-low p-md rounded-xl border border-outline-variant/20">
+<h3 class="flex items-center gap-2 font-h3 text-h3 text-on-surface mb-3">
+<span class="material-symbols-outlined text-primary text-[20px]">help_center</span>
+                            관련 탐구 질문
+                        </h3>
+<ul class="space-y-2">
+<li class="text-body-md text-on-surface-variant leading-relaxed flex gap-2">
+<span class="text-primary font-bold">•</span>
+                                우리 집이나 학교에서 불이 나면 어떻게 해야 할까요?
+                            </li>
+<li class="text-body-md text-on-surface-variant leading-relaxed flex gap-2">
+<span class="text-primary font-bold">•</span>
+                                우리를 도와주시는 소방관 아저씨들은 어떤 일을 하시나요?
+                            </li>
+</ul>
+</div>
+<div class="bg-secondary-container/30 p-md rounded-xl border border-secondary/10">
+<h3 class="flex items-center gap-2 font-h3 text-h3 text-on-surface mb-3">
+<span class="material-symbols-outlined text-secondary text-[20px]">task_alt</span>
+                            사후 활동 제안
+                        </h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                            체험 후 느낀 점을 '안전 약속' 카드로 만들어보고, 우리 동네의 소방시설(소화전 등)을 찾아 사진을 찍어보세요.
+                        </p>
+</div>
+</div>
+</div>
+<div class="p-lg border-t border-slate-100 bg-white/50">
+<button class="w-full bg-primary py-4 rounded-xl text-on-primary font-bold text-body-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                    체험 예약하기
+                </button>
+</div>
+</aside>
+<!-- Floating Controls (Right Side) -->
+<div class="absolute right-container-margin bottom-container-margin flex flex-col gap-3 z-40">
+<button class="w-12 h-12 bg-white shadow-lg rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors border border-slate-100">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<div class="flex flex-col bg-white shadow-lg rounded-2xl border border-slate-100 overflow-hidden">
+<button class="w-12 h-12 flex items-center justify-center text-on-surface-variant hover:bg-slate-50 border-b border-slate-100">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center text-on-surface-variant hover:bg-slate-50">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+<button class="w-12 h-12 bg-primary shadow-lg rounded-full flex items-center justify-center text-on-primary hover:scale-105 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">layers</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-4 pb-safe bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 shadow-[0_-4px_16px_rgba(44,102,184,0.08)] z-50 rounded-t-2xl">
+<button class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 font-bold scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">language</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">온라인</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors">
+<span class="material-symbols-outlined">location_on</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">지역체험</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors">
+<span class="material-symbols-outlined">info</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">이용안내</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 transition-colors">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">내정보</span>
+</button>
+</nav>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #cbd5e1;
+        }
+    </style>
+</body></html>

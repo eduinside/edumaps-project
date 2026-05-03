@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduMap Kids - 온라인 학습 맵</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Lexend:wght@600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "surface-variant": "#e1e3e4",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary-container": "#00731e",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#664b00",
+                        "surface-bright": "#f8f9fa",
+                        "on-primary-fixed-variant": "#00458e",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d7e3ff",
+                        "surface-container": "#edeeef",
+                        "surface-container-low": "#f3f4f5",
+                        "surface": "#f8f9fa",
+                        "on-secondary-fixed": "#002204",
+                        "on-background": "#191c1d",
+                        "tertiary-container": "#836200",
+                        "on-primary-fixed": "#001b3e",
+                        "background": "#f8f9fa",
+                        "outline-variant": "#c2c6d3",
+                        "outline": "#737783",
+                        "on-primary-container": "#dce6ff",
+                        "inverse-primary": "#aac7ff",
+                        "surface-dim": "#d9dadb",
+                        "inverse-surface": "#2e3132",
+                        "secondary-fixed": "#94f990",
+                        "tertiary-fixed-dim": "#fabd00",
+                        "primary-fixed-dim": "#aac7ff",
+                        "on-surface": "#191c1d",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary": "#006e1c",
+                        "primary": "#004d9d",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#205daf",
+                        "surface-container-high": "#e7e8e9",
+                        "primary-container": "#2c66b8",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#ffdf9e",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-surface-variant": "#424751",
+                        "on-secondary-fixed-variant": "#005313",
+                        "secondary-fixed-dim": "#78dc77",
+                        "secondary-container": "#91f78e",
+                        "on-tertiary-container": "#ffe3ae"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "map-overlay-gap": "12px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "container-margin": "20px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Lexend"],
+                        "h1": ["Plus Jakarta Sans"],
+                        "h2": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h3": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "h1": ["32px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                        "h2": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["18px", {"lineHeight": "1.5", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-x-hidden">
+<!-- TopAppBar Shell -->
+<header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center px-6 h-16 w-full font-['Plus_Jakarta_Sans'] antialiased">
+<div class="text-xl font-bold text-blue-700 dark:text-blue-300">EduMap Kids</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 font-semibold py-1" href="#">온라인 맵</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 py-1 transition-colors" href="#">지역 체험 맵</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-blue-500 py-1 transition-colors" href="#">이용 안내</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-400">account_circle</span>
+</button>
+</div>
+</header>
+<main class="pt-16 pb-24 min-h-screen">
+<!-- Grade Filter Chips -->
+<div class="sticky top-16 z-40 bg-surface/80 backdrop-blur-sm py-4 border-b border-outline-variant">
+<div class="px-6 flex gap-3 overflow-x-auto hide-scrollbar">
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-primary-container text-on-primary-container font-semibold text-body-md shadow-sm ring-2 ring-primary">전체</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-body-md hover:bg-surface-variant transition-colors">1-2학년</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-body-md hover:bg-surface-variant transition-colors">3-4학년</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-body-md hover:bg-surface-variant transition-colors">5-6학년</button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-body-md hover:bg-surface-variant transition-colors">전학년</button>
+</div>
+</div>
+<!-- Content Canvas -->
+<div class="px-6 py-6 space-y-6">
+<!-- Resource Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_16px_rgba(44,102,184,0.08)] border border-outline-variant relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-primary"></div>
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-wrap gap-2">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">전학년</span>
+<span class="bg-secondary/10 text-secondary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">예술</span>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Chrome Music Lab</h3>
+<p class="text-body-md text-on-surface-variant mb-5">음악의 기초 원리를 웹 기술을 통해 시각적이고 인터랙티브하게 배울 수 있는 가상 음악 실험실입니다.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">language</span>
+<span class="text-[12px] font-medium">온라인 학습</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-semibold text-body-md shadow-sm hover:opacity-90 active:scale-95 transition-all">학습 시작</button>
+</div>
+</div>
+<!-- Resource Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_16px_rgba(44,102,184,0.08)] border border-outline-variant relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-tertiary"></div>
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-wrap gap-2">
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">3-6학년</span>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">과학</span>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Virtual Science Lab</h3>
+<p class="text-body-md text-on-surface-variant mb-5">복잡한 과학 실험을 가상 공간에서 안전하게 체험하며 원리를 탐구할 수 있는 물리/화학 시뮬레이션입니다.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">science</span>
+<span class="text-[12px] font-medium">시뮬레이션</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-semibold text-body-md shadow-sm hover:opacity-90 active:scale-95 transition-all">입장하기</button>
+</div>
+</div>
+<!-- Resource Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_16px_rgba(44,102,184,0.08)] border border-outline-variant relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-secondary"></div>
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-wrap gap-2">
+<span class="bg-secondary/10 text-secondary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">1-2학년</span>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">수학</span>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Math Play Zone</h3>
+<p class="text-body-md text-on-surface-variant mb-5">기초 연산과 도형 감각을 게임을 통해 자연스럽게 익히는 저학년 맞춤형 창의 수학 콘텐츠입니다.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">smart_toy</span>
+<span class="text-[12px] font-medium">게임형 학습</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-semibold text-body-md shadow-sm hover:opacity-90 active:scale-95 transition-all">플레이</button>
+</div>
+</div>
+<!-- Resource Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_16_rgba(44,102,184,0.08)] border border-outline-variant relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-error"></div>
+<div class="flex justify-between items-start mb-3">
+<div class="flex flex-wrap gap-2">
+<span class="bg-error/10 text-error px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">5-6학년</span>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-lg text-label-caps font-label-caps uppercase">코딩</span>
+</div>
+<span class="material-symbols-outlined text-outline">more_vert</span>
+</div>
+<h3 class="font-h3 text-h3 text-on-surface mb-2">Block Code Masters</h3>
+<p class="text-body-md text-on-surface-variant mb-5">블록 코딩을 통해 나만의 게임을 만들고 알고리즘의 기초를 다질 수 있는 고학년 심화 코딩 학습기입니다.</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-slate-500">
+<span class="material-symbols-outlined text-[20px]">code</span>
+<span class="text-[12px] font-medium">프로그래밍</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-semibold text-body-md shadow-sm hover:opacity-90 active:scale-95 transition-all">코드 작성</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-4 pb-safe bg-white dark:bg-slate-900 z-50 rounded-t-2xl border-t border-slate-100 dark:border-slate-800 shadow-[0_-4px_16px_rgba(44,102,184,0.08)] font-['Plus_Jakarta_Sans']">
+<a class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 font-bold group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform" style="font-variation-settings: 'FILL' 1;">language</span>
+<span class="text-[10px] font-medium">온라인</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">location_on</span>
+<span class="text-[10px] font-medium">지역체험</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">info</span>
+<span class="text-[10px] font-medium">이용안내</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 hover:text-blue-500 group" href="#">
+<span class="material-symbols-outlined group-active:scale-95 transition-transform">person</span>
+<span class="text-[10px] font-medium">내정보</span>
+</a>
+</nav>
+<!-- FAB for quick search/filter -->
+<button class="md:hidden fixed bottom-20 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center z-40 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[28px]">filter_alt</span>
+</button>
+</body></html>

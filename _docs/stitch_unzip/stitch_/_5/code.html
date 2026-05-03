@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Lexend:wght@600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#5b4300",
+                    "surface-variant": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-secondary-container": "#00731e",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#664b00",
+                    "surface-bright": "#f8f9fa",
+                    "on-primary-fixed-variant": "#00458e",
+                    "on-tertiary-fixed": "#261a00",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d7e3ff",
+                    "surface-container": "#edeeef",
+                    "surface-container-low": "#f3f4f5",
+                    "surface": "#f8f9fa",
+                    "on-secondary-fixed": "#002204",
+                    "on-background": "#191c1d",
+                    "tertiary-container": "#836200",
+                    "on-primary-fixed": "#001b3e",
+                    "background": "#f8f9fa",
+                    "outline-variant": "#c2c6d3",
+                    "outline": "#737783",
+                    "on-primary-container": "#dce6ff",
+                    "inverse-primary": "#aac7ff",
+                    "surface-dim": "#d9dadb",
+                    "inverse-surface": "#2e3132",
+                    "secondary-fixed": "#94f990",
+                    "tertiary-fixed-dim": "#fabd00",
+                    "primary-fixed-dim": "#aac7ff",
+                    "on-surface": "#191c1d",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary": "#006e1c",
+                    "primary": "#004d9d",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#205daf",
+                    "surface-container-high": "#e7e8e9",
+                    "primary-container": "#2c66b8",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed": "#ffdf9e",
+                    "surface-container-highest": "#e1e3e4",
+                    "on-surface-variant": "#424751",
+                    "on-secondary-fixed-variant": "#005313",
+                    "secondary-fixed-dim": "#78dc77",
+                    "secondary-container": "#91f78e",
+                    "on-tertiary-container": "#ffe3ae"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "xl": "32px",
+                    "base": "4px",
+                    "map-overlay-gap": "12px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "container-margin": "20px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Lexend"],
+                    "h1": ["Plus Jakarta Sans"],
+                    "h2": ["Plus Jakarta Sans"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h3": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "h1": ["32px", {"lineHeight": "1.4", "fontWeight": "700"}],
+                    "h2": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["18px", {"lineHeight": "1.5", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { -webkit-tap-highlight-color: transparent; }
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: repeating-linear-gradient(to bottom, #dce6ff 0, #dce6ff 8px, transparent 8px, transparent 16px);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 border-b bg-white/90 backdrop-blur-md border-slate-200 shadow-sm flex justify-between items-center px-6 h-16 w-full font-['Plus_Jakarta_Sans'] antialiased">
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-blue-700">EduMap Kids</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-50 transition-colors rounded-full text-slate-600">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-2 hover:bg-slate-50 transition-colors rounded-full text-blue-600">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Map Canvas (Background) -->
+<main class="relative pt-16 pb-20 min-h-screen">
+<div class="fixed inset-0 z-0">
+<img class="w-full h-full object-cover grayscale opacity-20" data-alt="A stylized aerial map view of a modern urban neighborhood in Seoul with soft, muted tones and clear street markings. The aesthetic is clean and minimal, following a professional educational design style. Gentle blue and grey highlights define the geographical features, creating a high-end light-mode background that feels safe and organized for parents." data-location="Seoul" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx0KFnfM1mIdtyxLRCqvQlCjGWQvuaSDXdaDFrUn3Xf0SuJo05Y4-AxExwyjJc1oyDNYsHNqAHF-1V4h0LQo_swUSsPy87BXH1ND8oE5gO46fvsI1yxOnyKnbEZaW14_7T9vzWUso6uCyu7kLpb5eFVJ0dwmCk97PqJSGCSiJs60eI8kk0Bdiy5gKu_EDWTmzpoOW_aoZxB2YjdBeBTT278UM52rismEbX0v7Hoo-Dyqk4qHIvAb_RPXoktdWYYvJKik0r3xF2Uk2r"/>
+</div>
+<!-- Grade Selector Floating Overlay -->
+<section class="relative z-10 px-container-margin py-md">
+<div class="bg-white/80 backdrop-blur-xl rounded-xl p-base shadow-[0_4px_16px_rgba(44,102,184,0.08)] border border-white flex gap-sm overflow-x-auto hide-scrollbar">
+<button class="flex-none px-lg py-sm rounded-lg bg-primary-container text-on-primary-container font-h3 text-h3 shadow-sm transition-all scale-95 active:scale-90">1학년</button>
+<button class="flex-none px-lg py-sm rounded-lg text-on-surface-variant font-h3 text-h3 hover:bg-surface-container transition-all">2학년</button>
+<button class="flex-none px-lg py-sm rounded-lg text-on-surface-variant font-h3 text-h3 hover:bg-surface-container transition-all">3학년</button>
+<button class="flex-none px-lg py-sm rounded-lg text-on-surface-variant font-h3 text-h3 hover:bg-surface-container transition-all">4학년</button>
+</div>
+</section>
+<!-- Curriculum Timeline List -->
+<section class="relative z-10 px-container-margin space-y-lg">
+<div class="flex items-center justify-between mb-sm">
+<h2 class="font-h2 text-h2 text-primary">1학기 맞춤 교육 로드맵</h2>
+<span class="bg-secondary-container text-on-secondary-container px-sm py-xs rounded-full font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+                    추천순
+                </span>
+</div>
+<!-- Timeline Container -->
+<div class="relative pl-8">
+<div class="timeline-line"></div>
+<!-- Month Group 3월 -->
+<div class="space-y-md mb-xl relative">
+<div class="absolute -left-[26px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-white shadow-sm"></div>
+<div class="font-h3 text-h3 text-primary-container mb-sm">3월: 새로운 시작</div>
+<!-- Resource Card 1: Offline -->
+<div class="bg-white rounded-xl overflow-hidden shadow-[0_8px_24px_rgba(44,102,184,0.06)] border border-slate-100 p-md flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span> 오프라인 체험
+                                </span>
+<h3 class="font-h3 text-h3 text-on-surface">슬기로운 생활: 우리 학교 탐험대</h3>
+</div>
+<div class="bg-surface-container-low px-sm py-xs rounded-lg text-primary font-bold text-h3">03.15</div>
+</div>
+<img class="w-full h-40 object-cover rounded-lg" data-alt="Young elementary students with colorful backpacks exploring a brightly lit, modern school library filled with wooden shelves and large windows. The lighting is soft and natural, creating an encouraging and safe educational atmosphere. The color palette is composed of gentle whites, warm wood tones, and vibrant primary accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC66hHNYplmLFIjT0mXTBqxxDtuPVlTcgM-DQHkydA4QFUZLH4irxXe81Qt7GP25ZX8cgRa-0nIVT98bk2LjTCyf6U4VykZJxecTE8oe3kBnrjCBDqsnWall8Lb1tsSD-JQx8DNB3GqHEp7AANTsVaj8QGqsMjrASi8nrNfBWHYXGpcv-rTUTj85U53knn3Y977vK8L5Y1IDhFhfGEtzw4ml5JVV-yGgSUIdpMnjGIFlMEYzMRzTFoAwdVWSuUtyFD105BvNBMsA_vT"/>
+<div class="flex justify-between items-center">
+<span class="text-body-md text-on-surface-variant">서울시 종로구 한우리 도서관</span>
+<button class="flex items-center gap-1 text-primary font-semibold hover:underline">
+                                상세 보기 <span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Resource Card 2: Online -->
+<div class="bg-white rounded-xl overflow-hidden shadow-[0_8px_24px_rgba(44,102,184,0.06)] border border-slate-100 p-md flex gap-md">
+<div class="w-24 h-24 flex-none rounded-lg bg-surface-container relative overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean digital interface showing an interactive animation of the Korean alphabet 'Hangul' for kids. The visual style is playful yet modern, with high-contrast colors like bright blue and soft yellow against a crisp white background. The composition is balanced and child-friendly, emphasizing clear legibility and engagement." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe3KIobORRoo7PaRkhIjyzEA4GRvMbD_v4VXhfhM0TmacSifYZPZm7R6Ay13saN2EyxBYfH4ksRJVUx2chJJvNcV5r-vUA344LjM4vnRpo0xT9QHY5wI-48s2p50r8XHP2Iw_pn6sacnnH7Bx-HPtJJoc42Gk-ishzAgu7IJrBDKmJRe5r6cKBwJRGrJBb0dPHr00MG-Xn5UA63iMlbzPb6ldYQYCTBkVoXf7t2Af8v9_9vE15CIfobVICJQmbjJUVogNCY5DrZlYW"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-1">
+<span class="text-label-caps font-label-caps text-tertiary uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="language">language</span> 온라인 콘텐츠
+                                </span>
+<h3 class="font-h3 text-h3 text-on-surface">국어: 재미있는 한글 놀이</h3>
+</div>
+<button class="w-fit px-md py-xs rounded-full border border-primary text-primary font-semibold text-body-md hover:bg-primary-container hover:text-white transition-all">콘텐츠 보기</button>
+</div>
+</div>
+</div>
+<!-- Month Group 4월 -->
+<div class="space-y-md mb-xl relative">
+<div class="absolute -left-[26px] top-0 w-4 h-4 rounded-full bg-slate-300 border-4 border-white shadow-sm"></div>
+<div class="font-h3 text-h3 text-on-surface-variant mb-sm">4월: 봄나들이</div>
+<!-- Resource Card 3: Offline (Full Width Content Focus) -->
+<div class="bg-white rounded-xl overflow-hidden shadow-[0_8px_24px_rgba(44,102,184,0.06)] border border-slate-100 p-md flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="text-label-caps font-label-caps text-secondary uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span> 오프라인 체험
+                                </span>
+<h3 class="font-h3 text-h3 text-on-surface">봄: 동식물 친구들을 만나요</h3>
+</div>
+<div class="bg-surface-container-low px-sm py-xs rounded-lg text-on-surface-variant font-bold text-h3">04.10</div>
+</div>
+<div class="bg-primary/5 rounded-lg p-md border-l-4 border-primary">
+<p class="text-body-md text-on-surface-variant">어린이 대공원 식물원에서 진행되는 1학년 맞춤 식물 관찰 프로그램입니다. 워크북이 함께 제공됩니다.</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface-container px-sm py-xs rounded-full text-label-caps text-on-surface-variant">#식물관찰</span>
+<span class="bg-surface-container px-sm py-xs rounded-full text-label-caps text-on-surface-variant">#워크북제공</span>
+</div>
+<div class="flex gap-sm">
+<button class="flex-1 bg-primary-container text-on-primary-container py-sm rounded-lg font-semibold flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="map">map</span> 지도에서 보기
+                            </button>
+<button class="flex-1 border border-slate-200 py-sm rounded-lg font-semibold text-on-surface-variant">상세 정보</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB: Floating Action Button (Only on main dashboard/map context) -->
+<button class="fixed bottom-20 right-6 z-50 w-14 h-14 bg-primary-container text-white rounded-full shadow-lg flex items-center justify-center transition-transform active:scale-90">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-4 pb-safe bg-white rounded-t-2xl border-t border-slate-100 shadow-[0_-4px_16px_rgba(44,102,184,0.08)] z-50">
+<a class="flex flex-col items-center justify-center text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="language">language</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">온라인</span>
+</a>
+<a class="flex flex-col items-center justify-center text-blue-600 font-bold scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">지역체험</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">이용안내</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">내정보</span>
+</a>
+</nav>
+</body></html>

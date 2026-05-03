@@ -1,0 +1,62 @@
+[
+  {
+    "id": "res_001",
+    "type": "OFFLINE",
+    "title": "대구시민안전테마파크",
+    "category": "동구",
+    "tags": [
+      "체험",
+      "관람",
+      "생태"
+    ],
+    "recommended_grade": [],
+    "description": "각종 재난과 안전사고 예방을 위한 체험 운영",
+    "location": {
+      "lat": 35.9891717,
+      "lng": 128.691943
+    },
+    "image_url": "/image/res_001.png",
+    "external_url": "https://www.daegu.go.kr/safe119/index.do",
+    "grade_topics": [
+      {
+        "grade": 1,
+        "subject": "사람들",
+        "month": "4월",
+        "topic_title": "불이 났을 때는",
+        "description": "화재 등 재난상황에 슬기롭게 대처하는 방법을 알아봅시다.",
+        "inquiry_questions": [
+          "불이 났을 때 어떻게 해야 할까요?"
+        ],
+        "post_activities": [
+          "집과 학교에서 불이 났을 때 해야 하는 일을 떠올려 봅시다.",
+          "소방관이 하는 일을 알아봅시다."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "res_002",
+    "type": "ONLINE",
+    "title": "EBS MATH",
+    "category": "수리",
+    "tags": [
+      "로그인필요",
+      "영상자료",
+      "문제풀이"
+    ],
+    "recommended_grade": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "description": "다양한 콘텐츠로 재미있는 수학 학습을 제공해요",
+    "location": {
+      "lat": 0,
+      "lng": 0
+    },
+    "image_url": "/image/res_002.png",
+    "external_url": "https://www.ebsmath.co.kr/",
+    "grade_topics": []
+  }
+]
