@@ -248,112 +248,92 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
         {/* Floating Detail Panel */}
         {selectedResource && (
-          <div className="absolute top-24 right-4 z-20 w-[calc(100%-2rem)] sm:w-[350px] bg-white rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300 flex flex-col max-h-[80vh]">
+          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-300 ${
+            activeTab === "ONLINE" 
+              ? "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-3rem)] max-w-[500px] shadow-emerald-200/50" 
+              : "top-24 right-4 w-[calc(100%-2rem)] sm:w-[350px] slide-in-from-right-4"
+          }`}>
             {/* Top Image Banner */}
             {selectedResource.image_url && (
-              <div className="relative w-full h-48 shrink-0">
+              <div className={`relative w-full shrink-0 ${activeTab === "ONLINE" ? "h-64" : "h-48"}`}>
                 <Image src={selectedResource.image_url} alt={selectedResource.title} fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <button onClick={() => setSelectedResource(null)} className="absolute top-4 right-4 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors">
-                  <X className="w-4 h-4" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <button onClick={() => setSelectedResource(null)} className="absolute top-6 right-6 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors">
+                  <X className="w-5 h-5" />
                 </button>
-                <div className="absolute bottom-4 left-6">
-                  <span className="px-2 py-1 bg-emerald-500 text-white text-[10px] font-black rounded-md mb-2 inline-block">
+                <div className="absolute bottom-6 left-8">
+                  <span className="px-3 py-1 bg-emerald-500 text-white text-[11px] font-black rounded-lg mb-3 inline-block shadow-lg shadow-emerald-500/30">
                     {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인학습"}
                   </span>
-                  <h2 className="text-xl font-black text-white drop-shadow-md">{selectedResource.title}</h2>
+                  <h2 className="text-2xl font-black text-white drop-shadow-xl tracking-tight">{selectedResource.title}</h2>
                 </div>
               </div>
             )}
 
             {/* Header without Image */}
             {!selectedResource.image_url && (
-              <div className="p-6 pb-0 flex justify-between items-start shrink-0">
+              <div className="p-8 pb-0 flex justify-between items-start shrink-0">
                 <div>
-                  <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-md mb-2 inline-block">
+                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[11px] font-black rounded-lg mb-3 inline-block">
                     {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인학습"}
                   </span>
-                  <h2 className="text-xl font-black text-slate-900">{selectedResource.title}</h2>
+                  <h2 className="text-2xl font-black text-slate-900 tracking-tight">{selectedResource.title}</h2>
                 </div>
-                <button onClick={() => setSelectedResource(null)} className="p-2 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors">
-                  <X className="w-4 h-4" />
+                <button onClick={() => setSelectedResource(null)} className="p-2.5 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors">
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-5 custom-scrollbar">
-              <div className="flex flex-wrap gap-1.5">
-                <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100">{selectedResource.category}</span>
+            <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
+              <div className="flex flex-wrap gap-2">
+                <span className="text-[11px] font-black text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">{selectedResource.category}</span>
                 {selectedResource.tags?.map((tag: string) => (
-                  <span key={tag} className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full">{tag}</span>
+                  <span key={tag} className="text-[11px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">{tag}</span>
                 ))}
               </div>
 
-              {/* Roadmap Link Button in Offline/Online View */}
-              {activeTab !== "GRADE" && selectedResource.grade_topics?.length > 0 && (
-                <div className="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 space-y-3">
-                  <div className="flex items-center gap-2 text-emerald-700">
-                    <BookOpen className="w-4 h-4" />
-                    <span className="text-xs font-black">이 장소와 관련된 로드맵이 있습니다</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedResource.grade_topics.map((gt: any, idx: number) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          // 학년과 리소스 ID를 URL 파라미터에 담아 이동
-                          handleTabChange("roadmap", `grade=${gt.grade}&id=${selectedResource.id}`);
-                        }}
-                        className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[10px] font-bold rounded-lg hover:bg-emerald-400 hover:text-white hover:border-emerald-400 transition-all shadow-sm active:scale-95"
-                      >
-                        {gt.grade}학년 로드맵 보기
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {activeTab === "GRADE" && selectedGrade && selectedResource.grade_topics?.find((gt: any) => gt.grade === selectedGrade) ? (
-                <div className="bg-emerald-50/50 p-5 rounded-3xl border border-emerald-100 space-y-4">
+                <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 space-y-5 shadow-inner">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white text-xs font-black">{selectedGrade}</div>
-                      <span className="text-sm font-black text-emerald-800">학년 학습 로드맵</span>
+                      <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
+                      <span className="text-base font-black text-emerald-800">학년 학습 로드맵</span>
                     </div>
-                    <div className="flex gap-1">
+                    <div className="flex gap-1.5">
                       {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).subject && (
-                        <span className="px-2 py-1 bg-white border border-emerald-200 text-emerald-600 text-[10px] font-bold rounded-md shadow-sm">
+                        <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">
                           {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).subject}
                         </span>
                       )}
                       {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).month && (
-                        <span className="px-2 py-1 bg-white border border-emerald-200 text-emerald-600 text-[10px] font-bold rounded-md shadow-sm">
+                        <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">
                           {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).month}
                         </span>
                       )}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-slate-800 mb-1">“{selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).topic_title}”</h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">{selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).description}</p>
+                    <h4 className="text-lg font-black text-slate-800 mb-2 leading-snug">“{selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).topic_title}”</h4>
+                    <p className="text-sm text-slate-600 leading-relaxed font-medium opacity-90">{selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).description}</p>
                   </div>
                   <div className="space-y-4 pt-2">
-                    <div className="bg-white/60 p-3 rounded-2xl">
-                      <h5 className="text-[11px] font-black text-emerald-700 flex items-center gap-1.5 mb-2"><Info className="w-3.5 h-3.5" /> 탐구 질문</h5>
-                      <ul className="space-y-1.5">
+                    <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
+                      <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><Info className="w-4 h-4" /> 탐구 질문</h5>
+                      <ul className="space-y-2">
                         {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).inquiry_questions?.map((q: string, i: number) => (
-                          <li key={i} className="text-[11px] text-slate-600 flex gap-2">
-                            <span className="text-emerald-400">•</span> {q}
+                          <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
+                            <span className="text-emerald-400 font-black">•</span> {q}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className="bg-white/60 p-3 rounded-2xl">
-                      <h5 className="text-[11px] font-black text-emerald-700 flex items-center gap-1.5 mb-2"><History className="w-3.5 h-3.5" /> 사후 활동</h5>
-                      <ul className="space-y-1.5">
+                    <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
+                      <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
+                      <ul className="space-y-2">
                         {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).post_activities?.map((a: string, i: number) => (
-                          <li key={i} className="text-[11px] text-slate-600 flex gap-2">
-                            <span className="text-emerald-400">•</span> {a}
+                          <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
+                            <span className="text-emerald-400 font-black">•</span> {a}
                           </li>
                         ))}
                       </ul>
@@ -361,41 +341,39 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4">
-                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">장소 소개</h5>
-                    <p className="text-sm text-slate-600 leading-relaxed">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
+                <div className="space-y-5">
+                  <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                    <h5 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">장소 및 자원 소개</h5>
+                    <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
                   </div>
                 </div>
               )}
-
-              <div className="flex flex-wrap gap-1.5">
-                {selectedResource.recommended_grade?.length > 0 && (
-                  <div className="w-full flex items-center gap-2 text-[11px] text-slate-400 font-bold mt-2">
-                    <div className="h-[1px] flex-1 bg-slate-100"></div>
-                    <span>권장 학년: {selectedResource.recommended_grade.join(', ')}학년</span>
-                    <div className="h-[1px] flex-1 bg-slate-100"></div>
-                  </div>
-                )}
-              </div>
+              
+              {selectedResource.recommended_grade?.length > 0 && (
+                <div className="flex items-center gap-3 text-xs text-slate-400 font-bold px-2 py-4">
+                  <div className="h-px flex-1 bg-slate-100"></div>
+                  <span>권장 학년: {selectedResource.recommended_grade.join(', ')}학년</span>
+                  <div className="h-px flex-1 bg-slate-100"></div>
+                </div>
+              )}
             </div>
 
-            <div className="p-6 pt-0 mt-auto shrink-0">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="p-8 pt-0 mt-auto shrink-0">
+              <div className={`${activeTab === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
                 {selectedResource.external_url && (
-                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-3.5 bg-slate-900 text-white rounded-2xl text-xs font-black hover:bg-slate-800 transition-all shadow-lg active:scale-95">
-                    <ExternalLink className="w-4 h-4" /> 웹사이트
+                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 transition-all shadow-xl active:scale-95 ${activeTab === "ONLINE" ? "w-full" : ""}`}>
+                    <ExternalLink className="w-5 h-5" /> 웹사이트 바로가기
                   </a>
                 )}
                 {selectedResource.type === "OFFLINE" && (
-                  <button
+                  <button 
                     onClick={() => {
                       const url = `https://map.kakao.com/link/to/${selectedResource.title},${selectedResource.location.lat},${selectedResource.location.lng}`;
                       window.open(url, '_blank');
                     }}
-                    className="flex items-center justify-center gap-2 py-3.5 bg-emerald-500 text-white rounded-2xl text-xs font-black hover:bg-emerald-400 transition-all shadow-lg active:scale-95 shadow-emerald-200"
+                    className="flex items-center justify-center gap-3 py-4 bg-emerald-500 text-white rounded-[1.5rem] text-sm font-black hover:bg-emerald-400 transition-all shadow-xl active:scale-95 shadow-emerald-100"
                   >
-                    <Navigation className="w-4 h-4" /> 길찾기
+                    <Navigation className="w-5 h-5" /> 길찾기
                   </button>
                 )}
               </div>
