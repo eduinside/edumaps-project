@@ -82,20 +82,32 @@ function onOpen() {
 
 function fetchCoordinatesForSelectedRow() {
   var sheet = SpreadsheetApp.getActiveSheet();
-  var currentRow = sheet.getActiveCell().getRow();
+  var ranges = sheet.getActiveRangeList().getRanges();
   var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   var titleIdx = headers.indexOf('title') + 1;
   var latIdx = headers.indexOf('lat') + 1;
   var lngIdx = headers.indexOf('lng') + 1;
 
   if (titleIdx === 0 || latIdx === 0 || lngIdx === 0) return;
-  var title = sheet.getRange(currentRow, titleIdx).getValue();
-  if (!title) return;
 
-  var response = Maps.newGeocoder().geocode(title);
-  if (response.status === 'OK') {
-    var result = response.results[0];
-    sheet.getRange(currentRow, latIdx).setValue(result.geometry.location.lat);
-    sheet.getRange(currentRow, lngIdx).setValue(result.geometry.location.lng);
+  for (var r = 0; r < ranges.length; r++) {
+    var range = ranges[r];
+    var startRow = range.getRow();
+    var numRows = range.getNumRows();
+
+    for (var i = 0; i < numRows; i++) {
+      var currentRow = startRow + i;
+      var title = sheet.getRange(currentRow, titleIdx).getValue();
+      if (!title) continue;
+
+      var response = Maps.newGeocoder().geocode(title);
+      if (response.status === 'OK' && response.results.length > 0) {
+        var result = response.results[0];
+        sheet.getRange(currentRow, latIdx).setValue(result.geometry.location.lat);
+        sheet.getRange(currentRow, lngIdx).setValue(result.geometry.location.lng);
+      }
+      
+      Utilities.sleep(200); // 구글 맵스 API 연속 호출 오류 방지
+    }
   }
 }

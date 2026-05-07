@@ -3,8 +3,9 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { Map, MapPin, MonitorPlay, BookOpen, X, Info, HelpCircle, History, ChevronRight, ChevronLeft, ExternalLink, Navigation } from "lucide-react";
+import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History } from "lucide-react";
 import MapComponent from "./MapComponent";
+import HowToModal from "./HowToModal";
 
 interface Props {
   initialData: any[];
@@ -41,12 +42,16 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
       const resource = initialData.find(r => r.id.toString() === idParam);
       if (resource) {
         setSelectedResource(resource);
+        // 로드맵 탭에서 id가 있으면, 해당 자원의 첫 번째 grade_topics의 grade를 자동 선택
+        if (activeTab === "GRADE" && resource.grade_topics && resource.grade_topics.length > 0) {
+          setSelectedGrade(resource.grade_topics[0].grade);
+        }
         if (resource.location?.lat && resource.location?.lng) {
           setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
         }
       }
     }
-  }, [searchParams, initialData]);
+  }, [searchParams, initialData, activeTab]);
 
   // 탭 변경 시 URL 이동 함수
   const handleTabChange = (tab: string, extraParams?: string) => {
@@ -96,11 +101,14 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
     <div className="flex flex-col h-screen bg-gray-50 font-sans overflow-hidden">
       {/* Floating Header */}
       <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 backdrop-blur-md shadow-lg rounded-full z-20">
-        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => router.push('/')}>
+        <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push('/')}>
           <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
             <Image src="/images/daegu_logo.webp" alt="EduMaps Logo" fill className="object-contain rounded-full" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">EduMaps</h1>
+          <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
+            검색과 월별 추천 자료를 확인하세요
+          </span>
         </div>
         <nav className="hidden sm:flex gap-2">
           <div className="group relative">
@@ -145,6 +153,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         </button>
       </header>
 
+
       {/* Main Content Area */}
       <main className="flex-1 relative w-full h-full">
         {/* Full Screen Map */}
@@ -161,7 +170,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         </div>
 
         {/* Floating Sidebar */}
-        <div className={`absolute top-24 left-4 z-10 w-full max-w-[340px] transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+2rem)]'}`}>
+        <div className={`${activeTab === "ONLINE" ? "sm:hidden" : ""} absolute top-24 left-4 z-10 w-full max-w-[340px] transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+2rem)]'}`}>
           <div className="bg-white/90 backdrop-blur-md rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
             <div className="p-7 pb-4">
               {/* 모바일 전용 탭 네비게이션 */}
@@ -202,10 +211,12 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-slate-800">
-                  {activeTab === "OFFLINE" ? "장소" : activeTab === "ONLINE" ? "온라인" : "로드맵"}
-                  <span className="text-emerald-500 text-base ml-2">{filteredResources.length}</span>
-                </h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-slate-600">
+                    {activeTab === "OFFLINE" ? "체험학습" : activeTab === "ONLINE" ? "온라인" : "학년별 로드맵"}
+                  </h2>
+                  <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{filteredResources.length}</span>
+                </div>
                 <button onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition-colors">
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -218,7 +229,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 {activeTab === "OFFLINE" && ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"].map(region => (
                   <button key={region} onClick={() => setSelectedCategory(region === selectedCategory ? null : region)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
                 ))}
-                {activeTab === "ONLINE" && ["언어", "수리", "디지털", "과학", "예체능", "더 알아보기"].map(cat => (
+                {activeTab === "ONLINE" && ["언어", "수리", "디지털", "문화", "더 알아보기"].map(cat => (
                   <button key={cat} onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === cat ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{cat}</button>
                 ))}
               </div>
@@ -247,16 +258,14 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
                       }
                     }}
-                    className={`group p-4 rounded-3xl transition-all cursor-pointer border ${selectedResource?.id === resource.id ? "bg-emerald-50 border-emerald-200 shadow-md" : "bg-white border-transparent hover:bg-slate-50 hover:shadow-sm"}`}
+                    className={`group ${activeTab === "GRADE" ? "p-5" : "p-4"} rounded-3xl transition-all cursor-pointer border ${selectedResource?.id === resource.id ? "bg-emerald-50 border-emerald-200 shadow-md" : "bg-white border-transparent hover:bg-slate-50 hover:shadow-sm"}`}
                   >
                     <div className="flex gap-4">
-                      {resource.image_url && (
-                        <div className="relative w-16 h-16 rounded-2xl overflow-hidden shrink-0 shadow-sm">
-                          <Image src={resource.image_url} alt={resource.title} fill className="object-cover group-hover:scale-110 transition-transform" />
-                        </div>
-                      )}
+                      <div className={`relative ${activeTab === "GRADE" ? "w-20 h-20" : "w-16 h-16"} rounded-2xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                        <Image src={resource.image_url || "/images/res_000.webp"} alt={resource.title} fill className="object-cover" />
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-slate-800 text-sm group-hover:text-emerald-600 transition-colors line-clamp-1">{resource.title}</h3>
+                        <h3 className={`font-bold text-slate-800 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 transition-colors line-clamp-1`}>{resource.title}</h3>
                         <div className="flex flex-wrap gap-1 mt-1 mb-1">
                           <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">{resource.category}</span>
                           {resource.tags?.map((tag: string) => (
@@ -273,6 +282,65 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
           </div>
         </div>
 
+        {/* Padlet-style layout for ONLINE tab on desktop */}
+        {activeTab === "ONLINE" && (
+          <div className="hidden sm:flex w-full absolute left-0 right-0 bottom-0 top-[100px] z-10 flex-row gap-4 px-4 py-6 overflow-x-auto">
+            {["언어", "수리", "디지털", "문화", "더 알아보기"].map((category) => {
+              const categoryResources = filteredResources.filter(r => r.category === category);
+              return (
+                <div key={category} className="flex-1 min-w-[280px] flex flex-col bg-white/90 backdrop-blur-md rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden max-h-[calc(100vh-8rem)]">
+                  {/* Column Header */}
+                  <div className="px-5 py-4 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-bold text-slate-600">{category}</h3>
+                      <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{categoryResources.length}</span>
+                    </div>
+                  </div>
+
+                  {/* Items List */}
+                  <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-3 custom-scrollbar">
+                    {categoryResources.length === 0 ? (
+                      <div className="py-8 text-center text-slate-400 text-sm">항목 없음</div>
+                    ) : (
+                      categoryResources.map((resource) => (
+                        <div
+                          key={resource.id}
+                          onClick={() => setSelectedResource(resource)}
+                          className={`group p-3 rounded-2xl transition-all cursor-pointer border ${
+                            selectedResource?.id === resource.id
+                              ? "bg-emerald-50 border-emerald-200 shadow-md"
+                              : "bg-white border-transparent hover:bg-slate-50 hover:shadow-sm"
+                          }`}
+                        >
+                          <div className="flex gap-3">
+                            <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                              <Image src={resource.image_url || "/images/res_000.webp"} alt={resource.title} fill className="object-cover" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-bold text-slate-800 text-xs group-hover:text-emerald-600 transition-colors line-clamp-2">{resource.title}</h4>
+                              <div className="flex flex-wrap gap-0.5 mt-1">
+                                {resource.tags && resource.tags.map((tag: string) => (
+                                  <span key={tag} className="text-[8px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{tag}</span>
+                                ))}
+                              </div>
+                              <p className="text-[9px] text-slate-500 line-clamp-1 mt-0.5">{resource.description}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Background overlay when modal is open */}
+        {selectedResource && activeTab === "ONLINE" && (
+          <div className="hidden sm:block absolute inset-0 z-20 bg-black/30 backdrop-blur-sm" onClick={() => setSelectedResource(null)} />
+        )}
+
         {/* Sidebar Toggle Button (Hidden when sidebar is open) */}
         {!isSidebarOpen && (
           <button
@@ -286,40 +354,23 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         {/* Floating Detail Panel */}
         {selectedResource && (
           <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white shadow-2xl border border-slate-100 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
-            ? "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[calc(100%-3rem)] sm:max-w-[500px] sm:max-h-[calc(100vh-8rem)] shadow-emerald-200/50"
-            : "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-auto sm:right-4 sm:w-[350px] sm:max-h-[85vh] slide-in-from-right-4"
+            ? "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[calc(100%-3rem)] sm:max-w-[500px] sm:max-h-[calc(100vh-8rem)] shadow-emerald-200/50"
+            : "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-auto sm:right-4 sm:w-[420px] sm:max-h-[85vh] slide-in-from-right-4"
             }`}>
             {/* Top Image Banner */}
-            {selectedResource.image_url && (
-              <div className={`relative w-full shrink-0 ${activeTab === "ONLINE" ? "h-64" : "h-48"}`}>
-                <Image src={selectedResource.image_url} alt={selectedResource.title} fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <button onClick={() => setSelectedResource(null)} className="absolute top-6 right-6 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors">
-                  <X className="w-5 h-5" />
-                </button>
-                <div className="absolute bottom-6 left-8">
-                  <span className="px-3 py-1 bg-emerald-500 text-white text-[11px] font-black rounded-lg mb-3 inline-block shadow-lg shadow-emerald-500/30">
-                    {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인 학습"}
-                  </span>
-                  <h2 className="text-2xl font-black text-white drop-shadow-xl tracking-tight">{selectedResource.title}</h2>
-                </div>
+            <div className={`relative w-full shrink-0 ${activeTab === "ONLINE" ? "h-64" : "h-48"} bg-gradient-to-br from-emerald-50 to-slate-100 overflow-hidden flex items-center justify-center`}>
+              <Image src={selectedResource.image_url || "/images/res_000.webp"} alt={selectedResource.title} fill className="object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <button onClick={() => setSelectedResource(null)} className="absolute top-6 right-6 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+              <div className="absolute bottom-6 left-8">
+                <span className="px-3 py-1 bg-emerald-500 text-white text-[11px] font-black rounded-lg mb-3 inline-block shadow-lg shadow-emerald-500/30">
+                  {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인 학습"}
+                </span>
+                <h2 className="text-2xl font-black text-white drop-shadow-xl tracking-tight">{selectedResource.title}</h2>
               </div>
-            )}
-
-            {/* Header without Image */}
-            {!selectedResource.image_url && (
-              <div className="p-8 pb-0 flex justify-between items-start shrink-0">
-                <div>
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[11px] font-black rounded-lg mb-3 inline-block">
-                    {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인 학습"}
-                  </span>
-                  <h2 className="text-2xl font-black text-slate-900 tracking-tight">{selectedResource.title}</h2>
-                </div>
-                <button onClick={() => setSelectedResource(null)} className="p-2.5 bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            )}
+            </div>
 
             <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
               <div className="flex flex-wrap gap-2">
@@ -386,30 +437,58 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   {activeTab === "ONLINE" && selectedResource.recommended_grade?.length > 0 && (
                     <div className="flex flex-wrap items-center gap-2 px-1">
                       <span className="text-xs font-bold text-slate-400">권장 학년</span>
-                      {selectedResource.recommended_grade.map((g: number) => (
-                        <span
-                          key={g}
-                          className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
-                        >
-                          {g}학년
-                        </span>
-                      ))}
+                      {(() => {
+                        const grades = selectedResource.recommended_grade.map((g: any) => String(g));
+                        const allGrades = grades.length === 6 && ['1', '2', '3', '4', '5', '6'].every(g => grades.includes(g));
+                        if (allGrades) {
+                          return (
+                            <span className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                              모든 학년
+                            </span>
+                          );
+                        }
+                        return grades.map((g: string) => (
+                          <span
+                            key={g}
+                            className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
+                          >
+                            {g}학년
+                          </span>
+                        ));
+                      })()}
                     </div>
                   )}
                 </div>
               )}
 
-              {/* 비온라인 탭: 기존 구분선 형태 권장 학년 */}
-              {activeTab !== "ONLINE" && selectedResource.recommended_grade?.length > 0 && (
-                <div className="flex items-center gap-3 text-xs text-slate-400 font-bold px-2 py-4">
-                  <div className="h-px flex-1 bg-slate-100"></div>
-                  <span>권장 학년: {selectedResource.recommended_grade.join(', ')}학년</span>
-                  <div className="h-px flex-1 bg-slate-100"></div>
+              {/* 방문형 탭: 권장 학년 뱃지 */}
+              {activeTab === "OFFLINE" && selectedResource.recommended_grade?.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 px-1">
+                  <span className="text-xs font-bold text-slate-400">권장 학년</span>
+                  {(() => {
+                    const grades = selectedResource.recommended_grade.map((g: any) => String(g));
+                    const allGrades = grades.length === 6 && ['1', '2', '3', '4', '5', '6'].every(g => grades.includes(g));
+                    if (allGrades) {
+                      return (
+                        <span className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                          모든 학년
+                        </span>
+                      );
+                    }
+                    return grades.map((g: string) => (
+                      <span
+                        key={g}
+                        className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
+                      >
+                        {g}학년
+                      </span>
+                    ));
+                  })()}
                 </div>
               )}
             </div>
 
-            <div className="p-8 pt-0 mt-auto shrink-0">
+            <div className="p-8 pt-0 mt-auto shrink-0 space-y-4">
               <div className={`${activeTab === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
                 {selectedResource.external_url && (
                   <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 transition-all shadow-xl active:scale-95 ${activeTab === "ONLINE" ? "w-full" : ""}`}>
@@ -428,95 +507,32 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   </button>
                 )}
               </div>
+
+              {activeTab === "OFFLINE" && selectedResource.grade_topics && selectedResource.grade_topics.length > 0 && (
+                (() => {
+                  const relatedGrades = selectedResource.grade_topics.map((gt: any) => gt.grade).sort((a: number, b: number) => a - b);
+                  const uniqueGrades = [...new Set(relatedGrades)];
+                  return (
+                    <button
+                      onClick={() => handleTabChange("roadmap", `id=${selectedResource.id}`)}
+                      className="w-full flex flex-col items-center justify-center gap-2 py-4 bg-gradient-to-r from-emerald-50 to-cyan-50 text-emerald-600 border-2 border-emerald-200 rounded-[1.5rem] text-sm font-black hover:from-emerald-100 hover:to-cyan-100 transition-all shadow-sm active:scale-95"
+                    >
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="w-5 h-5" /> 관련 로드맵 보기
+                      </div>
+                      <div className="text-xs font-bold text-emerald-500 opacity-80">
+                        {uniqueGrades.map(g => `${g}학년`).join(", ")}
+                      </div>
+                    </button>
+                  );
+                })()
+              )}
             </div>
           </div>
         )}
       </main>
 
-      {/* Info Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-all" onClick={() => setIsModalOpen(false)}>
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
-                <Map className="w-6 h-6 text-emerald-500" /> EduMaps 이용방법
-              </h2>
-              <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-6 space-y-8">
-              <section>
-                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-3">
-                  <Info className="w-5 h-5 text-emerald-500" /> 사용법
-                </h3>
-                <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-5 text-sm text-slate-600 leading-relaxed space-y-2">
-                  <p><b>1. 탭 탐색하기:</b> 상단의 탭을 눌러 체험학습, 온라인, 또는 학년별 로드맵을 확인할 수 있습니다.</p>
-                  <p><b>2. 학년별 필터링:</b> '학년별 로드맵' 탭에서는 원하는 학년 버튼을 눌러 맞춤형 정보를 얻어보세요.</p>
-                  <p><b>3. 지도와 리스트 연동:</b> 리스트에서 카드를 클릭하거나 지도에서 마커를 클릭하면 해당 장소의 상세한 정보를 볼 수 있습니다.</p>
-                </div>
-              </section>
-
-              <section>
-                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-3">
-                  <HelpCircle className="w-5 h-5 text-emerald-500" /> 소중한 의견을 들려주세요
-                </h3>
-                <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
-                  <p className="text-sm text-slate-600 leading-relaxed">EduMaps는 대구광역시교육청의 사교육비 줄이기 대책의 일환으로 '초등 자기주도학습 정보모아' 팀에서 개발하였습니다. <br></br>자료 사용 중 불편한 점이나 추가되었으면 하는 장소가 있다면 아래 &apos;의견 남기기&apos;를 통해 알려주세요!</p>
-                </div>
-              </section>
-
-              <section>
-                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2 mb-1">
-                  <History className="w-5 h-5 text-emerald-500" /> 최근 업데이트 내용
-                </h3>
-                <p className="text-[11px] text-slate-400 mb-4 ml-7 font-medium italic">데이터 최종 갱신: {updatedTime}</p>
-
-                <ul className="text-sm text-slate-600 space-y-3 border-l-2 border-slate-200 ml-2 pl-4">
-                  <li className="relative">
-                    <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white shadow-sm"></span>
-                    <strong className="text-slate-800">2026.05.04</strong> - 사용성 및 업데이트 방식을 개선하였습니다.
-                  </li>
-                  <li className="relative">
-                    <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-slate-300 border-2 border-white shadow-sm"></span>
-                    <strong className="text-slate-800">2026.05.03</strong> - 사이트를 처음 만들었습니다.
-                  </li>
-                </ul>
-              </section>
-            </div>
-
-            <div className="p-4 border-t border-slate-100 bg-slate-50 flex flex-row items-center justify-between gap-3">
-              <a href="https://www.dge.go.kr/" target="_blank" rel="noopener noreferrer" className="shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <Image src="/images/daegu_logo.webp" alt="대구교육청" width={60} height={60} className="object-contain" />
-              </a>
-              <div className="flex flex-wrap justify-end gap-2">
-                <button
-                  onClick={() => {
-                    const url = window.location.origin;
-                    if (navigator.share) {
-                      navigator.share({
-                        title: 'EduMaps - 대구 에듀테크 지도',
-                        text: '대구의 체험학습과 온라인 학습 자원을 한눈에 확인하세요!',
-                        url: url,
-                      }).catch(() => { });
-                    } else {
-                      navigator.clipboard.writeText(url).then(() => {
-                        alert('사이트 주소가 복사되었습니다.');
-                      });
-                    }
-                  }}
-                  className="px-4 py-2 bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold rounded-full hover:bg-emerald-100 transition-colors text-sm flex items-center gap-1.5"
-                >
-                  <Navigation className="w-3.5 h-3.5 rotate-45" /> 공유하기
-                </button>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdFO6QElrq-wHApWi8RUl6bDhlGDJC_IuRHIPyWvl5f9sGenA/viewform" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-white border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-colors text-sm">의견 남기기</a>
-                <button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-slate-800 text-white font-semibold rounded-full hover:bg-slate-700 transition-colors text-sm">닫기</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <HowToModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} updatedTime={updatedTime} />
     </div>
   );
 }

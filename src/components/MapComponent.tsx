@@ -27,7 +27,7 @@ export default function MapComponent({ className, resources, centerOn, onMarkerC
     if (mapInstance.current && window.kakao && centerOn) {
       const moveLatLon = new window.kakao.maps.LatLng(centerOn.lat, centerOn.lng);
       mapInstance.current.setCenter(moveLatLon);
-      mapInstance.current.setLevel(4, { animate: true });
+      mapInstance.current.setLevel(3, { animate: true });
     }
   }, [centerOn]);
 

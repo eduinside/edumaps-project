@@ -8,8 +8,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "EduMaps - Educational Resources for Kids",
-  description: "A curated directory of local field trip locations and self-directed learning resources tailored to the elementary curriculum.",
+  title: "에듀맵 - 대구광역시교육청",
+  description: "초등 교육과정 연계 체험학습 및 자기주도학습자료 정보제공",
   icons: {
     icon: '/images/daegu_logo.webp',
     apple: '/images/daegu_logo.webp',
