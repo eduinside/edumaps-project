@@ -83,6 +83,12 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
   const [refreshing, setRefreshing] = useState(false);
   const [isHowToOpen, setIsHowToOpen] = useState(false);
 
+  // URL ?q= 파라미터로 검색어 초기화
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setSearchQuery(decodeURIComponent(q));
+  }, [searchParams]);
+
   // 숨겨진 관리자 새로고침 모드: /?refresh=1
   useEffect(() => {
     if (searchParams.get("refresh")) {
@@ -232,8 +238,8 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
         {/* Hero + Search */}
         <section className="pt-12 sm:pt-20 pb-10 text-center">
           <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-tight">
-            아이의 호기심을 따라가는<br className="hidden sm:block" />
-            <span className="text-emerald-500"> 대구 체험·학습 지도</span>
+            우리 아이 자기주도학습을 위한<br className="hidden sm:block" />
+            <span className="text-emerald-500"> 대구 체험·온라인 학습 길잡이</span>
           </h2>
           <p className="mt-4 text-sm sm:text-base text-slate-500 font-medium">
             현장체험과 온라인 학습 자원을 한 번에 검색하고, 이달의 학년별 추천자원을 만나보세요.
@@ -382,6 +388,15 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
 
             {/* Grade Selector */}
             <div className="flex flex-wrap gap-2 mb-8">
+              <button
+                onClick={() => setSelectedGrade(null)}
+                className={`px-5 py-2.5 text-sm font-bold rounded-full transition-all ${selectedGrade === null
+                    ? "bg-emerald-500 text-white shadow-lg scale-105"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+              >
+                전체
+              </button>
               {[1, 2, 3, 4, 5, 6].map((g) => (
                 <button
                   key={g}

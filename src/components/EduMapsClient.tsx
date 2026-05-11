@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History } from "lucide-react";
+import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History, Search } from "lucide-react";
 import MapComponent from "./MapComponent";
 import HowToModal from "./HowToModal";
 
@@ -31,6 +31,34 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedResource, setSelectedResource] = useState<any | null>(null);
   const [centerOn, setCenterOn] = useState<{ lat: number, lng: number } | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [headerQuery, setHeaderQuery] = useState("");
+
+  const headerSearchResults = useMemo(() => {
+    const q = headerQuery.trim().toLowerCase();
+    if (!q) return [];
+    return initialData.filter((item: any) => {
+      const haystack = [item.title, item.description, item.category, ...(item.tags || [])]
+        .filter(Boolean).join(" ").toLowerCase();
+      return haystack.includes(q);
+    }).slice(0, 8);
+  }, [headerQuery, initialData]);
+
+  const handleHeaderSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = headerQuery.trim();
+    if (!q) return;
+    setSearchOpen(false);
+    setHeaderQuery("");
+    router.push(`/?q=${encodeURIComponent(q)}`);
+  };
+
+  const navigateToHeaderResult = (item: any) => {
+    setSearchOpen(false);
+    setHeaderQuery("");
+    const path = item.type === "OFFLINE" ? `/visitmap?id=${item.id}` : item.type === "ONLINE" ? `/online?id=${item.id}` : `/roadmap?id=${item.id}`;
+    router.push(path);
+  };
 
   // URL 파라미터가 있을 때 초기 상태 설정
   useEffect(() => {
@@ -145,12 +173,67 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             </span>
           </div>
         </nav>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-5 py-2.5 text-sm font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 transition-colors flex items-center gap-1.5"
-        >
-          <Info className="w-4 h-4" /> 이용방법
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            {searchOpen ? (
+              <form onSubmit={handleHeaderSearch} className="flex items-center gap-1 animate-in fade-in zoom-in duration-200">
+                <input
+                  autoFocus
+                  type="text"
+                  value={headerQuery}
+                  onChange={(e) => setHeaderQuery(e.target.value)}
+                  placeholder="전체 자원 검색..."
+                  className="w-40 sm:w-56 px-4 py-2 text-sm rounded-full border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 transition-all"
+                />
+                {/* 모바일: 제출 시 랜딩 검색 결과 페이지로 이동 */}
+                <button type="submit" className="sm:hidden p-2.5 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors">
+                  <Search className="w-4 h-4" />
+                </button>
+                <button type="button" onClick={() => { setSearchOpen(false); setHeaderQuery(""); }} className="p-2.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+                {/* 데스크탑: 드롭다운 자동완성 */}
+                {headerSearchResults.length > 0 && (
+                  <div className="hidden sm:block absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    {headerSearchResults.map((item: any) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => navigateToHeaderResult(item)}
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 transition-colors text-left group"
+                      >
+                        <div className="shrink-0 w-8 h-8 rounded-xl overflow-hidden bg-slate-100">
+                          <img src={item.image_url || "/images/res_000.webp"} alt="" className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-slate-800 group-hover:text-emerald-600 truncate">{item.title}</p>
+                          <p className="text-xs text-slate-400 truncate">{item.category}</p>
+                        </div>
+                        <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded-full ${item.type === "OFFLINE" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"}`}>
+                          {item.type === "OFFLINE" ? "체험" : "온라인"}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </form>
+            ) : (
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="p-2.5 text-slate-500 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors"
+                aria-label="검색"
+              >
+                <Search className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-5 py-2.5 text-sm font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 transition-colors flex items-center gap-1.5"
+          >
+            <Info className="w-4 h-4" /> <span className="hidden sm:inline">이용방법</span>
+          </button>
+        </div>
       </header>
 
 
@@ -223,30 +306,35 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {activeTab === "GRADE" && [1, 2, 3, 4, 5, 6].map(grade => (
-                  <button key={grade} onClick={() => setSelectedGrade(grade === selectedGrade ? null : grade)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === grade ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{grade}학년</button>
-                ))}
-                {activeTab === "OFFLINE" && ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"].map(region => (
-                  <button key={region} onClick={() => setSelectedCategory(region === selectedCategory ? null : region)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
-                ))}
-                {activeTab === "ONLINE" && ["언어", "수리", "디지털", "문화", "더 알아보기"].map(cat => (
-                  <button key={cat} onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === cat ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{cat}</button>
-                ))}
+                {activeTab === "GRADE" && (
+                  <>
+                    <button onClick={() => setSelectedGrade(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
+                    {[1, 2, 3, 4, 5, 6].map(grade => (
+                      <button key={grade} onClick={() => setSelectedGrade(grade === selectedGrade ? null : grade)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === grade ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{grade}학년</button>
+                    ))}
+                  </>
+                )}
+                {activeTab === "OFFLINE" && (
+                  <>
+                    <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
+                    {["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"].map(region => (
+                      <button key={region} onClick={() => setSelectedCategory(region === selectedCategory ? null : region)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
+                    ))}
+                  </>
+                )}
+                {activeTab === "ONLINE" && (
+                  <>
+                    <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
+                    {["언어", "수리", "디지털", "문화", "더 알아보기"].map(cat => (
+                      <button key={cat} onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === cat ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{cat}</button>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 pb-8 space-y-3 custom-scrollbar">
-              {activeTab === "GRADE" && selectedGrade === null ? (
-                <div className="py-20 text-center space-y-4">
-                  <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto">
-                    <BookOpen className="w-8 h-8 text-emerald-500" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-slate-800">학년을 선택해 주세요</h3>
-                    <p className="text-xs text-slate-500 mt-1">학년별 맞춤 로드맵이 준비되어 있습니다.</p>
-                  </div>
-                </div>
-              ) : filteredResources.length === 0 ? (
+              {filteredResources.length === 0 ? (
                 <div className="py-20 text-center text-slate-400 text-sm">해당 조건의 자원이 없습니다.</div>
               ) : (
                 filteredResources.map((resource) => (
@@ -489,9 +577,9 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             </div>
 
             <div className="p-8 pt-0 mt-auto shrink-0 space-y-4">
-              <div className={`${activeTab === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
+              <div className={`${selectedResource.type === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
                 {selectedResource.external_url && (
-                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 transition-all shadow-xl active:scale-95 ${activeTab === "ONLINE" ? "w-full" : ""}`}>
+                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 transition-all shadow-xl active:scale-95 ${selectedResource.type === "ONLINE" ? "w-full" : ""}`}>
                     <ExternalLink className="w-5 h-5" /> 웹사이트
                   </a>
                 )}
