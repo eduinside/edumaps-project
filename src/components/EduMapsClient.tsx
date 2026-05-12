@@ -12,6 +12,18 @@ interface Props {
   updatedTime: string;
 }
 
+const categoryColorMap: Record<string, { border: string; bg: string; text: string; bgLight: string }> = {
+  "언어": { border: "#fb7185", bg: "#f43f5e", text: "#e11d48", bgLight: "#ffe4e6" },
+  "수리": { border: "#fb923c", bg: "#f97316", text: "#d97706", bgLight: "#fed7aa" },
+  "디지털": { border: "#34d399", bg: "#10b981", text: "#059669", bgLight: "#d1fae5" },
+  "외국어": { border: "#60a5fa", bg: "#3b82f6", text: "#1d4ed8", bgLight: "#dbeafe" },
+  "더 알아보기": { border: "#c084fc", bg: "#a855f7", text: "#7e22ce", bgLight: "#f3e8ff" },
+};
+
+const getCategoryColor = (category: string | null) => {
+  return category && categoryColorMap[category] ? categoryColorMap[category] : { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" };
+};
+
 export default function EduMapsClient({ initialData, updatedTime }: Props) {
   const router = useRouter();
   const params = useParams();
@@ -325,9 +337,24 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 {activeTab === "ONLINE" && (
                   <>
                     <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
-                    {["언어", "수리", "디지털", "문화", "더 알아보기"].map(cat => (
-                      <button key={cat} onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === cat ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{cat}</button>
-                    ))}
+                    {["언어", "수리", "디지털", "외국어", "더 알아보기"].map(cat => {
+                      const colors = getCategoryColor(cat);
+                      const isSelected = selectedCategory === cat;
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)}
+                          className="px-4 py-2 text-sm font-bold rounded-full transition-all"
+                          style={{
+                            backgroundColor: isSelected ? colors.bg : colors.bgLight,
+                            color: isSelected ? "white" : colors.text,
+                            boxShadow: isSelected ? `0 10px 15px -3px ${colors.bg}40` : "none"
+                          }}
+                        >
+                          {cat}
+                        </button>
+                      );
+                    })}
                   </>
                 )}
               </div>
@@ -355,7 +382,10 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                       <div className="flex-1 min-w-0">
                         <h3 className={`font-bold text-slate-800 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 transition-colors line-clamp-1`}>{resource.title}</h3>
                         <div className="flex flex-wrap gap-1 mt-1 mb-1">
-                          <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">{resource.category}</span>
+                          {(() => {
+                            const colors = getCategoryColor(resource.category);
+                            return <span className="text-[9px] font-bold px-1.5 py-0.5 rounded border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{resource.category}</span>;
+                          })()}
                           {resource.tags?.map((tag: string) => (
                             <span key={tag} className="text-[9px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{tag}</span>
                           ))}
@@ -373,15 +403,16 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         {/* Padlet-style layout for ONLINE tab on desktop */}
         {activeTab === "ONLINE" && (
           <div className="hidden sm:flex w-full absolute left-0 right-0 bottom-0 top-[100px] z-10 flex-row gap-4 px-4 py-6 overflow-x-auto">
-            {["언어", "수리", "디지털", "문화", "더 알아보기"].map((category) => {
+            {["언어", "수리", "디지털", "외국어", "더 알아보기"].map((category) => {
               const categoryResources = filteredResources.filter(r => r.category === category);
+              const colors = getCategoryColor(category);
               return (
-                <div key={category} className="flex-1 min-w-[280px] flex flex-col bg-white/90 backdrop-blur-md rounded-[2rem] shadow-lg border border-slate-100 overflow-hidden max-h-[calc(100vh-8rem)]">
+                <div key={category} className="flex-1 min-w-[280px] flex flex-col bg-white/90 backdrop-blur-md rounded-[2rem] shadow-lg border overflow-hidden max-h-[calc(100vh-8rem)]" style={{ borderColor: colors.border }}>
                   {/* Column Header */}
-                  <div className="px-5 py-4 border-b border-slate-100">
+                  <div className="px-5 py-4 border-b bg-gradient-to-r to-white/30" style={{ borderBottomColor: colors.border, backgroundImage: `linear-gradient(to right, ${colors.bgLight}, rgba(255,255,255,0.3))` }}>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-slate-600">{category}</h3>
-                      <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{categoryResources.length}</span>
+                      <h3 className="text-sm font-bold" style={{ color: colors.text }}>{category}</h3>
+                      <span className="px-2.5 py-1 text-white text-xs font-black rounded-full" style={{ backgroundColor: colors.bg }}>{categoryResources.length}</span>
                     </div>
                   </div>
 
@@ -462,7 +493,10 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
             <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
               <div className="flex flex-wrap gap-2">
-                <span className="text-[11px] font-black text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">{selectedResource.category}</span>
+                {(() => {
+                  const colors = getCategoryColor(selectedResource.category);
+                  return <span className="text-[11px] font-black px-3 py-1.5 rounded-full border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{selectedResource.category}</span>;
+                })()}
                 {selectedResource.tags?.map((tag: string) => (
                   <span key={tag} className="text-[11px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">{tag}</span>
                 ))}
