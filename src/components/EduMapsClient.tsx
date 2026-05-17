@@ -17,6 +17,7 @@ const categoryColorMap: Record<string, { border: string; bg: string; text: strin
   "수리": { border: "#fb923c", bg: "#f97316", text: "#d97706", bgLight: "#fed7aa" },
   "디지털": { border: "#34d399", bg: "#10b981", text: "#059669", bgLight: "#d1fae5" },
   "외국어": { border: "#60a5fa", bg: "#3b82f6", text: "#1d4ed8", bgLight: "#dbeafe" },
+  "문화": { border: "#818cf8", bg: "#4f46e5", text: "#3730a3", bgLight: "#e0e7ff" },
   "더 알아보기": { border: "#c084fc", bg: "#a855f7", text: "#7e22ce", bgLight: "#f3e8ff" },
 };
 
@@ -337,7 +338,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 {activeTab === "ONLINE" && (
                   <>
                     <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
-                    {["언어", "수리", "디지털", "외국어", "더 알아보기"].map(cat => {
+                    {["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"].map(cat => {
                       const colors = getCategoryColor(cat);
                       const isSelected = selectedCategory === cat;
                       return (
@@ -383,7 +384,9 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         <h3 className={`font-bold text-slate-800 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 transition-colors line-clamp-1`}>{resource.title}</h3>
                         <div className="flex flex-wrap gap-1 mt-1 mb-1">
                           {(() => {
-                            const colors = getCategoryColor(resource.category);
+                            const colors = activeTab === "GRADE"
+                              ? { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" }
+                              : getCategoryColor(resource.category);
                             return <span className="text-[9px] font-bold px-1.5 py-0.5 rounded border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{resource.category}</span>;
                           })()}
                           {resource.tags?.map((tag: string) => (
@@ -403,7 +406,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         {/* Padlet-style layout for ONLINE tab on desktop */}
         {activeTab === "ONLINE" && (
           <div className="hidden sm:flex w-full absolute left-0 right-0 bottom-0 top-[100px] z-10 flex-row gap-4 px-4 py-6 overflow-x-auto">
-            {["언어", "수리", "디지털", "외국어", "더 알아보기"].map((category) => {
+            {["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"].map((category) => {
               const categoryResources = filteredResources.filter(r => r.category === category);
               const colors = getCategoryColor(category);
               return (
@@ -494,7 +497,9 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
               <div className="flex flex-wrap gap-2">
                 {(() => {
-                  const colors = getCategoryColor(selectedResource.category);
+                  const colors = activeTab === "GRADE"
+                    ? { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" }
+                    : getCategoryColor(selectedResource.category);
                   return <span className="text-[11px] font-black px-3 py-1.5 rounded-full border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{selectedResource.category}</span>;
                 })()}
                 {selectedResource.tags?.map((tag: string) => (
