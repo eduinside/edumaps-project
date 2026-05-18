@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, MapPin, MonitorPlay, BookOpen, Sparkles, Info } from "lucide-react";
 import HowToModal from "./HowToModal";
+import DownloadSection from "./DownloadSection";
 
 interface Props {
   initialData: any[];
@@ -355,6 +356,9 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             </div>
           </section>
         )}
+
+        {/* Download Section */}
+        {!isSearching && <DownloadSection />}
 
         {/* Monthly Recommended */}
         {!isSearching && (

@@ -2,6 +2,30 @@
 
 모든 주목할 만한 변경 사항을 이 파일에 기록합니다.
 
+## [2026.05.19] - 탐색 및 연계 기능 강화
+
+### 추가됨
+- **지도 자동 이동 (내 근처)**: "내 근처" 필터 활성화 시 `MapComponent.fitToPoints()`로 내 위치 + 가장 가까운 5개 장소가 화면에 맞게 자동 줌/이동
+- **지도 자동 이동 (지역 필터)**: 중구·동구 등 지역 필터 선택 시 해당 지역 마커 전체를 `fitToPoints()`로 자동 이동
+- **전체 필터 시 초기 뷰 복귀**: "전체" 버튼 클릭 시 `MapComponent.resetView()`로 초기 중심점(35.8714, 128.6014)·레벨 8로 복귀
+- **로드맵 연계 버튼 학년별 분리**: 체험학습·온라인 탭 상세 카드에서 학년별 로드맵 버튼이 개별 학년 단위로 표시, `/roadmap?id=X&grade=N`으로 직접 이동
+- **로드맵 카드 학년 전환 버튼**: 복수 학년이 연결된 자원의 로드맵 상세 카드 상단에 학년 전환 버튼 표시 (중복 학년 자동 제거)
+- **로드맵 전체 필터 자동 학년 선택**: 학년 미선택 상태에서 사이드바 아이템 클릭 시 자원의 첫 번째 학년 자동 선택
+- **온라인 → 로드맵 연계**: 온라인 탭 상세 카드에도 `grade_topics` 보유 자원에 학년별 로드맵 이동 버튼 추가
+
+### 변경됨
+- **MapComponent 구조 정리**: `fitToPoints` + `resetView` 두 메서드만 노출하는 `MapHandle` ref 패턴. `updateMarkers()` 완료 후 pending fit 자동 실행으로 타이밍 문제 해결
+- **사이드바 내 근처 표시**: nearbyMode 시 사이드바는 가까운 순 10개, 지도는 전체 마커 유지
+
+### 수정됨
+- **중복 학년 키 오류**: `grade_topics`에 동일 학년이 중복된 경우 `globalThis.Map`으로 중복 제거하여 React key 충돌 해소
+
+### 관련 파일
+- `src/components/MapComponent.tsx` — `MapHandle`, `fitToPoints`, `resetView`, `doFit`, `pendingFitRef`
+- `src/components/EduMapsClient.tsx` — nearbyMode/지역 필터 fitToPoints, 로드맵 연계 버튼, 학년 전환 UI
+
+---
+
 ## [2026.05.08] - UI 개선 및 기능 확장
 
 ### 추가됨

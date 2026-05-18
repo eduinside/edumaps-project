@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History, Search } from "lucide-react";
-import MapComponent from "./MapComponent";
+import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History, Search, LocateFixed } from "lucide-react";
+import MapComponent, { MapHandle } from "./MapComponent";
 import HowToModal from "./HowToModal";
 
 interface Props {
@@ -46,6 +46,16 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
   const [centerOn, setCenterOn] = useState<{ lat: number, lng: number } | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [headerQuery, setHeaderQuery] = useState("");
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(() => {
+    if (typeof window === "undefined") return null;
+    try { const s = sessionStorage.getItem("edumaps_userLocation"); return s ? JSON.parse(s) : null; } catch { return null; }
+  });
+  const [nearbyMode, setNearbyMode] = useState(false);
+  const [locating, setLocating] = useState(false);
+
+  useEffect(() => {
+    if (userLocation) sessionStorage.setItem("edumaps_userLocation", JSON.stringify(userLocation));
+  }, [userLocation]);
 
   const headerSearchResults = useMemo(() => {
     const q = headerQuery.trim().toLowerCase();
@@ -56,6 +66,41 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
       return haystack.includes(q);
     }).slice(0, 8);
   }, [headerQuery, initialData]);
+
+  const getDistanceKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  };
+
+  const handleNearbyToggle = () => {
+    if (nearbyMode) {
+      setNearbyMode(false);
+      return;
+    }
+    if (userLocation) {
+      setNearbyMode(true);
+      setSelectedCategory(null);
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        setUserLocation(loc);
+        setNearbyMode(true);
+        setSelectedCategory(null);
+        setLocating(false);
+      },
+      () => {
+        alert("위치 정보를 가져올 수 없습니다. 브라우저 설정을 확인해 주세요.");
+        setLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   const handleHeaderSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,19 +123,21 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
     const gradeParam = searchParams.get("grade");
     const idParam = searchParams.get("id");
 
-    if (gradeParam) setSelectedGrade(parseInt(gradeParam));
     if (idParam) {
       const resource = initialData.find(r => r.id.toString() === idParam);
       if (resource) {
         setSelectedResource(resource);
-        // 로드맵 탭에서 id가 있으면, 해당 자원의 첫 번째 grade_topics의 grade를 자동 선택
-        if (activeTab === "GRADE" && resource.grade_topics && resource.grade_topics.length > 0) {
+        if (gradeParam) {
+          setSelectedGrade(parseInt(gradeParam));
+        } else if (activeTab === "GRADE" && resource.grade_topics && resource.grade_topics.length > 0) {
           setSelectedGrade(resource.grade_topics[0].grade);
         }
         if (resource.location?.lat && resource.location?.lng) {
           setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
         }
       }
+    } else if (gradeParam) {
+      setSelectedGrade(parseInt(gradeParam));
     }
   }, [searchParams, initialData, activeTab]);
 
@@ -135,8 +182,37 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
       });
     }
 
+    if (activeTab === "OFFLINE" && nearbyMode && userLocation) {
+      result = [...result].sort((a, b) => {
+        const aDist = a.location?.lat ? getDistanceKm(userLocation.lat, userLocation.lng, a.location.lat, a.location.lng) : Infinity;
+        const bDist = b.location?.lat ? getDistanceKm(userLocation.lat, userLocation.lng, b.location.lat, b.location.lng) : Infinity;
+        return aDist - bDist;
+      });
+    }
+
     return result;
-  }, [activeTab, selectedGrade, selectedCategory, initialData]);
+  }, [activeTab, selectedGrade, selectedCategory, initialData, nearbyMode, userLocation]);
+
+  const sidebarResources = useMemo(() => {
+    if (activeTab === "OFFLINE" && nearbyMode) return filteredResources.slice(0, 10);
+    return filteredResources;
+  }, [filteredResources, activeTab, nearbyMode]);
+
+  const mapRef = useRef<MapHandle>(null);
+
+  useEffect(() => {
+    if (activeTab !== "OFFLINE" || !nearbyMode || !userLocation) return;
+    const nearest = filteredResources.slice(0, 5).filter((r: any) => r.location?.lat)
+      .map((r: any) => ({ lat: r.location.lat, lng: r.location.lng }));
+    mapRef.current?.fitToPoints([userLocation, ...nearest]);
+  }, [nearbyMode, userLocation, activeTab, filteredResources]);
+
+  useEffect(() => {
+    if (activeTab !== "OFFLINE" || !selectedCategory || nearbyMode) return;
+    const points = filteredResources.filter((r: any) => r.location?.lat)
+      .map((r: any) => ({ lat: r.location.lat, lng: r.location.lng }));
+    if (points.length) mapRef.current?.fitToPoints(points);
+  }, [selectedCategory, activeTab]);
 
   return (
     <div className="flex flex-col h-screen bg-gray-50 font-sans overflow-hidden">
@@ -255,10 +331,12 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         {/* Full Screen Map */}
         <div className="absolute inset-0 z-0">
           <MapComponent
+            ref={mapRef}
             className="w-full h-full"
             resources={activeTab === "ONLINE" ? [] : filteredResources}
             centerOn={centerOn}
             onMarkerClick={(resource) => setSelectedResource(resource)}
+            userLocation={activeTab === "OFFLINE" || activeTab === "GRADE" ? userLocation : null}
           />
           {activeTab === "ONLINE" && (
             <div className="absolute inset-0 bg-white/85 backdrop-blur-[12px] z-[1] transition-all duration-700" />
@@ -311,7 +389,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   <h2 className="text-sm font-bold text-slate-600">
                     {activeTab === "OFFLINE" ? "체험학습" : activeTab === "ONLINE" ? "온라인" : "학년별 로드맵"}
                   </h2>
-                  <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{filteredResources.length}</span>
+                  <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{sidebarResources.length}</span>
                 </div>
                 <button onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition-colors">
                   <ChevronLeft className="w-5 h-5" />
@@ -321,7 +399,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               <div className="flex flex-wrap gap-2">
                 {activeTab === "GRADE" && (
                   <>
-                    <button onClick={() => setSelectedGrade(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
+                    <button onClick={() => { setSelectedGrade(null); mapRef.current?.resetView(); }} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
                     {[1, 2, 3, 4, 5, 6].map(grade => (
                       <button key={grade} onClick={() => setSelectedGrade(grade === selectedGrade ? null : grade)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === grade ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{grade}학년</button>
                     ))}
@@ -329,9 +407,12 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 )}
                 {activeTab === "OFFLINE" && (
                   <>
-                    <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
+                    <button onClick={() => { setSelectedCategory(null); setNearbyMode(false); mapRef.current?.resetView(); }} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null && !nearbyMode ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
+                    <button onClick={handleNearbyToggle} className={`px-4 py-2 text-sm font-bold rounded-full transition-all flex items-center gap-1.5 ${nearbyMode ? "bg-blue-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>
+                      <LocateFixed className={`w-3.5 h-3.5 ${locating ? "animate-spin" : ""}`} />{locating ? "탐색중" : "내 근처"}
+                    </button>
                     {["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"].map(region => (
-                      <button key={region} onClick={() => setSelectedCategory(region === selectedCategory ? null : region)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
+                      <button key={region} onClick={() => { setSelectedCategory(region === selectedCategory ? null : region); setNearbyMode(false); }} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
                     ))}
                   </>
                 )}
@@ -362,16 +443,20 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 pb-8 space-y-3 custom-scrollbar">
-              {filteredResources.length === 0 ? (
+              {sidebarResources.length === 0 ? (
                 <div className="py-20 text-center text-slate-400 text-sm">해당 조건의 자원이 없습니다.</div>
               ) : (
-                filteredResources.map((resource) => (
+                sidebarResources.map((resource) => (
                   <div
                     key={resource.id}
                     onClick={() => {
                       setSelectedResource(resource);
                       if (resource.location?.lat && resource.location?.lng) {
                         setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
+                      }
+                      if (activeTab === "GRADE" && selectedGrade === null && resource.grade_topics?.length > 0) {
+                        const grades = resource.grade_topics.map((gt: any) => gt.grade).sort((a: number, b: number) => a - b);
+                        setSelectedGrade(grades[0]);
                       }
                     }}
                     className={`group ${activeTab === "GRADE" ? "p-5" : "p-4"} rounded-3xl transition-all cursor-pointer border ${selectedResource?.id === resource.id ? "bg-emerald-50 border-emerald-200 shadow-md" : "bg-white border-transparent hover:bg-slate-50 hover:shadow-sm"}`}
@@ -394,6 +479,12 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                           ))}
                         </div>
                         <p className="text-[10px] text-slate-500 line-clamp-1 mt-1">{resource.description}</p>
+                        {nearbyMode && userLocation && resource.location?.lat && (
+                          <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-blue-500">
+                            <LocateFixed className="w-3 h-3" />
+                            {getDistanceKm(userLocation.lat, userLocation.lng, resource.location.lat, resource.location.lng).toFixed(1)}km
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -509,6 +600,23 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
               {activeTab === "GRADE" && selectedGrade && selectedResource.grade_topics?.find((gt: any) => gt.grade === selectedGrade) ? (
                 <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 space-y-5 shadow-inner">
+                  {selectedResource.grade_topics.length > 1 && (
+                    <>
+                      <div className="flex flex-wrap gap-1.5">
+                        {Array.from(new globalThis.Map(selectedResource.grade_topics.map((gt: any) => [gt.grade, gt])).values())
+                          .sort((a: any, b: any) => a.grade - b.grade).map((gt: any) => (
+                          <button
+                            key={gt.grade}
+                            onClick={() => setSelectedGrade(gt.grade)}
+                            className={`px-3 py-1.5 text-xs font-black rounded-full transition-all ${selectedGrade === gt.grade ? "bg-emerald-500 text-white shadow-md" : "bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
+                          >
+                            {gt.grade}학년
+                          </button>
+                        ))}
+                      </div>
+                      <hr className="border-emerald-100" />
+                    </>
+                  )}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
@@ -635,22 +743,28 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 )}
               </div>
 
-              {activeTab === "OFFLINE" && selectedResource.grade_topics && selectedResource.grade_topics.length > 0 && (
+              {(activeTab === "OFFLINE" || activeTab === "ONLINE") && selectedResource.grade_topics && selectedResource.grade_topics.length > 0 && (
                 (() => {
-                  const relatedGrades = selectedResource.grade_topics.map((gt: any) => gt.grade).sort((a: number, b: number) => a - b);
-                  const uniqueGrades = [...new Set(relatedGrades)];
+                  const sortedTopics = [...selectedResource.grade_topics].sort((a: any, b: any) => a.grade - b.grade);
                   return (
-                    <button
-                      onClick={() => handleTabChange("roadmap", `id=${selectedResource.id}`)}
-                      className="w-full flex flex-col items-center justify-center gap-2 py-4 bg-gradient-to-r from-emerald-50 to-cyan-50 text-emerald-600 border-2 border-emerald-200 rounded-[1.5rem] text-sm font-black hover:from-emerald-100 hover:to-cyan-100 transition-all shadow-sm active:scale-95"
-                    >
-                      <div className="flex items-center gap-3">
-                        <BookOpen className="w-5 h-5" /> 관련 로드맵 보기
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 px-1">
+                        <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+                        <span className="text-xs font-black text-emerald-600">학년별 로드맵</span>
                       </div>
-                      <div className="text-xs font-bold text-emerald-500 opacity-80">
-                        {uniqueGrades.map(g => `${g}학년`).join(", ")}
+                      <div className="flex flex-wrap gap-2">
+                        {sortedTopics.map((gt: any) => (
+                          <button
+                            key={gt.grade}
+                            onClick={() => handleTabChange("roadmap", `id=${selectedResource.id}&grade=${gt.grade}`)}
+                            className="flex-1 min-w-[80px] flex flex-col items-center gap-1 py-3 px-3 bg-gradient-to-br from-emerald-50 to-cyan-50 text-emerald-700 border-2 border-emerald-200 rounded-2xl text-xs font-black hover:from-emerald-100 hover:to-cyan-100 hover:border-emerald-300 transition-all shadow-sm active:scale-95"
+                          >
+                            <span className="text-base font-black text-emerald-500">{gt.grade}학년</span>
+                            {gt.topic_title && <span className="text-[9px] font-bold text-emerald-600 opacity-75 line-clamp-1 text-center">{gt.topic_title}</span>}
+                          </button>
+                        ))}
                       </div>
-                    </button>
+                    </div>
                   );
                 })()
               )}
