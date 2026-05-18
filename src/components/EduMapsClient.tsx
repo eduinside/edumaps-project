@@ -598,71 +598,10 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 ))}
               </div>
 
-              {activeTab === "GRADE" && selectedGrade && selectedResource.grade_topics?.find((gt: any) => gt.grade === selectedGrade) ? (
-                <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 space-y-5 shadow-inner">
-                  {selectedResource.grade_topics.length > 1 && (
-                    <>
-                      <div className="flex flex-wrap gap-1.5">
-                        {Array.from(new globalThis.Map(selectedResource.grade_topics.map((gt: any) => [gt.grade, gt])).values())
-                          .sort((a: any, b: any) => a.grade - b.grade).map((gt: any) => (
-                          <button
-                            key={gt.grade}
-                            onClick={() => setSelectedGrade(gt.grade)}
-                            className={`px-3 py-1.5 text-xs font-black rounded-full transition-all ${selectedGrade === gt.grade ? "bg-emerald-500 text-white shadow-md" : "bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50"}`}
-                          >
-                            {gt.grade}학년
-                          </button>
-                        ))}
-                      </div>
-                      <hr className="border-emerald-100" />
-                    </>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
-                      <span className="text-base font-black text-emerald-800">학년</span>
-                    </div>
-                    <div className="flex gap-1.5">
-                      {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).subject && (
-                        <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">
-                          {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).subject}
-                        </span>
-                      )}
-                      {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).month && (
-                        <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">
-                          {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).month}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="text-lg font-black text-slate-800 mb-2 leading-snug">“{selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).topic_title}”</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed font-medium opacity-90">{selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).description}</p>
-                  </div>
-                  <div className="space-y-4 pt-2">
-                    <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
-                      <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><Info className="w-4 h-4" /> 탐구 질문</h5>
-                      <ul className="space-y-2">
-                        {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).inquiry_questions?.map((q: string, i: number) => (
-                          <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
-                            <span className="text-emerald-400 font-black">•</span> {q}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
-                      <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
-                      <ul className="space-y-2">
-                        {selectedResource.grade_topics.find((gt: any) => gt.grade === selectedGrade).post_activities?.map((a: string, i: number) => (
-                          <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
-                            <span className="text-emerald-400 font-black">•</span> {a}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              ) : (
+              {((): React.ReactNode => {
+                const topics: any[] = selectedResource.grade_topics || [];
+                const matchingTopics = topics.filter((gt: any) => gt.grade === selectedGrade);
+                if (activeTab !== 'GRADE' || !selectedGrade || matchingTopics.length === 0) return (
                 <div className="space-y-4">
                   <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
                     <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
@@ -694,7 +633,70 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                     </div>
                   )}
                 </div>
-              )}
+                );
+                const uniqueGrades = Array.from(new globalThis.Map(topics.map((gt: any) => [gt.grade, gt])).values())
+                  .sort((a: any, b: any) => a.grade - b.grade);
+                return (
+                  <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 space-y-5 shadow-inner">
+                    {uniqueGrades.length > 1 && (
+                      <>
+                        <div className="flex flex-wrap gap-1">
+                          {uniqueGrades.map((gt: any) => (
+                            <button
+                              key={gt.grade}
+                              onClick={() => setSelectedGrade(gt.grade)}
+                              className={`px-2.5 py-1 text-xs font-black rounded-full transition-all ${selectedGrade === gt.grade ? 'bg-emerald-500 text-white shadow-md' : 'bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50'}`}
+                            >
+                              {gt.grade}학년
+                            </button>
+                          ))}
+                        </div>
+                        <hr className="border-emerald-100" />
+                      </>
+                    )}
+                    {matchingTopics.map((gt: any, idx: number) => (
+                      <div key={idx} className={idx > 0 ? 'pt-2 border-t border-emerald-100' : ''}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
+                            <span className="text-base font-black text-emerald-800">학년{matchingTopics.length > 1 ? ` (${idx + 1}/${matchingTopics.length})` : ''}</span>
+                          </div>
+                          <div className="flex gap-1.5">
+                            {gt.subject && <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">{gt.subject}</span>}
+                            {gt.month && <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">{gt.month}</span>}
+                          </div>
+                        </div>
+                        <div className="mb-3">
+                          <h4 className="text-lg font-black text-slate-800 mb-2 leading-snug">&ldquo;{gt.topic_title}&rdquo;</h4>
+                          <p className="text-sm text-slate-600 leading-relaxed font-medium opacity-90">{gt.description}</p>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
+                            <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><Info className="w-4 h-4" /> 탐구 질문</h5>
+                            <ul className="space-y-2">
+                              {gt.inquiry_questions?.map((q: string, i: number) => (
+                                <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
+                                  <span className="text-emerald-400 font-black">•</span> {q}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
+                            <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
+                            <ul className="space-y-2">
+                              {gt.post_activities?.map((a: string, i: number) => (
+                                <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
+                                  <span className="text-emerald-400 font-black">•</span> {a}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
 
               {/* 방문형 탭: 권장 학년 뱃지 */}
               {activeTab === "OFFLINE" && selectedResource.recommended_grade?.length > 0 && (

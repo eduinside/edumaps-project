@@ -80,6 +80,15 @@
 - 가까운 장소 필터링/정렬: **낮음** (Haversine 거리 계산 + 배열 정렬)
 - 두 기능 모두 외부 API 의존 없이 클라이언트 단독으로 구현 가능
 
+## 📋 최근 개선사항 (2026.05.19 후속)
+
+### 분석 도구 연동
+- **Vercel Analytics**: 페이지뷰·사용자 이벤트 분석 자동 수집 (`@vercel/analytics`)
+- **Vercel Speed Insights**: Core Web Vitals(LCP, CLS, FID 등) 실시간 측정 (`@vercel/speed-insights`)
+- 두 기능 모두 Vercel 배포 환경에서 별도 설정 없이 즉시 활성화
+
+---
+
 ## 📋 최근 개선사항 (2026.05.19)
 
 ### 탐색 및 연계 기능 강화

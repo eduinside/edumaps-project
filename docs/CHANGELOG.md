@@ -2,6 +2,18 @@
 
 모든 주목할 만한 변경 사항을 이 파일에 기록합니다.
 
+## [2026.05.19] - Vercel Analytics · Speed Insights 연동
+
+### 추가됨
+- **@vercel/analytics**: Vercel Analytics 패키지 설치 및 `layout.tsx`에 `<Analytics />` 컴포넌트 추가
+- **@vercel/speed-insights**: Vercel Speed Insights 패키지 설치 및 `layout.tsx`에 `<SpeedInsights />` 컴포넌트 추가
+- Vercel 배포 환경에서 페이지뷰·이벤트 분석 및 Core Web Vitals 측정 자동 활성화
+
+### 관련 파일
+- `src/app/layout.tsx` — Analytics, SpeedInsights 컴포넌트 삽입
+
+---
+
 ## [2026.05.19] - 탐색 및 연계 기능 강화
 
 ### 추가됨
