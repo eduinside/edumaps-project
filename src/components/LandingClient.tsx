@@ -145,7 +145,11 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
     return { offline, online, allOffline, allOnline };
   }, [initialData, trimmedQuery, isSearching, selectedOfflineTag, selectedOnlineCategory]);
 
-  const monthLabel = `${selectedMonth}월`;
+  // 방학 월(1,2,8)은 인접 학기 월의 자료를 대신 표시
+  const VACATION_FALLBACK: Record<number, number> = { 1: 12, 2: 3, 8: 9 };
+  const isVacationMonth = selectedMonth in VACATION_FALLBACK;
+  const effectiveMonth = VACATION_FALLBACK[selectedMonth] ?? selectedMonth;
+  const monthLabel = `${effectiveMonth}월`;
 
   const recommendedItems = useMemo(() => {
     if (selectedGrade === null) {
@@ -370,7 +374,9 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                   이달의 학년별 추천
                 </h3>
                 <p className="text-sm text-slate-500 mt-1 font-medium">
-                  학년을 선택하면 <span className="text-emerald-600 font-bold">{monthLabel}</span>에 어울리는 체험과 자료를 보여드려요.
+                  {isVacationMonth
+                    ? <><span className="text-emerald-600 font-bold">{effectiveMonth}월</span>에 어울리는 체험과 자료도 살펴보세요</>
+                    : <>학년을 선택하면 <span className="text-emerald-600 font-bold">{monthLabel}</span>에 어울리는 체험과 자료를 보여드려요.</>}
                 </p>
               </div>
               {/* Month Selector */}
