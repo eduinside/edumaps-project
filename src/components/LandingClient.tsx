@@ -110,7 +110,11 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
     setSelectedOnlineCategory(null);
   }, [searchQuery]);
 
-  const navigateToItem = (item: any) => {
+  const navigateToItem = (item: any, linked: boolean = false) => {
+    if (linked) {
+      router.push(`/roadmap?id=${item.id}`);
+      return;
+    }
     const path = item.type === "OFFLINE" ? `/visitmap?id=${item.id}` : `/online?id=${item.id}`;
     router.push(path);
   };
@@ -145,30 +149,69 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
     return { offline, online, allOffline, allOnline };
   }, [initialData, trimmedQuery, isSearching, selectedOfflineTag, selectedOnlineCategory]);
 
-  // 방학 월(1,2,8)은 인접 학기 월의 자료를 대신 표시
-  const VACATION_FALLBACK: Record<number, number> = { 1: 12, 2: 3, 8: 9 };
-  const isVacationMonth = selectedMonth in VACATION_FALLBACK;
-  const effectiveMonth = VACATION_FALLBACK[selectedMonth] ?? selectedMonth;
-  const monthLabel = `${effectiveMonth}월`;
+  const monthLabel = `${selectedMonth}월`;
 
-  const recommendedItems = useMemo(() => {
-    if (selectedGrade === null) {
-      // 학년 미선택 시 모든 학년의 자료 표시
-      return initialData.filter((item) => {
-        const topics = item.grade_topics || [];
+  const recommendedItems = useMemo<{ item: any; linked: boolean }[]>(() => {
+    const MIN = 4;
+    const MAX = 8;
+    const gradeStr = selectedGrade === null ? null : String(selectedGrade);
+
+    const isLinked = (item: any) => {
+      const topics = item.grade_topics || [];
+      if (gradeStr === null) {
         return topics.some((gt: any) => gt.month === monthLabel);
-      });
-    }
-    const gradeStr = String(selectedGrade);
-    return initialData.filter((item) => {
+      }
       const recGrades = (item.recommended_grade || []).map((g: any) => String(g));
       if (!recGrades.includes(gradeStr)) return false;
-      const topics = item.grade_topics || [];
-      return topics.some((gt: any) => {
-        const gtGrade = String(gt.grade);
-        return gtGrade === gradeStr && gt.month === monthLabel;
+      return topics.some((gt: any) => String(gt.grade) === gradeStr && gt.month === monthLabel);
+    };
+
+    const linked = initialData.filter(isLinked);
+    const used = new Set<string>(linked.map((i: any) => i.id));
+    const result: { item: any; linked: boolean }[] = linked.map((item: any) => ({ item, linked: true }));
+
+    const balancePush = (candidates: any[]) => {
+      if (result.length >= MIN && result.length >= MAX) return;
+      const offline = candidates.filter((c) => c.type === "OFFLINE" && !used.has(c.id));
+      const online = candidates.filter((c) => c.type === "ONLINE" && !used.has(c.id));
+      while (result.length < MAX && (offline.length || online.length)) {
+        const offCount = result.filter((r) => r.item.type === "OFFLINE").length;
+        const onCount = result.length - offCount;
+        const pickOffline = offCount <= onCount ? offline.length > 0 : !online.length;
+        const pool = pickOffline && offline.length ? offline : online.length ? online : offline;
+        const next = pool.shift();
+        if (!next) break;
+        used.add(next.id);
+        result.push({ item: next, linked: false });
+        if (result.length >= MIN && result.length >= MAX) break;
+      }
+    };
+
+    // 2차: 같은 월에 다른 학년 grade_topic을 가진 자료
+    if (result.length < MIN) {
+      const tier2 = initialData.filter((item: any) => {
+        if (used.has(item.id)) return false;
+        return (item.grade_topics || []).some((gt: any) => gt.month === monthLabel);
       });
-    });
+      balancePush(tier2);
+    }
+
+    // 3차: recommended_grade에 해당 학년이 포함된 자료(연계 토픽 없음)
+    if (result.length < MIN && gradeStr !== null) {
+      const tier3 = initialData.filter((item: any) => {
+        if (used.has(item.id)) return false;
+        return (item.recommended_grade || []).map((g: any) => String(g)).includes(gradeStr);
+      });
+      balancePush(tier3);
+    }
+
+    // 4차: 안전망 — 어떤 자료든 type 균형으로 채움
+    if (result.length < MIN) {
+      const tier4 = initialData.filter((item: any) => !used.has(item.id));
+      balancePush(tier4);
+    }
+
+    return result.slice(0, MAX);
   }, [initialData, selectedGrade, monthLabel]);
 
   if (refreshing) {
@@ -201,7 +244,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 onClick={() => router.push("/visitmap")}
                 className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 transition-all flex items-center gap-1.5"
               >
-                <MapPin className="w-4 h-4" /> <span className="hidden sm:inline">체험학습</span>
+                <MapPin className="w-4 h-4" /> <span className="hidden md:inline">체험학습</span>
               </button>
               <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
                 대구 지역의 오프라인 현장체험 장소를 지도로 확인하세요
@@ -212,7 +255,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 onClick={() => router.push("/online")}
                 className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 transition-all flex items-center gap-1.5"
               >
-                <MonitorPlay className="w-4 h-4" /> <span className="hidden sm:inline">온라인</span>
+                <MonitorPlay className="w-4 h-4" /> <span className="hidden md:inline">온라인</span>
               </button>
               <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
                 에듀테크 자원과 유용한 온라인 학습 사이트 모음
@@ -223,7 +266,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 onClick={() => router.push("/roadmap")}
                 className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 transition-all flex items-center gap-1.5"
               >
-                <BookOpen className="w-4 h-4" /> <span className="hidden sm:inline">학년별 로드맵</span>
+                <BookOpen className="w-4 h-4" /> <span className="hidden md:inline">학년별 로드맵</span>
               </button>
               <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
                 교과 단원과 연계된 학년별 맞춤 학습 코스
@@ -233,7 +276,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
               onClick={() => setIsHowToOpen(true)}
               className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-emerald-600 bg-emerald-50 hover:bg-emerald-100 transition-all flex items-center gap-1.5 border border-emerald-200"
             >
-              <Info className="w-4 h-4" /> <span className="hidden sm:inline">이용방법</span>
+              <Info className="w-4 h-4" /> <span className="hidden md:inline">이용방법</span>
             </button>
           </nav>
         </div>
@@ -374,9 +417,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                   이달의 학년별 추천
                 </h3>
                 <p className="text-sm text-slate-500 mt-1 font-medium">
-                  {isVacationMonth
-                    ? <><span className="text-emerald-600 font-bold">{effectiveMonth}월</span>에 어울리는 체험과 자료도 살펴보세요</>
-                    : <>학년을 선택하면 <span className="text-emerald-600 font-bold">{monthLabel}</span>에 어울리는 체험과 자료를 보여드려요.</>}
+                  학년을 선택하면 <span className="text-emerald-600 font-bold">{monthLabel}</span>에 어울리는 체험과 자료를 보여드려요.
                 </p>
               </div>
               {/* Month Selector */}
@@ -427,8 +468,8 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {recommendedItems.map((item: any) => (
-                  <LandingCard key={item.id} item={item} onClick={() => navigateToItem(item)} />
+                {recommendedItems.map(({ item, linked }) => (
+                  <LandingCard key={item.id} item={item} onClick={() => navigateToItem(item, linked)} />
                 ))}
               </div>
             )}
