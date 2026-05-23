@@ -170,10 +170,24 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
     const used = new Set<string>(linked.map((i: any) => i.id));
     const result: { item: any; linked: boolean }[] = linked.map((item: any) => ({ item, linked: true }));
 
+    // 월×학년 시드 기반 결정론적 셔플 (같은 조합은 항상 동일 순서)
+    const seed = (selectedMonth ?? 0) * 7 + (selectedGrade ?? 0) * 13;
+    const seededShuffle = <T,>(arr: T[]): T[] => {
+      const a = [...arr];
+      let s = seed;
+      for (let i = a.length - 1; i > 0; i--) {
+        s = (s * 1664525 + 1013904223) & 0xffffffff;
+        const j = Math.abs(s) % (i + 1);
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+
     const balancePush = (candidates: any[]) => {
       if (result.length >= MIN && result.length >= MAX) return;
-      const offline = candidates.filter((c) => c.type === "OFFLINE" && !used.has(c.id));
-      const online = candidates.filter((c) => c.type === "ONLINE" && !used.has(c.id));
+      const shuffled = seededShuffle(candidates);
+      const offline = shuffled.filter((c) => c.type === "OFFLINE" && !used.has(c.id));
+      const online = shuffled.filter((c) => c.type === "ONLINE" && !used.has(c.id));
       while (result.length < MAX && (offline.length || online.length)) {
         const offCount = result.filter((r) => r.item.type === "OFFLINE").length;
         const onCount = result.length - offCount;
