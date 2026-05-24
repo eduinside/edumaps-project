@@ -215,14 +215,14 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
   }, [selectedCategory, activeTab]);
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 font-sans overflow-hidden">
+    <div className="flex flex-col h-screen bg-gray-50 dark:bg-slate-900 font-sans overflow-hidden">
       {/* Floating Header */}
-      <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 backdrop-blur-md shadow-lg rounded-full z-20">
+      <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-lg rounded-full z-20">
         <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push('/')}>
           <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
             <Image src="/images/daegu_logo.webp" alt="EduMaps Logo" fill className="object-contain rounded-full" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">EduMaps</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">EduMaps</h1>
           <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
             검색과 월별 추천 자료를 확인하세요
           </span>
@@ -231,7 +231,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
           <div className="group relative">
             <button
               onClick={() => handleTabChange("visitmap")}
-              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "OFFLINE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 bg-slate-100 hover:bg-slate-200"}`}
+              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "OFFLINE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
             >
               <MapPin className="w-4 h-4" /> 체험학습
             </button>
@@ -242,7 +242,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
           <div className="group relative">
             <button
               onClick={() => handleTabChange("online")}
-              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "ONLINE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 bg-slate-100 hover:bg-slate-200"}`}
+              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "ONLINE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
             >
               <MonitorPlay className="w-4 h-4" /> 온라인
             </button>
@@ -253,7 +253,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
           <div className="group relative">
             <button
               onClick={() => handleTabChange("roadmap")}
-              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "GRADE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 bg-slate-100 hover:bg-slate-200"}`}
+              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "GRADE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
             >
               <BookOpen className="w-4 h-4" /> 학년별 로드맵
             </button>
@@ -272,31 +272,31 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   value={headerQuery}
                   onChange={(e) => setHeaderQuery(e.target.value)}
                   placeholder="전체 자원 검색..."
-                  className="w-40 sm:w-56 px-4 py-2 text-sm rounded-full border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-200 focus:border-emerald-400 transition-all"
+                  className="w-40 sm:w-56 px-4 py-2 text-sm rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:focus:ring-emerald-800 focus:border-emerald-400 transition-all"
                 />
                 {/* 모바일: 제출 시 랜딩 검색 결과 페이지로 이동 */}
                 <button type="submit" className="sm:hidden p-2.5 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors">
                   <Search className="w-4 h-4" />
                 </button>
-                <button type="button" onClick={() => { setSearchOpen(false); setHeaderQuery(""); }} className="p-2.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors">
+                <button type="button" onClick={() => { setSearchOpen(false); setHeaderQuery(""); }} className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                   <X className="w-4 h-4" />
                 </button>
                 {/* 데스크탑: 드롭다운 자동완성 */}
                 {headerSearchResults.length > 0 && (
-                  <div className="hidden sm:block absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="hidden sm:block absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                     {headerSearchResults.map((item: any) => (
                       <button
                         key={item.id}
                         type="button"
                         onClick={() => navigateToHeaderResult(item)}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 transition-colors text-left group"
+                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors text-left group"
                       >
-                        <div className="shrink-0 w-8 h-8 rounded-xl overflow-hidden bg-slate-100">
+                        <div className="shrink-0 w-8 h-8 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700">
                           <img src={item.image_url || "/images/res_000.webp"} alt="" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-800 group-hover:text-emerald-600 truncate">{item.title}</p>
-                          <p className="text-xs text-slate-400 truncate">{item.category}</p>
+                          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 truncate">{item.title}</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{item.category}</p>
                         </div>
                         <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded-full ${item.type === "OFFLINE" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"}`}>
                           {item.type === "OFFLINE" ? "체험" : "온라인"}
@@ -309,7 +309,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             ) : (
               <button
                 onClick={() => setSearchOpen(true)}
-                className="p-2.5 text-slate-500 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors"
+                className="p-2.5 text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full transition-colors"
                 aria-label="검색"
               >
                 <Search className="w-4 h-4" />
@@ -318,7 +318,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 text-sm font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full hover:bg-emerald-100 transition-colors flex items-center gap-1.5"
+            className="px-5 py-2.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors flex items-center gap-1.5"
           >
             <Info className="w-4 h-4" /> <span className="hidden sm:inline">이용방법</span>
           </button>
@@ -339,22 +339,22 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             userLocation={activeTab === "OFFLINE" || activeTab === "GRADE" ? userLocation : null}
           />
           {activeTab === "ONLINE" && (
-            <div className="absolute inset-0 bg-white/85 backdrop-blur-[12px] z-[1] transition-all duration-700" />
+            <div className="absolute inset-0 bg-white/85 dark:bg-slate-900/85 backdrop-blur-[12px] z-[1] transition-all duration-700" />
           )}
         </div>
 
         {/* Floating Sidebar */}
         <div className={`${activeTab === "ONLINE" ? "sm:hidden" : ""} absolute top-24 left-4 z-10 w-full max-w-[340px] transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+2rem)]'}`}>
-          <div className="bg-white/90 backdrop-blur-md rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
+          <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
             <div className="p-7 pb-4">
               {/* 모바일 전용 탭 네비게이션 */}
-              <div className="sm:hidden grid grid-cols-3 gap-1.5 mb-4 p-1.5 bg-slate-100 rounded-2xl">
+              <div className="sm:hidden grid grid-cols-3 gap-1.5 mb-4 p-1.5 bg-slate-100 dark:bg-slate-700 rounded-2xl">
                 <button
                   onClick={() => handleTabChange("visitmap")}
                   className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
                     activeTab === "OFFLINE"
-                      ? "bg-white text-emerald-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "bg-white dark:bg-slate-600 text-emerald-600 dark:text-emerald-400 shadow-sm"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                   }`}
                 >
                   <MapPin className="w-4 h-4" />
@@ -364,8 +364,8 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   onClick={() => handleTabChange("online")}
                   className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
                     activeTab === "ONLINE"
-                      ? "bg-white text-emerald-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "bg-white dark:bg-slate-600 text-emerald-600 dark:text-emerald-400 shadow-sm"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                   }`}
                 >
                   <MonitorPlay className="w-4 h-4" />
@@ -375,8 +375,8 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   onClick={() => handleTabChange("roadmap")}
                   className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
                     activeTab === "GRADE"
-                      ? "bg-white text-emerald-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
+                      ? "bg-white dark:bg-slate-600 text-emerald-600 dark:text-emerald-400 shadow-sm"
+                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
                   }`}
                 >
                   <BookOpen className="w-4 h-4" />
@@ -386,12 +386,12 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-sm font-bold text-slate-600">
+                  <h2 className="text-sm font-bold text-slate-600 dark:text-slate-300">
                     {activeTab === "OFFLINE" ? "체험학습" : activeTab === "ONLINE" ? "온라인" : "학년별 로드맵"}
                   </h2>
                   <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{sidebarResources.length}</span>
                 </div>
-                <button onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition-colors">
+                <button onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                   <ChevronLeft className="w-5 h-5" />
                 </button>
               </div>
@@ -444,7 +444,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
             <div className="flex-1 overflow-y-auto px-4 pb-8 space-y-3 custom-scrollbar">
               {sidebarResources.length === 0 ? (
-                <div className="py-20 text-center text-slate-400 text-sm">해당 조건의 자원이 없습니다.</div>
+                <div className="py-20 text-center text-slate-400 dark:text-slate-500 text-sm">해당 조건의 자원이 없습니다.</div>
               ) : (
                 sidebarResources.map((resource) => (
                   <div
@@ -459,14 +459,14 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         setSelectedGrade(grades[0]);
                       }
                     }}
-                    className={`group ${activeTab === "GRADE" ? "p-5" : "p-4"} rounded-3xl transition-all cursor-pointer border ${selectedResource?.id === resource.id ? "bg-emerald-50 border-emerald-200 shadow-md" : "bg-white border-transparent hover:bg-slate-50 hover:shadow-sm"}`}
+                    className={`group ${activeTab === "GRADE" ? "p-5" : "p-4"} rounded-3xl transition-all cursor-pointer border ${selectedResource?.id === resource.id ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 shadow-md" : "bg-white dark:bg-slate-800 border-transparent hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-sm"}`}
                   >
                     <div className="flex gap-4">
                       <div className={`relative ${activeTab === "GRADE" ? "w-20 h-20" : "w-16 h-16"} rounded-2xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
                         <Image src={resource.image_url || "/images/res_000.webp"} alt={resource.title} fill className="object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className={`font-bold text-slate-800 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 transition-colors line-clamp-1`}>{resource.title}</h3>
+                        <h3 className={`font-bold text-slate-800 dark:text-slate-100 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1`}>{resource.title}</h3>
                         <div className="flex flex-wrap gap-1 mt-1 mb-1">
                           {(() => {
                             const colors = activeTab === "GRADE"
@@ -475,10 +475,10 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                             return <span className="text-[9px] font-bold px-1.5 py-0.5 rounded border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{resource.category}</span>;
                           })()}
                           {resource.tags?.map((tag: string) => (
-                            <span key={tag} className="text-[9px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{tag}</span>
+                            <span key={tag} className="text-[9px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">{tag}</span>
                           ))}
                         </div>
-                        <p className="text-[10px] text-slate-500 line-clamp-1 mt-1">{resource.description}</p>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">{resource.description}</p>
                         {nearbyMode && userLocation && resource.location?.lat && (
                           <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-blue-500">
                             <LocateFixed className="w-3 h-3" />
@@ -501,7 +501,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
               const categoryResources = filteredResources.filter(r => r.category === category);
               const colors = getCategoryColor(category);
               return (
-                <div key={category} className="flex-1 min-w-[280px] flex flex-col bg-white/90 backdrop-blur-md rounded-[2rem] shadow-lg border overflow-hidden max-h-[calc(100vh-8rem)]" style={{ borderColor: colors.border }}>
+                <div key={category} className="flex-1 min-w-[280px] flex flex-col bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-[2rem] shadow-lg border overflow-hidden max-h-[calc(100vh-8rem)]" style={{ borderColor: colors.border }}>
                   {/* Column Header */}
                   <div className="px-5 py-4 border-b bg-gradient-to-r to-white/30" style={{ borderBottomColor: colors.border, backgroundImage: `linear-gradient(to right, ${colors.bgLight}, rgba(255,255,255,0.3))` }}>
                     <div className="flex items-center gap-2">
@@ -513,7 +513,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   {/* Items List */}
                   <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-3 custom-scrollbar">
                     {categoryResources.length === 0 ? (
-                      <div className="py-8 text-center text-slate-400 text-sm">항목 없음</div>
+                      <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">항목 없음</div>
                     ) : (
                       categoryResources.map((resource) => (
                         <div
@@ -521,8 +521,8 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                           onClick={() => setSelectedResource(resource)}
                           className={`group p-3 rounded-2xl transition-all cursor-pointer border ${
                             selectedResource?.id === resource.id
-                              ? "bg-emerald-50 border-emerald-200 shadow-md"
-                              : "bg-white border-transparent hover:bg-slate-50 hover:shadow-sm"
+                              ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 shadow-md"
+                              : "bg-white dark:bg-slate-800 border-transparent hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-sm"
                           }`}
                         >
                           <div className="flex gap-3">
@@ -530,13 +530,13 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                               <Image src={resource.image_url || "/images/res_000.webp"} alt={resource.title} fill className="object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-slate-800 text-xs group-hover:text-emerald-600 transition-colors line-clamp-2">{resource.title}</h4>
+                              <h4 className="font-bold text-slate-800 dark:text-slate-100 text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">{resource.title}</h4>
                               <div className="flex flex-wrap gap-0.5 mt-1">
                                 {resource.tags && resource.tags.map((tag: string) => (
-                                  <span key={tag} className="text-[8px] font-medium text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{tag}</span>
+                                  <span key={tag} className="text-[8px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">{tag}</span>
                                 ))}
                               </div>
-                              <p className="text-[9px] text-slate-500 line-clamp-1 mt-0.5">{resource.description}</p>
+                              <p className="text-[9px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{resource.description}</p>
                             </div>
                           </div>
                         </div>
@@ -558,7 +558,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         {!isSidebarOpen && (
           <button
             onClick={() => setIsSidebarOpen(true)}
-            className="absolute top-24 left-4 z-10 p-4 bg-white/90 backdrop-blur-md rounded-full shadow-xl text-emerald-500 hover:bg-white transition-all animate-in fade-in zoom-in"
+            className="absolute top-24 left-4 z-10 p-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full shadow-xl text-emerald-500 hover:bg-white dark:hover:bg-slate-700 transition-all animate-in fade-in zoom-in"
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -566,7 +566,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
 
         {/* Floating Detail Panel */}
         {selectedResource && (
-          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white shadow-2xl border border-slate-100 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
+          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white dark:bg-slate-800 shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
             ? "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[calc(100%-3rem)] sm:max-w-[500px] sm:max-h-[calc(100vh-8rem)] shadow-emerald-200/50"
             : "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-auto sm:right-4 sm:w-[420px] sm:max-h-[85vh] slide-in-from-right-4"
             }`}>
@@ -594,7 +594,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                   return <span className="text-[11px] font-black px-3 py-1.5 rounded-full border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{selectedResource.category}</span>;
                 })()}
                 {selectedResource.tags?.map((tag: string) => (
-                  <span key={tag} className="text-[11px] font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">{tag}</span>
+                  <span key={tag} className="text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-full">{tag}</span>
                 ))}
               </div>
 
@@ -603,14 +603,14 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 const matchingTopics = topics.filter((gt: any) => gt.grade === selectedGrade);
                 if (activeTab !== 'GRADE' || !selectedGrade || matchingTopics.length === 0) return (
                 <div className="space-y-4">
-                  <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
-                    <p className="text-[15px] text-slate-600 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
+                  <div className="bg-slate-50 dark:bg-slate-700/50 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-600">
+                    <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
                   </div>
 
                   {/* 온라인 탭 전용: 권장 학년 배지 */}
                   {activeTab === "ONLINE" && selectedResource.recommended_grade?.length > 0 && (
                     <div className="flex flex-wrap items-center gap-2 px-1">
-                      <span className="text-xs font-bold text-slate-400">권장 학년</span>
+                      <span className="text-xs font-bold text-slate-400 dark:text-slate-500">권장 학년</span>
                       {(() => {
                         const grades = selectedResource.recommended_grade.map((g: any) => String(g));
                         const allGrades = grades.length === 6 && ['1', '2', '3', '4', '5', '6'].every(g => grades.includes(g));
@@ -624,7 +624,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         return grades.map((g: string) => (
                           <span
                             key={g}
-                            className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
+                            className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800"
                           >
                             {g}학년
                           </span>
@@ -637,7 +637,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                 const uniqueGrades = Array.from(new globalThis.Map(topics.map((gt: any) => [gt.grade, gt])).values())
                   .sort((a: any, b: any) => a.grade - b.grade);
                 return (
-                  <div className="bg-emerald-50/50 p-6 rounded-[2rem] border border-emerald-100 space-y-5 shadow-inner">
+                  <div className="bg-emerald-50/50 dark:bg-emerald-900/20 p-6 rounded-[2rem] border border-emerald-100 dark:border-emerald-800 space-y-5 shadow-inner">
                     {uniqueGrades.length > 1 && (
                       <>
                         <div className="flex flex-wrap gap-1">
@@ -645,7 +645,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                             <button
                               key={gt.grade}
                               onClick={() => setSelectedGrade(gt.grade)}
-                              className={`px-2.5 py-1 text-xs font-black rounded-full transition-all ${selectedGrade === gt.grade ? 'bg-emerald-500 text-white shadow-md' : 'bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50'}`}
+                              className={`px-2.5 py-1 text-xs font-black rounded-full transition-all ${selectedGrade === gt.grade ? 'bg-emerald-500 text-white shadow-md' : 'bg-white dark:bg-slate-700 border border-emerald-200 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-600'}`}
                             >
                               {gt.grade}학년
                             </button>
@@ -659,33 +659,33 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
                             <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
-                            <span className="text-base font-black text-emerald-800">학년{matchingTopics.length > 1 ? ` (${idx + 1}/${matchingTopics.length})` : ''}</span>
+                            <span className="text-base font-black text-emerald-800 dark:text-emerald-300">학년{matchingTopics.length > 1 ? ` (${idx + 1}/${matchingTopics.length})` : ''}</span>
                           </div>
                           <div className="flex gap-1.5">
-                            {gt.subject && <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">{gt.subject}</span>}
-                            {gt.month && <span className="px-3 py-1.5 bg-white border border-emerald-200 text-emerald-600 text-[11px] font-bold rounded-xl shadow-sm">{gt.month}</span>}
+                            {gt.subject && <span className="px-3 py-1.5 bg-white dark:bg-slate-700 border border-emerald-200 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold rounded-xl shadow-sm">{gt.subject}</span>}
+                            {gt.month && <span className="px-3 py-1.5 bg-white dark:bg-slate-700 border border-emerald-200 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold rounded-xl shadow-sm">{gt.month}</span>}
                           </div>
                         </div>
                         <div className="mb-3">
-                          <h4 className="text-lg font-black text-slate-800 mb-2 leading-snug">&ldquo;{gt.topic_title}&rdquo;</h4>
-                          <p className="text-sm text-slate-600 leading-relaxed font-medium opacity-90">{gt.description}</p>
+                          <h4 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-2 leading-snug">&ldquo;{gt.topic_title}&rdquo;</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium opacity-90">{gt.description}</p>
                         </div>
                         <div className="space-y-3">
-                          <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
-                            <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><Info className="w-4 h-4" /> 탐구 질문</h5>
+                          <div className="bg-white/70 dark:bg-slate-700/50 p-4 rounded-2xl border border-emerald-50 dark:border-slate-600">
+                            <h5 className="text-xs font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-2 mb-3"><Info className="w-4 h-4" /> 탐구 질문</h5>
                             <ul className="space-y-2">
                               {gt.inquiry_questions?.map((q: string, i: number) => (
-                                <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
+                                <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
                                   <span className="text-emerald-400 font-black">•</span> {q}
                                 </li>
                               ))}
                             </ul>
                           </div>
-                          <div className="bg-white/70 p-4 rounded-2xl border border-emerald-50">
-                            <h5 className="text-xs font-black text-emerald-700 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
+                          <div className="bg-white/70 dark:bg-slate-700/50 p-4 rounded-2xl border border-emerald-50 dark:border-slate-600">
+                            <h5 className="text-xs font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
                             <ul className="space-y-2">
                               {gt.post_activities?.map((a: string, i: number) => (
-                                <li key={i} className="text-[13px] text-slate-600 flex gap-2.5 font-medium">
+                                <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
                                   <span className="text-emerald-400 font-black">•</span> {a}
                                 </li>
                               ))}
@@ -728,7 +728,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
             <div className="p-8 pt-0 mt-auto shrink-0 space-y-4">
               <div className={`${selectedResource.type === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
                 {selectedResource.external_url && (
-                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 transition-all shadow-xl active:scale-95 ${selectedResource.type === "ONLINE" ? "w-full" : ""}`}>
+                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 dark:hover:bg-slate-600 transition-all shadow-xl active:scale-95 ${selectedResource.type === "ONLINE" ? "w-full" : ""}`}>
                     <ExternalLink className="w-5 h-5" /> 웹사이트
                   </a>
                 )}
@@ -752,17 +752,17 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 px-1">
                         <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-                        <span className="text-xs font-black text-emerald-600">학년별 로드맵</span>
+                        <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">학년별 로드맵</span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {sortedTopics.map((gt: any) => (
                           <button
                             key={gt.grade}
                             onClick={() => handleTabChange("roadmap", `id=${selectedResource.id}&grade=${gt.grade}`)}
-                            className="flex-1 min-w-[80px] flex flex-col items-center gap-1 py-3 px-3 bg-gradient-to-br from-emerald-50 to-cyan-50 text-emerald-700 border-2 border-emerald-200 rounded-2xl text-xs font-black hover:from-emerald-100 hover:to-cyan-100 hover:border-emerald-300 transition-all shadow-sm active:scale-95"
+                            className="flex-1 min-w-[80px] flex flex-col items-center gap-1 py-3 px-3 bg-gradient-to-br from-emerald-50 to-cyan-50 dark:from-emerald-900/30 dark:to-cyan-900/30 text-emerald-700 dark:text-emerald-400 border-2 border-emerald-200 dark:border-emerald-700 rounded-2xl text-xs font-black hover:from-emerald-100 hover:to-cyan-100 dark:hover:from-emerald-900/50 dark:hover:to-cyan-900/50 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all shadow-sm active:scale-95"
                           >
                             <span className="text-base font-black text-emerald-500">{gt.grade}학년</span>
-                            {gt.topic_title && <span className="text-[9px] font-bold text-emerald-600 opacity-75 line-clamp-1 text-center">{gt.topic_title}</span>}
+                            {gt.topic_title && <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-75 line-clamp-1 text-center">{gt.topic_title}</span>}
                           </button>
                         ))}
                       </div>
