@@ -35,9 +35,9 @@ function LandingCard({ item, onClick }: { item: any; onClick: () => void }) {
   return (
     <div
       onClick={onClick}
-      className="group cursor-pointer bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+      className="group cursor-pointer bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
     >
-      <div className="relative w-full aspect-[16/10] bg-slate-100 overflow-hidden">
+      <div className="relative w-full aspect-[16/10] bg-slate-100 dark:bg-slate-700 overflow-hidden">
         <ResourceImage src={item.image_url} alt={item.title} />
         <span
           className={`absolute top-3 left-3 px-2.5 py-1 text-[10px] font-black rounded-full shadow-md ${isOffline ? "bg-emerald-500 text-white" : "bg-sky-500 text-white"
@@ -53,20 +53,20 @@ function LandingCard({ item, onClick }: { item: any; onClick: () => void }) {
       <div className="p-4">
         <div className="flex flex-wrap gap-1 mb-2">
           {item.category && (
-            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+            <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full border border-emerald-100 dark:border-emerald-800">
               {item.category}
             </span>
           )}
           {item.tags?.slice(0, 2).map((tag: string) => (
-            <span key={tag} className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+            <span key={tag} className="text-[10px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded-full">
               {tag}
             </span>
           ))}
         </div>
-        <h3 className="font-bold text-slate-800 text-sm group-hover:text-emerald-600 transition-colors line-clamp-1">
+        <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
           {item.title}
         </h3>
-        <p className="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">{item.description}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1 leading-relaxed">{item.description}</p>
       </div>
     </div>
   );
@@ -230,22 +230,22 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
 
   if (refreshing) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
+      <div className="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-slate-900">
         <div className="animate-pulse text-emerald-500 font-bold">데이터 새로고침 중...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50/40 via-white to-white font-sans">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50/40 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 font-sans">
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-slate-100">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-100 dark:border-slate-700">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push("/")}>
             <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
               <Image src="/images/daegu_logo.webp" alt="EduMaps Logo" fill className="object-contain rounded-full" />
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 group-hover:text-emerald-600 transition-colors">
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">
               EduMaps
             </h1>
             <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
@@ -256,7 +256,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             <div className="group relative">
               <button
                 onClick={() => router.push("/visitmap")}
-                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 transition-all flex items-center gap-1.5"
+                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all flex items-center gap-1.5"
               >
                 <MapPin className="w-4 h-4" /> <span className="hidden md:inline">체험학습</span>
               </button>
@@ -267,7 +267,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             <div className="group relative">
               <button
                 onClick={() => router.push("/online")}
-                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 transition-all flex items-center gap-1.5"
+                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all flex items-center gap-1.5"
               >
                 <MonitorPlay className="w-4 h-4" /> <span className="hidden md:inline">온라인</span>
               </button>
@@ -278,7 +278,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             <div className="group relative">
               <button
                 onClick={() => router.push("/roadmap")}
-                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-700 transition-all flex items-center gap-1.5"
+                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all flex items-center gap-1.5"
               >
                 <BookOpen className="w-4 h-4" /> <span className="hidden md:inline">학년별 로드맵</span>
               </button>
@@ -288,7 +288,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             </div>
             <button
               onClick={() => setIsHowToOpen(true)}
-              className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-emerald-600 bg-emerald-50 hover:bg-emerald-100 transition-all flex items-center gap-1.5 border border-emerald-200"
+              className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800"
             >
               <Info className="w-4 h-4" /> <span className="hidden md:inline">이용방법</span>
             </button>
@@ -299,23 +299,23 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
         {/* Hero + Search */}
         <section className="pt-12 sm:pt-20 pb-10 text-center">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
             우리 아이 자기주도학습을 위한<br className="hidden sm:block" />
             <span className="text-emerald-500"> 대구 체험·온라인 학습 길잡이</span>
           </h2>
-          <p className="mt-4 text-sm sm:text-base text-slate-500 font-medium">
+          <p className="mt-4 text-sm sm:text-base text-slate-500 dark:text-slate-400 font-medium">
             현장체험과 온라인 학습 자원을 한 번에 검색하고, 이달의 학년별 추천자원을 만나보세요.
           </p>
 
           <div className="mt-8 max-w-2xl mx-auto">
             <div className="relative">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="검색어를 입력하세요 (예: 박물관, 수학, 역사)"
-                className="w-full pl-14 pr-5 py-4 sm:py-5 text-base rounded-full border border-slate-200 bg-white shadow-lg focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-400 transition-all"
+                className="w-full pl-14 pr-5 py-4 sm:py-5 text-base rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-slate-100 shadow-lg dark:shadow-slate-900/50 focus:outline-none focus:ring-4 focus:ring-emerald-100 dark:focus:ring-emerald-900 focus:border-emerald-400 transition-all"
               />
             </div>
           </div>
@@ -327,7 +327,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             {/* OFFLINE Results */}
             <div>
               <div className="flex items-baseline justify-between mb-4">
-                <h3 className="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2">
+                <h3 className="text-lg sm:text-xl font-black text-slate-800 dark:text-slate-100 flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-emerald-500" /> 현장체험
                   <span className="text-emerald-500 text-sm">{searchResults.offline.length}</span>
                 </h3>
@@ -337,8 +337,8 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                   <button
                     onClick={() => setSelectedOfflineTag(null)}
                     className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all ${selectedOfflineTag === null
-                        ? "bg-slate-800 text-white shadow"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 shadow"
+                        : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                       }`}
                   >
                     전체
@@ -354,7 +354,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                         onClick={() => setSelectedOfflineTag(region === selectedOfflineTag ? null : region)}
                         className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all ${selectedOfflineTag === region
                             ? "bg-emerald-500 text-white shadow"
-                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                            : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                           }`}
                       >
                         {region}
@@ -364,7 +364,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 </div>
               )}
               {searchResults.offline.length === 0 ? (
-                <p className="text-sm text-slate-400 py-8 text-center bg-slate-50 rounded-2xl">검색 결과가 없습니다.</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500 py-8 text-center bg-slate-50 dark:bg-slate-800/60 rounded-2xl">검색 결과가 없습니다.</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {searchResults.offline.map((item: any) => (
@@ -377,7 +377,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             {/* ONLINE Results */}
             <div>
               <div className="flex items-baseline justify-between mb-4">
-                <h3 className="text-lg sm:text-xl font-black text-slate-800 flex items-center gap-2">
+                <h3 className="text-lg sm:text-xl font-black text-slate-800 dark:text-slate-100 flex items-center gap-2">
                   <MonitorPlay className="w-5 h-5 text-sky-500" /> 온라인 학습
                   <span className="text-sky-500 text-sm">{searchResults.online.length}</span>
                 </h3>
@@ -386,8 +386,8 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 <button
                   onClick={() => setSelectedOnlineCategory(null)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all ${selectedOnlineCategory === null
-                      ? "bg-slate-800 text-white shadow"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      ? "bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 shadow"
+                      : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                     }`}
                 >
                   전체
@@ -398,7 +398,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                     onClick={() => setSelectedOnlineCategory(cat === selectedOnlineCategory ? null : cat)}
                     className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all ${selectedOnlineCategory === cat
                         ? "bg-sky-500 text-white shadow"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                       }`}
                   >
                     {cat}
@@ -406,7 +406,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 ))}
               </div>
               {searchResults.online.length === 0 ? (
-                <p className="text-sm text-slate-400 py-8 text-center bg-slate-50 rounded-2xl">검색 결과가 없습니다.</p>
+                <p className="text-sm text-slate-400 dark:text-slate-500 py-8 text-center bg-slate-50 dark:bg-slate-800/60 rounded-2xl">검색 결과가 없습니다.</p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {searchResults.online.map((item: any) => (
@@ -426,23 +426,23 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
           <section className="mt-4">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
               <div>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-2">
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
                   <Sparkles className="w-6 h-6 text-emerald-500" />
                   이달의 학년별 추천
                 </h3>
-                <p className="text-sm text-slate-500 mt-1 font-medium">
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
                   학년을 선택하면 <span className="text-emerald-600 font-bold">{monthLabel}</span>에 어울리는 체험과 자료를 보여드려요.
                 </p>
               </div>
               {/* Month Selector */}
-              <div className="flex items-center gap-1 bg-white border border-slate-200 rounded-full p-1 shadow-sm overflow-x-auto custom-scrollbar">
+              <div className="flex items-center gap-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full p-1 shadow-sm overflow-x-auto custom-scrollbar">
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
                   <button
                     key={m}
                     onClick={() => setSelectedMonth(m)}
                     className={`shrink-0 px-3 py-1.5 text-xs font-bold rounded-full transition-all ${selectedMonth === m
                         ? "bg-emerald-500 text-white shadow"
-                        : "text-slate-500 hover:bg-slate-100"
+                        : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                   >
                     {m}월
@@ -457,7 +457,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                 onClick={() => setSelectedGrade(null)}
                 className={`px-5 py-2.5 text-sm font-bold rounded-full transition-all ${selectedGrade === null
                     ? "bg-emerald-500 text-white shadow-lg scale-105"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                   }`}
               >
                 전체
@@ -468,7 +468,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
                   onClick={() => setSelectedGrade(g === selectedGrade ? null : g)}
                   className={`px-5 py-2.5 text-sm font-bold rounded-full transition-all ${selectedGrade === g
                       ? "bg-emerald-500 text-white shadow-lg scale-105"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600"
                     }`}
                 >
                   {g}학년
@@ -477,7 +477,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             </div>
 
             {recommendedItems.length === 0 ? (
-              <div className="py-20 text-center text-slate-400 text-sm bg-slate-50/60 rounded-3xl border border-slate-100">
+              <div className="py-20 text-center text-slate-400 dark:text-slate-500 text-sm bg-slate-50/60 dark:bg-slate-800/60 rounded-3xl border border-slate-100 dark:border-slate-700">
                 {selectedGrade ? `${selectedGrade}학년 · ` : ""}{monthLabel}에 해당하는 추천 자료가 아직 없습니다.
               </div>
             ) : (
@@ -491,8 +491,8 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
         )}
       </main>
 
-      <footer className="border-t border-slate-100 bg-white/60 py-6">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400">
+      <footer className="border-t border-slate-100 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 py-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400 dark:text-slate-500">
           대구광역시교육청 · 초등 자기주도학습 정보모아
         </div>
       </footer>

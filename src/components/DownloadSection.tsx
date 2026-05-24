@@ -28,9 +28,9 @@ export default function DownloadSection() {
             key={item.filename}
             href={`/downloads/${item.filename}`}
             download
-            className="group flex items-center gap-4 p-5 bg-white rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            className="group flex items-center gap-4 p-5 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
-            <div className="shrink-0 w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-colors">
+            <div className="shrink-0 w-12 h-12 rounded-2xl bg-red-50 dark:bg-red-900/30 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                 {/* 종이 몸체 */}
                 <path d="M7 4a2 2 0 0 1 2-2h10l6 6v18a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4z" fill="#fee2e2" stroke="#f87171" strokeWidth="1.2"/>
@@ -43,8 +43,8 @@ export default function DownloadSection() {
               </svg>
             </div>
             <div className="min-w-0 flex-1">
-              <h4 className="text-base font-bold text-slate-800 truncate">{item.title}</h4>
-              <p className="text-xs text-slate-500 mt-1 line-clamp-2">{item.description}</p>
+              <h4 className="text-base font-bold text-slate-800 dark:text-slate-100 truncate">{item.title}</h4>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{item.description}</p>
             </div>
           </a>
         ))}
