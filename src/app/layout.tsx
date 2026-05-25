@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="ko" className={`${plusJakartaSans.variable} antialiased`}>
       <head>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-QQBQB9Y5YY"
+          src="https://www.googletagmanager.com/gtag/js?id=G-RK6LDHNFXQ"
           strategy="afterInteractive"
         />
         <Script
@@ -39,7 +39,7 @@ export default function RootLayout({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-QQBQB9Y5YY');
+              gtag('config', 'G-RK6LDHNFXQ');
             `,
           }}
         />
