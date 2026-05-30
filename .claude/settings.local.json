@@ -7,7 +7,11 @@
       "mcp__Claude_in_Chrome__computer",
       "mcp__Claude_in_Chrome__read_console_messages",
       "Bash(npm run *)",
-      "mcp__Claude_in_Chrome__navigate"
+      "mcp__Claude_in_Chrome__navigate",
+      "PowerShell(Get-ChildItem D:\\\\Hwan\\\\Documents\\\\Web\\\\edumaps -File | Where-Object { $_.Extension -in '.md','.txt' -or $_.Name -in 'CLAUDE.md','AGENTS.md','README.md' })",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }

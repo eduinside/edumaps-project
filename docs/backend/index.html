@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>EduMaps 관리자 패널</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Vue 3 (Global Build) CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- FontAwesome 6.4.0 CSS CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    }
+    .font-outfit {
+      font-family: 'Outfit', sans-serif;
+    }
+    /* 스크롤바 숨기기/커스텀 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #10b981;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 overflow-x-hidden min-h-screen">
+
+  <div id="app" class="min-h-screen flex flex-col relative" v-cloak>
+    
+    <!-- Toast Alert Notification -->
+    <div v-if="toast" class="fixed top-6 right-6 z-50 flex items-center p-4 rounded-2xl border shadow-2xl transition-all duration-300 max-w-md animate-bounce"
+         :class="toast.type === 'success' ? 'bg-slate-900/90 border-emerald-500/40 text-emerald-400 backdrop-blur-md' : 'bg-slate-900/90 border-rose-500/40 text-rose-400 backdrop-blur-md'">
+      <div class="mr-3">
+        <i :class="toast.type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'" class="text-lg"></i>
+      </div>
+      <p class="text-sm font-medium">{{ toast.message }}</p>
+      <button @click="toast = null" class="ml-4 text-slate-400 hover:text-white transition-colors">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- ==================== 1. 로그인 레이어 ==================== -->
+    <div v-if="!isLoggedIn" class="flex-1 flex flex-col items-center justify-center px-4 relative overflow-hidden bg-slate-950">
+      <!-- 배경 그라데이션 오라 -->
+      <div class="absolute w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-[120px] top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2"></div>
+      <div class="absolute w-[400px] h-[400px] rounded-full bg-cyan-500/10 blur-[100px] bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2"></div>
+
+      <div class="w-full max-w-md bg-slate-900/80 border border-slate-800/80 p-8 rounded-3xl shadow-2xl backdrop-blur-xl relative z-10 transition-transform duration-500 hover:border-slate-700/80">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-50/5 text-emerald-400 border border-emerald-500/20 mb-4">
+            <i class="fas fa-map-marker-alt text-2xl"></i>
+          </div>
+          <h1 class="text-2xl font-black font-outfit tracking-tight text-white mb-2">EduMaps Admin</h1>
+          <p class="text-slate-400 text-sm">작성자 및 팀원 전용 데이터 관리 모드</p>
+        </div>
+
+        <form @submit.prevent="login" class="space-y-6">
+          <div>
+            <label class="block text-slate-300 text-xs font-semibold uppercase tracking-wider mb-2">관리자 패스코드</label>
+            <div class="relative">
+              <input type="password" v-model="passwordInput" placeholder="••••••••" required
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-2xl py-3.5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 transition-all placeholder-slate-600">
+              <div class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-500">
+                <i class="fas fa-lock text-sm"></i>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" :disabled="loading"
+                  class="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-2xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+            <span v-if="loading" class="mr-2"><i class="fas fa-spinner fa-spin"></i></span>
+            <span v-else>관리자 패널 로그인</span>
+          </button>
+        </form>
+        
+        <p class="text-center text-slate-500 text-xs mt-6">
+          초기 비밀번호는 <code class="bg-slate-950 px-1.5 py-0.5 rounded text-emerald-500">edumaps123!</code> 입니다.
+        </p>
+      </div>
+    </div>
+
+    <!-- ==================== 2. 메인 관리자 패널 레이아웃 ==================== -->
+    <div v-else class="flex-1 flex flex-col md:flex-row min-h-screen">
+      
+      <!-- 사이드바 -->
+      <aside class="w-full md:w-64 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col justify-between shrink-0">
+        <div>
+          <!-- 로고 헤더 -->
+          <div class="p-6 border-b border-slate-800 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-slate-950 shadow-lg shadow-emerald-500/20">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div>
+              <h2 class="font-black text-white leading-tight font-outfit text-lg">EduMaps</h2>
+              <span class="text-xs text-slate-500">Admin Dashboard</span>
+            </div>
+          </div>
+
+          <!-- 메뉴 링크 -->
+          <nav class="p-4 space-y-1">
+            <button @click="activeTab = 'dashboard'" 
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
+                    :class="activeTab === 'dashboard' ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/10' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'">
+              <i class="fas fa-chart-line w-4 text-center"></i>
+              대시보드
+            </button>
+            <button @click="activeTab = 'places'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
+                    :class="activeTab === 'places' ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/10' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'">
+              <i class="fas fa-map w-4 text-center"></i>
+              장소 관리
+            </button>
+            <button @click="activeTab = 'roadmaps'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
+                    :class="activeTab === 'roadmaps' ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/10' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'">
+              <i class="fas fa-book-open w-4 text-center"></i>
+              추천장소 관리
+            </button>
+            <button @click="activeTab = 'settings'"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all"
+                    :class="activeTab === 'settings' ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/10' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'">
+              <i class="fas fa-cog w-4 text-center"></i>
+              설정 & 동기화
+            </button>
+          </nav>
+        </div>
+
+        <!-- 하단 프로필/로그아웃 -->
+        <div class="p-4 border-t border-slate-800 flex flex-col gap-3">
+          <!-- Next.js 캐시 갱신 단축 버튼 -->
+          <button @click="revalidateCache" :disabled="revalidating"
+                  class="w-full py-2.5 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+            <span v-if="revalidating" class="animate-spin"><i class="fas fa-spinner"></i></span>
+            <i v-else class="fas fa-sync-alt"></i>
+            데이터 웹 즉시 동기화
+          </button>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+                <i class="fas fa-user"></i>
+              </div>
+              <span class="text-xs text-slate-300 font-medium">관리자 팀원</span>
+            </div>
+            <button @click="logout" class="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-slate-800 transition-all" title="로그아웃">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 메인 콘텐츠 영역 -->
+      <main class="flex-1 flex flex-col min-w-0 bg-slate-950">
+        <!-- 상단 헤더 -->
+        <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between shrink-0 bg-slate-950/60 backdrop-blur-md sticky top-0 z-20">
+          <div class="flex items-center gap-3">
+            <h1 class="text-lg font-bold text-white">{{ tabTitle }}</h1>
+            <span v-if="syncLoading" class="text-xs text-slate-400 flex items-center gap-1.5 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">
+              <span class="animate-spin"><i class="fas fa-spinner"></i></span>
+              구글 시트 동기화 중...
+            </span>
+          </div>
+          <div class="flex items-center gap-3">
+            <button @click="fetchData(true)" class="p-2 text-slate-400 hover:text-white hover:bg-slate-900 rounded-xl transition-all border border-slate-800 hover:border-slate-700" title="데이터 새로고침">
+              <i class="fas fa-sync"></i>
+            </button>
+            <span class="text-xs text-slate-500 border-l border-slate-800 pl-3">v1.3 (FontAwesome 아이콘 패치)</span>
+          </div>
+        </header>
+
+        <!-- 콘텐츠 바디 -->
+        <div class="flex-1 p-6 md:p-8 overflow-y-auto">
+
+          <!-- [로딩 대기 화면] -->
+          <div v-if="syncLoading && items.length === 0" class="flex flex-col items-center justify-center py-20 space-y-4">
+            <div class="animate-spin text-emerald-500"><i class="fas fa-spinner fa-3x"></i></div>
+            <p class="text-slate-400 font-medium">스프레드시트에서 데이터를 안전하게 불러오고 있습니다...</p>
+          </div>
+
+          <div v-else>
+            
+            <!-- ==================== TAB 2-1: 대시보드 ==================== -->
+            <div v-if="activeTab === 'dashboard'" class="space-y-8">
+              
+              <!-- GA4 외부 대시보드 연동 안내 카드 -->
+              <div class="bg-gradient-to-r from-slate-900 to-emerald-950/40 border border-emerald-500/20 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden">
+                <div class="absolute w-[200px] h-[200px] rounded-full bg-emerald-500/5 blur-[50px] top-0 right-0"></div>
+                <div class="space-y-3 max-w-xl">
+                  <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
+                    <i class="fas fa-chart-bar"></i> Google Analytics 4
+                  </div>
+                  <h3 class="text-xl font-bold text-white leading-tight">EduMaps 트래픽 분석 대시보드</h3>
+                  <p class="text-slate-400 text-xs leading-relaxed">
+                    구글 애널리틱스 공식 플랫폼에서 실시간 방문자 수, 월간 활성 사용자 수, 페이지별 조회수, 그리고 기기 및 지역 분포 등 고도화된 웹 트래픽 통계를 직관적으로 분석하고 모니터링할 수 있습니다.
+                  </p>
+                </div>
+                
+                <a href="https://analytics.google.com/analytics/web/?authuser=0#/a395724973p538920697/reports/intelligenthome" 
+                   target="_blank"
+                   class="px-6 py-4 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-2xl text-sm transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2 transform active:scale-95 shrink-0">
+                  구글 애널리틱스 대시보드 열기
+                  <i class="fas fa-external-link-alt"></i>
+                </a>
+              </div>
+
+              <!-- 기본 데이터 현황 그리드 카드 -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 장소 보유 현황 -->
+                <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl flex items-center justify-between shadow-lg">
+                  <div>
+                    <h4 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">등록된 총 장소 및 자원</h4>
+                    <span class="text-3xl font-black text-white font-outfit">{{ items.length }}<span class="text-xs text-slate-500 font-medium ml-1">개</span></span>
+                    <div class="flex gap-2.5 mt-3">
+                      <span class="text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full font-semibold border border-emerald-500/20">오프라인: {{ offlineItemsCount }}개</span>
+                      <span class="text-xs text-cyan-400 bg-cyan-500/10 px-2.5 py-0.5 rounded-full font-semibold border border-cyan-500/20">온라인: {{ onlineItemsCount }}개</span>
+                    </div>
+                  </div>
+                  <div class="w-14 h-14 rounded-2xl bg-emerald-500/5 text-emerald-500 flex items-center justify-center border border-emerald-500/10"><i class="fas fa-map-marker-alt text-2xl"></i></div>
+                </div>
+
+                <!-- 추천 로드맵 단원 현황 -->
+                <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl flex items-center justify-between shadow-lg">
+                  <div>
+                    <h4 class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">매칭된 학년별 추천 단원 수</h4>
+                    <span class="text-3xl font-black text-white font-outfit">{{ usages.length }}<span class="text-xs text-slate-500 font-medium ml-1">개</span></span>
+                    <p class="text-xs text-slate-500 mt-3.5">학년별 교과 연계 코스에 등록된 정보 개수</p>
+                  </div>
+                  <div class="w-14 h-14 rounded-2xl bg-cyan-500/5 text-cyan-500 flex items-center justify-center border border-cyan-500/10"><i class="fas fa-book-open text-2xl"></i></div>
+                </div>
+              </div>
+
+              <!-- 데이터 백업 권장 안내 -->
+              <div class="p-6 bg-slate-900/20 border border-slate-800 rounded-3xl text-slate-500 text-xs leading-relaxed space-y-2">
+                <h4 class="font-bold text-slate-400 flex items-center gap-1.5"><i class="fas fa-info-circle"></i> 데이터 관리 안전 수칙</h4>
+                <p>1. 이 관리모드에서 수행하는 모든 추가, 수정, 삭제 사항은 구글 스프레드시트 원본 데이터베이스에 **실시간으로 직접 반영**됩니다.</p>
+                <p>2. 실수로 중요한 데이터를 영구 삭제하는 것을 예방하기 위해, 정기적으로 구글 스프레드시트의 **[파일] -> [버전 기록]** 기능을 통해 시트를 백업해 두시는 것을 권장합니다.</p>
+              </div>
+
+            </div>
+
+            <!-- ==================== TAB 2-2: 장소 관리 (아이템 CRUD) ==================== -->
+            <div v-if="activeTab === 'places'" class="space-y-6">
+              
+              <!-- 검색, 필터, 등록 영역 -->
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/30 p-4 rounded-2xl border border-slate-800">
+                <div class="flex flex-col md:flex-row gap-3 flex-1">
+                  <!-- 검색 입력 -->
+                  <div class="relative flex-1">
+                    <input type="text" v-model="searchQuery" placeholder="장소명, 카테고리, 태그 검색..."
+                           class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-2.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 transition-all text-sm">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                      <i class="fas fa-search"></i>
+                    </div>
+                  </div>
+                  <!-- 타입 필터 -->
+                  <select v-model="filterType"
+                          class="bg-slate-950/60 border border-slate-800 text-slate-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm cursor-pointer">
+                    <option value="ALL">모든 타입</option>
+                    <option value="OFFLINE">오프라인 (체험장소)</option>
+                    <option value="ONLINE">온라인 (학습자원)</option>
+                  </select>
+                  <!-- 카테고리 필터 -->
+                  <select v-model="filterCategory"
+                          class="bg-slate-950/60 border border-slate-800 text-slate-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm cursor-pointer">
+                    <option value="ALL">모든 카테고리</option>
+                    <option v-for="cat in uniqueCategories" :key="cat" :value="cat">{{ cat }}</option>
+                  </select>
+                </div>
+                
+                <button @click="openPlaceModal()" 
+                        class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-sm shadow-lg shadow-emerald-500/10">
+                  <i class="fas fa-plus text-xs"></i>
+                  새 장소 추가
+                </button>
+              </div>
+
+              <!-- 장소 목록 리스트 (그리드 카드 뷰) -->
+              <div v-if="filteredItems.length === 0" class="py-20 text-center text-slate-500">
+                검색 결과와 일치하는 장소가 없습니다.
+              </div>
+              <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div v-for="place in filteredItems" :key="place.id" 
+                     class="bg-slate-900/40 border border-slate-800/80 rounded-3xl overflow-hidden flex flex-col justify-between hover:border-slate-700/80 hover:bg-slate-900/60 transition-all duration-300 group shadow-lg">
+                  <div>
+                    <!-- 카드 썸네일 영역 -->
+                    <div class="h-44 bg-slate-950 relative overflow-hidden flex items-center justify-center border-b border-slate-800">
+                      <img v-if="place.image_url" :src="getImageUrl(place.image_url)" alt="" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                      <div v-else class="text-slate-700"><i class="far fa-image text-4xl"></i></div>
+                      
+                      <!-- 타입 배지 -->
+                      <span class="absolute top-4 left-4 px-2.5 py-1 text-[10px] font-bold rounded-full border"
+                            :class="place.type === 'OFFLINE' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'">
+                        {{ place.type === 'OFFLINE' ? '📍 OFFLINE' : '💻 ONLINE' }}
+                      </span>
+                      <!-- ID 배지 -->
+                      <span class="absolute top-4 right-4 bg-slate-950/80 px-2 py-0.5 rounded text-[10px] font-mono text-slate-400 border border-slate-800">
+                        {{ place.id }}
+                      </span>
+                    </div>
+
+                    <!-- 카드 본문 -->
+                    <div class="p-5 space-y-4">
+                      <div>
+                        <span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">{{ place.category || '기타' }}</span>
+                        <h4 class="text-base font-bold text-white mt-1 leading-tight truncate">{{ place.title }}</h4>
+                        <p class="text-slate-400 text-xs mt-1.5 line-clamp-2 min-h-[2rem] leading-relaxed">{{ place.description || '설명이 없습니다.' }}</p>
+                      </div>
+
+                      <!-- 태그 칩 -->
+                      <div class="flex flex-wrap gap-1">
+                        <span v-for="tag in parseTags(place.tags)" :key="tag" class="bg-slate-950 text-[10px] text-slate-500 border border-slate-800/80 px-2 py-0.5 rounded-md">
+                          #{{ tag }}
+                        </span>
+                      </div>
+
+                      <!-- 상세 정보 (좌표, 학년) -->
+                      <div class="grid grid-cols-2 gap-2 text-[10px] text-slate-500 bg-slate-950/50 p-2.5 rounded-xl border border-slate-800">
+                        <div class="flex items-center gap-1.5">
+                          <i class="fas fa-location-arrow text-slate-600"></i>
+                          <span class="truncate" :title="place.lat + ', ' + place.lng">
+                            {{ place.type === 'OFFLINE' ? place.lat.toFixed(4) + ', ' + place.lng.toFixed(4) : '온라인 (좌표 없음)' }}
+                          </span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                          <i class="fas fa-graduation-cap text-slate-600"></i>
+                          <span class="truncate" :title="place.recommended_grade">
+                            {{ formatGrade(place.recommended_grade) }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 카드 하단 버튼 작업 영역 -->
+                  <div class="px-5 py-4 border-t border-slate-800/80 flex items-center justify-between gap-3 bg-slate-950/20">
+                    <a v-if="place.external_url" :href="place.external_url" target="_blank" 
+                       class="text-xs text-slate-400 hover:text-white transition-all flex items-center gap-1">
+                      <i class="fas fa-external-link-alt text-xs"></i>
+                      사이트 이동
+                    </a>
+                    <div v-else></div>
+
+                    <!-- 기존 자료 수정 및 삭제 버튼 패널 -->
+                    <div class="flex gap-2">
+                      <button @click="openPlaceModal(place)" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg hover:text-white transition-all flex items-center justify-center" title="기존 자료 수정">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button @click="confirmDeletePlace(place)" class="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-lg transition-all flex items-center justify-center" title="자료 삭제">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ==================== TAB 2-3: 추천장소 관리 (활용 CRUD) ==================== -->
+            <div v-if="activeTab === 'roadmaps'" class="space-y-6">
+              
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                
+                <!-- 왼쪽 1열: 장소/자원 목록 선택기 -->
+                <div class="lg:col-span-1 bg-slate-900/40 border border-slate-800 p-5 rounded-3xl space-y-4">
+                  <h3 class="font-bold text-white text-base">1단계: 장소 선택</h3>
+                  
+                  <!-- 리스트 필터링 검색창 -->
+                  <div class="relative">
+                    <input type="text" v-model="roadmapSearch" placeholder="연결할 장소 검색..."
+                           class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-2.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-xs">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+                      <i class="fas fa-search text-xs"></i>
+                    </div>
+                  </div>
+
+                  <!-- 장소 리스트 목록 -->
+                  <div class="space-y-2 overflow-y-auto max-h-[500px] pr-1.5">
+                    <button v-for="item in filteredRoadmapItems" :key="item.id"
+                            @click="selectRoadmapItem(item)"
+                            class="w-full text-left p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3"
+                            :class="selectedRoadmapItem?.id === item.id ? 'bg-emerald-500/10 border-emerald-500/40 text-white shadow-md' : 'bg-slate-950/50 border-slate-800/80 hover:border-slate-700 text-slate-400 hover:text-slate-200'">
+                      <div class="min-w-0">
+                        <span class="text-[9px] uppercase tracking-wider font-bold" :class="item.type === 'OFFLINE' ? 'text-emerald-400' : 'text-cyan-400'">
+                          {{ item.type === 'OFFLINE' ? '오프라인' : '온라인' }}
+                        </span>
+                        <h4 class="text-xs font-bold truncate mt-0.5">{{ item.title }}</h4>
+                      </div>
+                      <div class="flex items-center gap-1.5 shrink-0">
+                        <!-- 연동된 활용 갯수 뱃지 -->
+                        <span class="px-2 py-0.5 bg-slate-800 border border-slate-700 text-[10px] text-slate-300 font-bold rounded-full">
+                          {{ countRelatedUsages(item.id) }}
+                        </span>
+                        <i class="fas fa-chevron-right text-xs text-slate-600"></i>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 오른쪽 2열: 선택된 장소의 학년별 활용 로드맵 CRUD -->
+                <div class="lg:col-span-2 space-y-6">
+                  
+                  <div v-if="!selectedRoadmapItem" class="bg-slate-900/20 border border-slate-800/60 p-12 rounded-3xl text-center text-slate-500 flex flex-col items-center justify-center py-24">
+                    <div class="w-16 h-16 rounded-full bg-slate-900 flex items-center justify-center text-slate-700 mb-4 border border-slate-800/80">
+                      <i class="fas fa-book-open text-2xl"></i>
+                    </div>
+                    <p class="font-medium text-sm">왼쪽 목록에서 학년별 추천 교육과정(활용)을 관리할 장소를 선택해 주세요.</p>
+                  </div>
+
+                  <div v-else class="space-y-6 animate-in fade-in duration-300">
+                    <!-- 선택된 장소 요약 카드 -->
+                    <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-3xl flex items-center justify-between gap-4">
+                      <div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-xs font-bold text-emerald-400 uppercase">{{ selectedRoadmapItem.category }}</span>
+                          <span class="text-[10px] font-mono text-slate-500">ID: {{ selectedRoadmapItem.id }}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mt-1">{{ selectedRoadmapItem.title }}</h3>
+                        <p class="text-slate-400 text-xs mt-1 leading-relaxed">{{ selectedRoadmapItem.description }}</p>
+                      </div>
+
+                      <button @click="openUsageModal()"
+                              class="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-xs transition-all flex items-center gap-1.5 shrink-0 shadow-lg shadow-emerald-500/10">
+                        <i class="fas fa-plus"></i>
+                        단원 정보 추가
+                      </button>
+                    </div>
+
+                    <!-- 연결된 활용(추천장소 학년별 연계) 리스트 -->
+                    <h4 class="font-bold text-white text-base flex items-center gap-2">
+                      연계된 교과과정 목록
+                      <span class="text-xs text-slate-500">({{ countRelatedUsages(selectedRoadmapItem.id) }}개 등록됨)</span>
+                    </h4>
+
+                    <div v-if="relatedUsages.length === 0" class="bg-slate-900/30 border border-slate-800 border-dashed p-10 rounded-3xl text-center text-slate-500 py-16">
+                      이 장소에 연결된 학년별 교과과정(활용) 정보가 아직 없습니다. <br>
+                      상단 오른쪽의 '단원 정보 추가' 버튼을 눌러 교육 연계 정보를 등록해 주세요.
+                    </div>
+
+                    <div v-else class="space-y-6">
+                      <div v-for="usage in relatedUsages" :key="usage._original_index"
+                           class="bg-slate-900/40 border border-slate-800 rounded-3xl overflow-hidden hover:border-slate-700 transition-all flex flex-col shadow">
+                        
+                        <!-- 활용 정보 상단 바 -->
+                        <div class="px-5 py-4 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between gap-3">
+                          <div class="flex items-center gap-3">
+                            <span class="px-3 py-1 bg-emerald-500 text-slate-950 font-extrabold text-[11px] rounded-full">
+                              {{ usage.grade }}학년
+                            </span>
+                            <span class="text-xs text-slate-300 font-semibold border-r border-slate-800 pr-3">
+                              {{ usage.subject }}
+                            </span>
+                            <span class="text-xs text-cyan-400 font-bold">
+                              {{ usage.month }} 추천
+                            </span>
+                          </div>
+                          <!-- 동작 버튼 -->
+                          <div class="flex gap-1.5">
+                            <button @click="openUsageModal(usage)" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg hover:text-white transition-all text-xs" title="수정">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <button @click="confirmDeleteUsage(usage)" class="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-lg transition-all text-xs" title="삭제">
+                              <i class="fas fa-trash-alt"></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- 활용 정보 상세 내용 -->
+                        <div class="p-5 space-y-4">
+                          <div>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wide">수업 주제</span>
+                            <h5 class="text-sm font-bold text-white mt-1">{{ usage.topic_title }}</h5>
+                            <p class="text-slate-400 text-xs mt-1.5 leading-relaxed">{{ usage.description }}</p>
+                          </div>
+
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 border-t border-slate-800/60">
+                            <!-- 탐구 질문 -->
+                            <div class="space-y-1.5">
+                              <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wide flex items-center gap-1">
+                                <i class="far fa-question-circle"></i> 탐구 질문
+                              </span>
+                              <ul class="space-y-1 text-slate-300 text-xs bg-slate-950/40 p-3 rounded-2xl border border-slate-800/80 min-h-[4rem]">
+                                <li v-for="(q, idx) in parseList(usage.inquiry_questions)" :key="idx" class="flex gap-1.5">
+                                  <span class="text-emerald-500">•</span>
+                                  <span>{{ q }}</span>
+                                </li>
+                                <li v-if="!usage.inquiry_questions" class="text-slate-600 italic">등록된 질문이 없습니다.</li>
+                              </ul>
+                            </div>
+
+                            <!-- 사후 활동 -->
+                            <div class="space-y-1.5">
+                              <span class="text-[10px] text-cyan-400 font-bold uppercase tracking-wide flex items-center gap-1">
+                                <i class="fas fa-clipboard-list"></i> 사후/독후 활동
+                              </span>
+                              <ul class="space-y-1 text-slate-300 text-xs bg-slate-950/40 p-3 rounded-2xl border border-slate-800/80 min-h-[4rem]">
+                                <li v-for="(a, idx) in parseList(usage.post_activities)" :key="idx" class="flex gap-1.5">
+                                  <span class="text-cyan-500">•</span>
+                                  <span>{{ a }}</span>
+                                </li>
+                                <li v-if="!usage.post_activities" class="text-slate-600 italic">등록된 활동이 없습니다.</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- ==================== TAB 2-4: 설정 & 동기화 ==================== -->
+            <div v-if="activeTab === 'settings'" class="space-y-6 max-w-3xl">
+              
+              <!-- 데이터 강제 동기화 (ISR Refresh) -->
+              <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl space-y-4">
+                <h3 class="font-bold text-white text-base flex items-center gap-2">
+                  <i class="fas fa-sync-alt text-emerald-400"></i>
+                  Next.js 프론트엔드 캐시 새로고침 (ISR Revalidate)
+                </h3>
+                <p class="text-slate-400 text-xs leading-relaxed">
+                  스프레드시트에 데이터를 추가/수정/삭제했더라도, 실제 퍼블리시된 웹사이트(Next.js)에는 고성능 로딩을 위해 데이터가 캐싱되어 있습니다. 
+                  수정 사항을 웹에 즉시 반영하려면 아래 동기화 버튼을 눌러 캐시를 실시간 갱신해 주어야 합니다.
+                </p>
+
+                <div class="space-y-3 pt-2">
+                  <label class="block text-slate-300 text-xs font-semibold">퍼블리시된 웹 주소 (Next.js 사이트 URL)</label>
+                  <div class="flex gap-3">
+                    <input type="url" v-model="frontUrl" placeholder="https://edumaps.vercel.app"
+                           class="flex-1 bg-slate-950/60 border border-slate-800 text-white rounded-xl py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                    <button @click="saveFrontUrl" :disabled="savingFrontUrl"
+                            class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold rounded-xl text-sm transition-all shrink-0">
+                      {{ savingFrontUrl ? '저장 중...' : 'URL 저장' }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="pt-4 flex items-center justify-between border-t border-slate-800/80">
+                  <span class="text-xs text-slate-500">지정된 주소의 <code class="bg-slate-950 px-1 py-0.5 rounded text-emerald-400">/api/refresh</code> 엔드포인트를 호출합니다.</span>
+                  <button @click="revalidateCache" :disabled="revalidating || !frontUrl"
+                          class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-sm transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/15">
+                    <span v-if="revalidating" class="animate-spin"><i class="fas fa-spinner"></i></span>
+                    <i v-else class="fas fa-bolt"></i>
+                    웹서버 데이터 즉시 동기화
+                  </button>
+                </div>
+              </div>
+
+              <!-- 패스코드(비밀번호) 변경 -->
+              <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl space-y-4">
+                <h3 class="font-bold text-white text-base flex items-center gap-2">
+                  <i class="fas fa-key text-purple-400"></i>
+                  관리 패스코드(비밀번호) 변경
+                </h3>
+                <p class="text-slate-400 text-xs">관리모드로 로그인할 때 사용할 비밀번호를 수정합니다.</p>
+
+                <form @submit.prevent="changePassword" class="space-y-4 pt-2">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-slate-400 text-xs font-semibold mb-1.5">현재 비밀번호</label>
+                      <input type="password" v-model="pwdForm.oldPwd" required placeholder="현재 패스코드"
+                             class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                    </div>
+                    <div>
+                      <label class="block text-slate-400 text-xs font-semibold mb-1.5">새 비밀번호</label>
+                      <input type="password" v-model="pwdForm.newPwd" required placeholder="새 패스코드 (최소 4자)"
+                             class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                    </div>
+                  </div>
+                  
+                  <div class="flex justify-end pt-2">
+                    <button type="submit" :disabled="changingPwd"
+                            class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-sm transition-all flex items-center gap-1.5">
+                      <span v-if="changingPwd" class="animate-spin"><i class="fas fa-spinner"></i></span>
+                      비밀번호 변경 완료
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+
+    <!-- ==================== 3. 장소 추가/수정 모달 ==================== -->
+    <div v-if="placeModal.show" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl relative max-h-[90vh] flex flex-col my-8">
+        
+        <!-- 모달 헤더 -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4 shrink-0">
+          <h3 class="text-lg font-bold text-white">{{ placeModal.item.id ? '📍 장소 상세 정보 수정' : '📍 새 장소/자원 등록' }}</h3>
+          <button @click="placeModal.show = false" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-all">
+            <i class="fas fa-times text-lg"></i>
+          </button>
+        </div>
+
+        <!-- 모달 본문 폼 -->
+        <div class="flex-1 overflow-y-auto py-5 space-y-5 pr-1">
+          <!-- 1. 기본 타입 및 ID -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">자원 타입</label>
+              <select v-model="placeModal.item.type" required
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                <option value="OFFLINE">OFFLINE (오프라인 현장체험)</option>
+                <option value="ONLINE">ONLINE (온라인 디지털자원)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">아이템 고유 ID</label>
+              <input type="text" v-model="placeModal.item.id" placeholder="공백 시 자동 생성 (ex: res_113)"
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm"
+                     :disabled="placeModal.item._isEdit">
+              <span class="text-[10px] text-slate-500 mt-1 block">수정 시에는 고유 ID를 변경할 수 없습니다.</span>
+            </div>
+          </div>
+
+          <!-- 2. 제목 및 카테고리 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">장소/자원 제목</label>
+              <input type="text" v-model="placeModal.item.title" required placeholder="예: 대구수목원, 똑똑 수학탐험대"
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+            </div>
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">카테고리</label>
+              <input type="text" v-model="placeModal.item.category" required placeholder="예: 달서구, 수리, 언어, 디지털, 기타" list="category-suggestions"
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+              <datalist id="category-suggestions">
+                <option v-for="cat in uniqueCategories" :key="cat" :value="cat"></option>
+              </datalist>
+            </div>
+          </div>
+
+          <!-- 3. 설명 설명 -->
+          <div>
+            <label class="block text-slate-400 text-xs font-semibold mb-1.5">상세 설명</label>
+            <textarea v-model="placeModal.item.description" rows="3" placeholder="체험지나 디지털 도구에 대한 간략한 핵심 정보를 기술합니다."
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm resize-none"></textarea>
+          </div>
+
+          <!-- 4. 태그 및 권장학년 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">태그 (쉼표로 구분)</label>
+              <input type="text" v-model="placeModal.item.tags" placeholder="체험, 생태, 역사, 놀이, 로그인필요"
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+              <span class="text-[10px] text-slate-500 mt-1 block">여러 태그 입력 시 콤마(,)로 분리해 적으세요.</span>
+            </div>
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">권장 학년 선택</label>
+              <div class="grid grid-cols-3 gap-2 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
+                <label v-for="g in ['1','2','3','4','5','6']" :key="g" class="flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer hover:text-white select-none">
+                  <input type="checkbox" :value="g" v-model="placeModal.gradeArray" class="rounded border-slate-800 text-emerald-500 focus:ring-0 focus:ring-offset-0 bg-slate-900">
+                  {{ g }}학년
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. 좌표 정보 (오프라인일 때만 필수처럼 작동) -->
+          <div v-if="placeModal.item.type === 'OFFLINE'" class="p-4 bg-slate-950/60 border border-slate-850 rounded-2xl space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-300 font-bold flex items-center gap-1.5"><i class="fas fa-location-arrow"></i> 위치 지오코딩 좌표 설정</span>
+              <button type="button" @click="fetchCoords" :disabled="fetchingCoords"
+                      class="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5">
+                <span v-if="fetchingCoords"><i class="fas fa-spinner fa-spin"></i></span>
+                <i v-else class="fas fa-search"></i>
+                이름으로 좌표 검색(구글 지도 연동)
+              </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-slate-400 text-[10px] font-semibold mb-1">위도 (Latitude)</label>
+                <input type="number" step="any" v-model="placeModal.item.lat" required
+                       class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-2 px-3 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-xs">
+              </div>
+              <div>
+                <label class="block text-slate-400 text-[10px] font-semibold mb-1">경도 (Longitude)</label>
+                <input type="number" step="any" v-model="placeModal.item.lng" required
+                       class="w-full bg-slate-900 border border-slate-800 text-white rounded-xl py-2 px-3 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-xs">
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. 이미지 URL 및 외부 링크 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">이미지 파일 경로</label>
+              <input type="text" v-model="placeModal.item.image_url" placeholder="/images/res_xxx.webp"
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+            </div>
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">외부 공식 웹사이트 링크</label>
+              <input type="url" v-model="placeModal.item.external_url" placeholder="https://..."
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 모달 푸터 버튼 -->
+        <div class="border-t border-slate-800 pt-4 flex items-center justify-end gap-3 shrink-0">
+          <button type="button" @click="placeModal.show = false"
+                  class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-sm transition-all border border-slate-700">
+            취소
+          </button>
+          <button type="button" @click="savePlace" :disabled="savingPlace"
+                  class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-sm transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-500/10">
+            <span v-if="savingPlace" class="animate-spin"><i class="fas fa-spinner"></i></span>
+            저장 및 업데이트
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== 4. 추천 활용 단원 추가/수정 모달 ==================== -->
+    <div v-if="usageModal.show" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div class="w-full max-w-2xl bg-slate-900 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-2xl relative max-h-[90vh] flex flex-col my-8">
+        
+        <!-- 모달 헤더 -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4 shrink-0">
+          <h3 class="text-lg font-bold text-white">{{ usageModal.usage._original_index !== undefined ? '📚 교육 활용 정보 수정' : '📚 새 교육 활용 연계 등록' }}</h3>
+          <button @click="usageModal.show = false" class="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-all">
+            <i class="fas fa-times text-lg"></i>
+          </button>
+        </div>
+
+        <!-- 모달 본문 폼 -->
+        <div class="flex-1 overflow-y-auto py-5 space-y-5 pr-1">
+          <div class="p-4 bg-slate-950/40 border border-slate-850 rounded-2xl text-slate-300 text-xs">
+            현재 <strong>{{ selectedRoadmapItem.title }}</strong> 에 교육 활용 정보가 추가됩니다.
+          </div>
+
+          <!-- 1. 학년, 교과, 추천 월 -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">권장 학년</label>
+              <select v-model="usageModal.usage.grade" required
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                <option v-for="g in [1,2,3,4,5,6]" :key="g" :value="g">{{ g }}학년</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">교과 단원명</label>
+              <input type="text" v-model="usageModal.usage.subject" required placeholder="예: 사회, 과학, 창체 등"
+                     class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+            </div>
+            <div>
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">추천 월</label>
+              <select v-model="usageModal.usage.month" required
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+                <option v-for="m in ['3월','4월','5월','6월','7월','8월','9월','10월','11월','12월','1월','2월','연중']" :key="m" :value="m">{{ m }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. 주제 제목 -->
+          <div>
+            <label class="block text-slate-400 text-xs font-semibold mb-1.5">수업/활동 주제명</label>
+            <input type="text" v-model="usageModal.usage.topic_title" required placeholder="예: 다양한 기호를 이용한 우리 지역 기호지도 만들기"
+                   class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
+          </div>
+
+          <!-- 3. 상세 설명 -->
+          <div>
+            <label class="block text-slate-400 text-xs font-semibold mb-1.5">활동 상세 설명</label>
+            <textarea v-model="usageModal.usage.description" rows="3" placeholder="학생들이 자기주도적으로 학습할 때 참고할 수 있도록 활동 설명을 자세히 작성합니다."
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm resize-none"></textarea>
+          </div>
+
+          <!-- 4. 탐구 질문 -->
+          <div>
+            <label class="block text-slate-400 text-xs font-semibold mb-1.5">탐구 질문 목록 (한 줄에 한 질문씩 입력)</label>
+            <textarea v-model="usageModal.inquiryQuestionsText" rows="3" placeholder="지도로 만나는 우리 지역은 어떻게 생겼을까요?&#10;과거 지도는 오늘날과 무엇이 다른가요?"
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm resize-none"></textarea>
+            <span class="text-[10px] text-slate-500 mt-1 block">질문이 여러 개인 경우 줄바꿈(엔터)으로 구분하여 입력해 주세요.</span>
+          </div>
+
+          <!-- 5. 사후 활동 -->
+          <div>
+            <label class="block text-slate-400 text-xs font-semibold mb-1.5">사후/독후 활동 목록 (한 줄에 한 활동씩 입력)</label>
+            <textarea v-model="usageModal.postActivitiesText" rows="3" placeholder="온라인 지도를 캡처하여 나만의 맛집 기호 지도를 그려봅시다.&#10;우리 마을의 문화 지도를 제작해봅시다."
+                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm resize-none"></textarea>
+            <span class="text-[10px] text-slate-500 mt-1 block">활동이 여러 개인 경우 줄바꿈(엔터)으로 구분하여 입력해 주세요.</span>
+          </div>
+
+        </div>
+
+        <!-- 모달 푸터 버튼 -->
+        <div class="border-t border-slate-800 pt-4 flex items-center justify-end gap-3 shrink-0">
+          <button type="button" @click="usageModal.show = false"
+                  class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-sm transition-all border border-slate-700">
+            취소
+          </button>
+          <button type="button" @click="saveUsage" :disabled="savingUsage"
+                  class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-sm transition-all flex items-center gap-1.5 shadow-lg shadow-emerald-500/10">
+            <span v-if="savingUsage" class="animate-spin"><i class="fas fa-spinner"></i></span>
+            저장 및 업데이트
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== 5. 단순 컨펌 삭제 다이얼로그 모달 ==================== -->
+    <div v-if="confirmModal.show" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div class="w-full max-w-md bg-slate-900 border border-slate-800 p-6 rounded-3xl shadow-2xl relative">
+        <div class="flex gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center border border-rose-500/20 shrink-0">
+            <i class="fas fa-trash-alt text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">{{ confirmModal.title }}</h3>
+            <p class="text-slate-400 text-xs mt-2 leading-relaxed">{{ confirmModal.message }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 mt-6 border-t border-slate-800/60 pt-4">
+          <button type="button" @click="confirmModal.show = false" class="px-4 py-2 bg-slate-850 hover:bg-slate-800 text-slate-300 rounded-xl text-xs border border-slate-800">
+            취소
+          </button>
+          <button type="button" @click="executeConfirmAction" :disabled="confirmModal.loading"
+                  class="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs transition-all flex items-center gap-1.5 shadow-lg shadow-rose-500/15">
+            <span v-if="confirmModal.loading" class="animate-spin"><i class="fas fa-spinner"></i></span>
+            삭제하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    createApp({
+      setup() {
+        // 인증 상태
+        const isLoggedIn = ref(false);
+        const password = ref('');
+        const passwordInput = ref('');
+        const loading = ref(false);
+
+        // 네비게이션 및 로딩 탭
+        const activeTab = ref('dashboard');
+        const syncLoading = ref(false);
+
+        // 시트 데이터 소스
+        const items = ref([]);
+        const usages = ref([]);
+
+        // 토스트 알림
+        const toast = ref(null);
+
+        // 검색 및 필터 상태
+        const searchQuery = ref('');
+        const filterType = ref('ALL');
+        const filterCategory = ref('ALL');
+
+        const roadmapSearch = ref('');
+        const selectedRoadmapItem = ref(null);
+
+        // 설정 & 동기화 변수
+        const frontUrl = ref('');
+        const savingFrontUrl = ref(false);
+        const revalidating = ref(false);
+
+        const pwdForm = ref({ oldPwd: '', newPwd: '' });
+        const changingPwd = ref(false);
+
+        // CRUD 모달 상태
+        const placeModal = ref({
+          show: false,
+          gradeArray: [],
+          item: { id: '', type: 'OFFLINE', title: '', category: '', tags: '', recommended_grade: '', description: '', lat: 0, lng: 0, image_url: '', external_url: '', _isEdit: false }
+        });
+        const savingPlace = ref(false);
+        const fetchingCoords = ref(false);
+
+        const usageModal = ref({
+          show: false,
+          inquiryQuestionsText: '',
+          postActivitiesText: '',
+          usage: { linked_id: '', grade: 1, subject: '', month: '3월', topic_title: '', description: '', inquiry_questions: [], post_activities: [] }
+        });
+        const savingUsage = ref(false);
+
+        const confirmModal = ref({
+          show: false,
+          title: '',
+          message: '',
+          action: null,
+          loading: false
+        });
+
+        // 탭 타이틀 한글 변환
+        const tabTitle = computed(() => {
+          switch (activeTab.value) {
+            case 'dashboard': return '📈 대시보드 및 서비스 현황';
+            case 'places': return '📍 체험 장소 및 온라인 학습자원 관리 (아이템)';
+            case 'roadmaps': return '📚 학년별 교과과정 연계 추천 정보 관리 (활용)';
+            case 'settings': return '⚙️ 사이트 설정 및 데이터 실시간 배포';
+            default: return '관리자 패널';
+          }
+        });
+
+        // 토스트 출력 유틸
+        const showToast = (message, type = 'success') => {
+          toast.value = { message, type };
+          setTimeout(() => {
+            if (toast.value && toast.value.message === message) toast.value = null;
+          }, 3500);
+        };
+
+        // 로그인 기능
+        const login = () => {
+          loading.value = true;
+          google.script.run
+            .withSuccessHandler((isValid) => {
+              loading.value = false;
+              if (isValid) {
+                isLoggedIn.value = true;
+                password.value = passwordInput.value;
+                localStorage.setItem('edumaps_pwd', password.value);
+                showToast('성공적으로 로그인되었습니다.');
+                fetchData();
+              } else {
+                showToast('패스코드가 올바르지 않습니다.', 'error');
+              }
+            })
+            .withFailureHandler((err) => {
+              loading.value = false;
+              showToast('로그인 처리 중 기술 오류: ' + err.message, 'error');
+            })
+            .verifyPassword(passwordInput.value);
+        };
+
+        // 로그아웃
+        const logout = () => {
+          isLoggedIn.value = false;
+          password.value = '';
+          passwordInput.value = '';
+          localStorage.removeItem('edumaps_pwd');
+          showToast('로그아웃 되었습니다.');
+        };
+
+        // 자동 로그인 시도
+        const checkAutoLogin = () => {
+          const saved = localStorage.getItem('edumaps_pwd');
+          if (saved) {
+            passwordInput.value = saved;
+            login();
+          }
+        };
+
+        // 시트 데이터 호출
+        const fetchData = (isManual = false) => {
+          syncLoading.value = true;
+          google.script.run
+            .withSuccessHandler((data) => {
+              syncLoading.value = false;
+              items.value = data.items || [];
+              usages.value = data.usages || [];
+              
+              if (isManual) showToast('스프레드시트에서 데이터를 성공적으로 갱신했습니다.');
+              
+              // 설정값 로드
+              loadSettings();
+            })
+            .withFailureHandler((err) => {
+              syncLoading.value = false;
+              showToast('데이터 동기화 실패: ' + err.message, 'error');
+            })
+            .getAllData(password.value);
+        };
+
+        // 설정 데이터 로드
+        const loadSettings = () => {
+          // Front URL 로드
+          google.script.run.withSuccessHandler((url) => { frontUrl.value = url; }).getFrontUrl(password.value);
+        };
+
+        // 설정 저장
+        const saveFrontUrl = () => {
+          savingFrontUrl.value = true;
+          google.script.run
+            .withSuccessHandler(() => {
+              savingFrontUrl.value = false;
+              showToast('웹사이트 URL이 성공적으로 저장되었습니다.');
+            })
+            .withFailureHandler((err) => {
+              savingFrontUrl.value = false;
+              showToast('URL 저장 실패: ' + err.message, 'error');
+            })
+            .saveFrontUrl(password.value, frontUrl.value);
+        };
+
+        // Next.js ISR 캐시 새로고침
+        const revalidateCache = () => {
+          revalidating.value = true;
+          google.script.run
+            .withSuccessHandler((res) => {
+              revalidating.value = false;
+              if (res.success) {
+                showToast(res.message);
+              } else {
+                showToast(res.message, 'error');
+              }
+            })
+            .withFailureHandler((err) => {
+              revalidating.value = false;
+              showToast('새로고침 요청 중 기술 오류: ' + err.message, 'error');
+            })
+            .triggerRevalidation(password.value);
+        };
+
+        // 패스코드 변경
+        const changePassword = () => {
+          changingPwd.value = true;
+          google.script.run
+            .withSuccessHandler(() => {
+              changingPwd.value = false;
+              password.value = pwdForm.value.newPwd;
+              localStorage.setItem('edumaps_pwd', password.value);
+              pwdForm.value = { oldPwd: '', newPwd: '' };
+              showToast('관리자 패스코드가 성공적으로 변경되었습니다. 다음 로그인부터 적용됩니다.');
+            })
+            .withFailureHandler((err) => {
+              changingPwd.value = false;
+              showToast('비밀번호 변경 실패: ' + err.message, 'error');
+            })
+            .changePassword(pwdForm.value.oldPwd, pwdForm.value.newPwd);
+        };
+
+        // 계산식 카운터
+        const offlineItemsCount = computed(() => items.value.filter(i => i.type === 'OFFLINE').length);
+        const onlineItemsCount = computed(() => items.value.filter(i => i.type === 'ONLINE').length);
+
+        const uniqueCategories = computed(() => {
+          const cats = items.value.map(i => i.category).filter(c => c && c.trim() !== '');
+          return [...new Set(cats)];
+        });
+
+        // 장소 필터링 검색 목록
+        const filteredItems = computed(() => {
+          return items.value.filter(place => {
+            const query = searchQuery.value.toLowerCase().trim();
+            const matchesQuery = !query || 
+              place.title.toLowerCase().includes(query) ||
+              (place.category && place.category.toLowerCase().includes(query)) ||
+              (place.id && place.id.toLowerCase().includes(query)) ||
+              (place.tags && String(place.tags).toLowerCase().includes(query));
+
+            const matchesType = filterType.value === 'ALL' || place.type === filterType.value;
+            const matchesCat = filterCategory.value === 'ALL' || place.category === filterCategory.value;
+
+            return matchesQuery && matchesType && matchesCat;
+          });
+        });
+
+        // 태그 파싱 헬퍼
+        const parseTags = (tagsStr) => {
+          if (!tagsStr) return [];
+          return String(tagsStr).split(',').map(s => s.trim()).filter(s => s !== '');
+        };
+
+        // 이미지 절대 경로 도메인 바인딩 헬퍼
+        const getImageUrl = (url) => {
+          if (!url) return '';
+          if (String(url).startsWith('/')) {
+            let base = frontUrl.value || 'https://map.dgedu.link';
+            if (base.endsWith('/')) {
+              base = base.substring(0, base.length - 1);
+            }
+            return base + url;
+          }
+          return url;
+        };
+
+        // 학년 출력 헬퍼
+        const formatGrade = (gradeStr) => {
+          if (!gradeStr) return '전학년';
+          const split = String(gradeStr).split(',').map(s => s.trim());
+          if (split.length >= 6) return '전학년';
+          return split.map(g => g + '학년').join(', ');
+        };
+
+        // 장소 모달 열기 (추가/수정 공통)
+        const openPlaceModal = (existingPlace = null) => {
+          if (existingPlace) {
+            placeModal.value.item = {
+              ...existingPlace,
+              _isEdit: true
+            };
+            // 태그가 배열이 아닌 경우 쉼표 구분 문자열 형태로 유지되므로 복사
+            // recommended_grade 파싱하여 체크박스 데이터셋 바인딩
+            let rg = existingPlace.recommended_grade || '';
+            let grades = [];
+            if (rg.indexOf('전학년') > -1) {
+              grades = ['1','2','3','4','5','6'];
+            } else if (rg) {
+              grades = String(rg).split(',').map(v => v.trim()).filter(v => v !== '');
+            }
+            placeModal.value.gradeArray = grades;
+          } else {
+            placeModal.value.item = {
+              id: '',
+              type: 'OFFLINE',
+              title: '',
+              category: '',
+              tags: '',
+              recommended_grade: '',
+              description: '',
+              lat: 0,
+              lng: 0,
+              image_url: '',
+              external_url: '',
+              _isEdit: false
+            };
+            placeModal.value.gradeArray = ['1','2','3','4','5','6']; // 기본 전학년
+          }
+          placeModal.value.show = true;
+        };
+
+        // 장소 지오코딩 조회
+        const fetchCoords = () => {
+          const title = placeModal.value.item.title;
+          if (!title) {
+            showToast('좌표를 조회하려면 먼저 장소명(제목)을 입력해주세요.', 'error');
+            return;
+          }
+          fetchingCoords.value = true;
+          
+          google.script.run
+            .withSuccessHandler((result) => {
+              fetchingCoords.value = false;
+              if (result && result.lat && result.lng) {
+                placeModal.value.item.lat = result.lat;
+                placeModal.value.item.lng = result.lng;
+                showToast('좌표를 성공적으로 가져왔습니다.');
+              } else {
+                showToast('좌표를 찾을 수 없습니다. 주소를 정확히 기입하거나 수동 입력해주세요.', 'error');
+              }
+            })
+            .withFailureHandler((err) => {
+              fetchingCoords.value = false;
+              showToast('지오코딩 조회 중 구글 API 오류: ' + err.message, 'error');
+            })
+            // 스프레드시트의 fetchCoordinatesForSelectedRow에서 쓰는 것과 유사하게 제목을 기반으로 구글 맵 지오코딩 API 직접 호출
+            .fetchCoordinatesFromBackend(title);
+        };
+
+        // 장소 데이터 저장
+        const savePlace = () => {
+          const item = placeModal.value.item;
+          if (!item.title || !item.category) {
+            showToast('제목과 카테고리는 필수 항목입니다.', 'error');
+            return;
+          }
+
+          // 학년 정보 콤보박스 파싱
+          if (placeModal.value.gradeArray.length === 6) {
+            item.recommended_grade = '전학년';
+          } else {
+            item.recommended_grade = placeModal.value.gradeArray.join(', ');
+          }
+
+          savingPlace.value = true;
+          google.script.run
+            .withSuccessHandler((generatedId) => {
+              savingPlace.value = false;
+              placeModal.value.show = false;
+              showToast(item._isEdit ? '장소 정보가 수정되었습니다.' : `장소가 성공적으로 등록되었습니다. (ID: ${generatedId})`);
+              fetchData();
+            })
+            .withFailureHandler((err) => {
+              savingPlace.value = false;
+              showToast('장소 저장 에러: ' + err.message, 'error');
+            })
+            .saveItem(password.value, item);
+        };
+
+        // 장소 삭제
+        const confirmDeletePlace = (place) => {
+          confirmModal.value = {
+            show: true,
+            title: '장소 삭제 안내',
+            message: `장소 "${place.title}" (${place.id}) 데이터를 영구 삭제하시겠습니까? 연결된 학년별 교육과정(활용) 정보들도 모두 연쇄 삭제됩니다.`,
+            loading: false,
+            action: () => {
+              confirmModal.value.loading = true;
+              google.script.run
+                .withSuccessHandler(() => {
+                  confirmModal.value.show = false;
+                  showToast('장소 및 연계 추천단원이 삭제되었습니다.');
+                  // 선택되었던 로드맵 아이템 해제
+                  if (selectedRoadmapItem.value && selectedRoadmapItem.value.id === place.id) {
+                    selectedRoadmapItem.value = null;
+                  }
+                  fetchData();
+                })
+                .withFailureHandler((err) => {
+                  confirmModal.value.loading = false;
+                  showToast('삭제 실패: ' + err.message, 'error');
+                })
+                .deleteItem(password.value, place.id);
+            }
+          };
+        };
+
+        // 추천장소 (활용 로드맵) 목록 계산
+        const countRelatedUsages = (itemId) => {
+          return usages.value.filter(u => u.linked_id === itemId).length;
+        };
+
+        const filteredRoadmapItems = computed(() => {
+          return items.value.filter(i => {
+            const query = roadmapSearch.value.toLowerCase().trim();
+            return !query || i.title.toLowerCase().includes(query) || (i.category && i.category.toLowerCase().includes(query));
+          });
+        });
+
+        const selectRoadmapItem = (item) => {
+          selectedRoadmapItem.value = item;
+        };
+
+        const relatedUsages = computed(() => {
+          if (!selectedRoadmapItem.value) return [];
+          return usages.value.filter(u => u.linked_id === selectedRoadmapItem.value.id);
+        });
+
+        // 활용 폼 문항 구분 파싱
+        const parseList = (val) => {
+          if (!val) return [];
+          if (Array.isArray(val)) return val;
+          return String(val).split('\n').map(s => s.trim()).filter(s => s !== '');
+        };
+
+        // 활용 모달 열기
+        const openUsageModal = (existingUsage = null) => {
+          if (!selectedRoadmapItem.value) return;
+          
+          if (existingUsage) {
+            usageModal.value.usage = { ...existingUsage };
+            usageModal.value.inquiryQuestionsText = Array.isArray(existingUsage.inquiry_questions) 
+              ? existingUsage.inquiry_questions.join('\n') 
+              : String(existingUsage.inquiry_questions || '');
+            
+            usageModal.value.postActivitiesText = Array.isArray(existingUsage.post_activities) 
+              ? existingUsage.post_activities.join('\n') 
+              : String(existingUsage.post_activities || '');
+          } else {
+            usageModal.value.usage = {
+              linked_id: selectedRoadmapItem.value.id,
+              grade: 1,
+              subject: '',
+              month: '3월',
+              topic_title: '',
+              description: '',
+              inquiry_questions: [],
+              post_activities: []
+            };
+            usageModal.value.inquiryQuestionsText = '';
+            usageModal.value.postActivitiesText = '';
+          }
+          usageModal.value.show = true;
+        };
+
+        // 활용 데이터 저장
+        const saveUsage = () => {
+          const usage = usageModal.value.usage;
+          if (!usage.subject || !usage.topic_title) {
+            showToast('교과명과 주제는 필수 항목입니다.', 'error');
+            return;
+          }
+
+          // textarea의 줄바꿈 텍스트를 배열로 치환
+          usage.inquiry_questions = usageModal.value.inquiryQuestionsText.split('\n').map(s => s.trim()).filter(s => s !== '');
+          usage.post_activities = usageModal.value.postActivitiesText.split('\n').map(s => s.trim()).filter(s => s !== '');
+
+          savingUsage.value = true;
+          google.script.run
+            .withSuccessHandler(() => {
+              savingUsage.value = false;
+              usageModal.value.show = false;
+              showToast('교과과정 연계 정보가 저장되었습니다.');
+              fetchData();
+            })
+            .withFailureHandler((err) => {
+              savingUsage.value = false;
+              showToast('저장 실패: ' + err.message, 'error');
+            })
+            .saveUsage(password.value, usage, usage._original_index);
+        };
+
+        // 활용 정보 삭제
+        const confirmDeleteUsage = (usage) => {
+          confirmModal.value = {
+            show: true,
+            title: '교육 연계 정보 삭제',
+            message: `"${usage.subject}" 교과의 추천 단원 "${usage.topic_title}" 정보를 정말로 삭제하시겠습니까?`,
+            loading: false,
+            action: () => {
+              confirmModal.value.loading = true;
+              google.script.run
+                .withSuccessHandler(() => {
+                  confirmModal.value.show = false;
+                  showToast('교육 연계 정보가 삭제되었습니다.');
+                  fetchData();
+                })
+                .withFailureHandler((err) => {
+                  confirmModal.value.loading = false;
+                  showToast('삭제 실패: ' + err.message, 'error');
+                })
+                .deleteUsage(password.value, usage._original_index);
+            }
+          };
+        };
+
+        // 공통 확인 액션 실행기
+        const executeConfirmAction = () => {
+          if (confirmModal.value.action) {
+            confirmModal.value.action();
+          }
+        };
+
+        // 마운트 시 자동 로그인 체크
+        onMounted(() => {
+          checkAutoLogin();
+        });
+
+        return {
+          isLoggedIn, password, passwordInput, loading,
+          activeTab, syncLoading, items, usages, toast,
+          searchQuery, filterType, filterCategory,
+          roadmapSearch, selectedRoadmapItem,
+          frontUrl, savingFrontUrl, revalidating,
+          pwdForm, changingPwd,
+          placeModal, savingPlace, fetchingCoords,
+          usageModal, savingUsage,
+          confirmModal,
+          tabTitle, offlineItemsCount, onlineItemsCount, uniqueCategories,
+          filteredItems, filteredRoadmapItems, relatedUsages,
+          login, logout, fetchData, saveFrontUrl, revalidateCache, changePassword,
+          parseTags, formatGrade, getImageUrl, openPlaceModal, fetchCoords, savePlace, confirmDeletePlace,
+          countRelatedUsages, selectRoadmapItem, parseList, openUsageModal, saveUsage, confirmDeleteUsage,
+          executeConfirmAction
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
