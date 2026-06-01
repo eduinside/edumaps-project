@@ -3,9 +3,10 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, MapPin, MonitorPlay, BookOpen, Sparkles, Info } from "lucide-react";
+import { Search, MapPin, MonitorPlay, Sparkles } from "lucide-react";
 import HowToModal from "./HowToModal";
-import DownloadSection from "./DownloadSection";
+import CategoryNav from "./CategoryNav";
+import HomeCarousel from "./HomeCarousel";
 
 interface Props {
   initialData: any[];
@@ -252,47 +253,6 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
               검색과 월별 추천 자료를 확인하세요
             </span>
           </div>
-          <nav className="flex gap-1.5">
-            <div className="group relative">
-              <button
-                onClick={() => router.push("/visitmap")}
-                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all flex items-center gap-1.5"
-              >
-                <MapPin className="w-4 h-4" /> <span className="hidden md:inline">체험학습</span>
-              </button>
-              <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-                대구 지역의 오프라인 현장체험 장소를 지도로 확인하세요
-              </span>
-            </div>
-            <div className="group relative">
-              <button
-                onClick={() => router.push("/online")}
-                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all flex items-center gap-1.5"
-              >
-                <MonitorPlay className="w-4 h-4" /> <span className="hidden md:inline">온라인</span>
-              </button>
-              <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-                에듀테크 자원과 유용한 온라인 학습 사이트 모음
-              </span>
-            </div>
-            <div className="group relative">
-              <button
-                onClick={() => router.push("/roadmap")}
-                className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 hover:text-emerald-700 dark:hover:text-emerald-400 transition-all flex items-center gap-1.5"
-              >
-                <BookOpen className="w-4 h-4" /> <span className="hidden md:inline">학년별 로드맵</span>
-              </button>
-              <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-                교과 단원과 연계된 학년별 맞춤 학습 코스
-              </span>
-            </div>
-            <button
-              onClick={() => setIsHowToOpen(true)}
-              className="text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all flex items-center gap-1.5 border border-emerald-200 dark:border-emerald-800"
-            >
-              <Info className="w-4 h-4" /> <span className="hidden md:inline">이용방법</span>
-            </button>
-          </nav>
         </div>
       </header>
 
@@ -320,6 +280,14 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             </div>
           </div>
         </section>
+
+        {/* Category shortcuts + promo/download carousel */}
+        {!isSearching && (
+          <>
+            <CategoryNav onHowTo={() => setIsHowToOpen(true)} />
+            <HomeCarousel />
+          </>
+        )}
 
         {/* Search Results */}
         {isSearching && (
@@ -417,9 +385,6 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
             </div>
           </section>
         )}
-
-        {/* Download Section */}
-        {!isSearching && <DownloadSection />}
 
         {/* Monthly Recommended */}
         {!isSearching && (

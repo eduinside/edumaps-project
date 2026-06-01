@@ -63,6 +63,10 @@ export default function HowToModal({ isOpen, onClose, updatedTime }: HowToModalP
               <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-3 border-l-2 border-slate-200 dark:border-slate-600 ml-2 pl-4">
                 <li className="relative">
                   <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 shadow-sm"></span>
+                  <strong className="text-slate-800 dark:text-slate-100">2026.06.01</strong> - 검색창 아래 바로가기 아이콘과 추천 자료 홍보 캐러셀이 추가되었습니다.
+                </li>
+                <li className="relative">
+                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 shadow-sm"></span>
                   <strong className="text-slate-800 dark:text-slate-100">2026.05.19</strong> - 내 근처 필터·지역 필터 시 지도 자동 이동, 로드맵 연계 버튼 개선, 학년 간 전환 기능이 추가되었습니다.
                 </li>
                 <li className="relative">

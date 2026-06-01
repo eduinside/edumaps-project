@@ -1,0 +1,33 @@
+{
+  "slides": [
+    {
+      "id": "promo-online-hub",
+      "type": "promo",
+      "title": "대구 온라인 학습 자원 한눈에",
+      "subtitle": "언어·수리·디지털·문화 추천 사이트 모음",
+      "bgImage": "/images/res_011.webp",
+      "linkUrl": "/online",
+      "linkLabel": "바로가기",
+      "featured": true
+    },
+    {
+      "id": "exp-2026-jaju",
+      "type": "download",
+      "title": "초등 자기주도학습 정보모아",
+      "subtitle": "2026년 7월 기준 · PDF 다운로드",
+      "bgImage": "",
+      "fileUrl": "/downloads/2026 초등 자기주도학습 정보모아.pdf",
+      "featured": true
+    },
+    {
+      "id": "promo-ebsmath",
+      "type": "promo",
+      "title": "EBS MATH로 즐기는 수학 학습",
+      "subtitle": "영상·문제풀이로 배우는 무료 온라인 수학",
+      "bgImage": "",
+      "linkUrl": "https://www.ebsmath.co.kr/",
+      "linkLabel": "바로가기",
+      "featured": true
+    }
+  ]
+}

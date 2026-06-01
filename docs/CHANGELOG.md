@@ -2,6 +2,29 @@
 
 모든 주목할 만한 변경 사항을 이 파일에 기록합니다.
 
+## [2026.06.01] - 랜딩페이지 바로가기·홍보 캐러셀 개편
+
+### 추가됨
+- **카테고리 바로가기 아이콘 4종**: 검색창 아래 체험학습·온라인·학년별 로드맵·이용방법 카드(모바일 2×2 / 데스크톱 1×4). 체험학습→`/visitmap`, 온라인→`/online`, 로드맵→`/roadmap`, 이용방법→이용방법 모달.
+  - 코드: `src/components/CategoryNav.tsx`
+- **홍보·다운로드 통합 캐러셀**: 자동 슬라이드(4초)·좌우 화살표·인디케이터. 온라인 홍보(`promo`)와 자료 다운로드(`download`) 슬라이드를 한 캐러셀에 혼합. 이미지 배경 + 어두운 그라데이션 오버레이 한 겹, 흰색 글자(text-shadow), 초기 로딩 스켈레톤 적용. `bgImage`가 없으면 그라데이션 배경으로 폴백.
+  - 코드: `src/components/HomeCarousel.tsx`
+- **JSON 기반 콘텐츠 관리**: 슬라이드 내용은 `public/banners/carousel.json`으로 분리(스키마 안내 `public/banners/README.md`). `featured` 플래그로 노출 제어, `type` 필드(promo|download)로 동작 구분.
+- **GA4 다운로드 트래킹**: 다운로드 슬라이드 클릭 시 표준 `file_download` 이벤트 전송(`file_name`, `file_id`, `file_extension`, `link_url`).
+
+### 변경됨
+- 기존 단순 PDF 리스트(`DownloadSection`)를 이미지 배경 캐러셀 슬라이드로 대체.
+
+### 제거됨
+- `src/components/DownloadSection.tsx`, `public/downloads/pdf-list.json` (캐러셀로 통합되어 미사용). PDF 원본 파일은 유지.
+
+### 관련 파일
+- `src/components/LandingClient.tsx` — `CategoryNav`·`HomeCarousel` 삽입, `DownloadSection` 제거
+- `src/components/CategoryNav.tsx`, `src/components/HomeCarousel.tsx` — 신규
+- `public/banners/carousel.json`, `public/banners/README.md` — 신규
+
+---
+
 ## [2026.05.19] - Vercel Analytics · Speed Insights 연동
 
 ### 추가됨
