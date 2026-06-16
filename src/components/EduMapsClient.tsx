@@ -220,9 +220,9 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
       <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-lg rounded-full z-20">
         <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push('/')}>
           <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
-            <Image src="/images/daegu_logo.webp" alt="EduMaps Logo" fill className="object-contain rounded-full" />
+            <Image src="/images/daegu_logo.webp" alt="에듀맵스 로고" fill className="object-contain rounded-full" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">EduMaps</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">에듀맵스</h1>
           <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
             검색과 월별 추천 자료를 확인하세요
           </span>

@@ -22,7 +22,7 @@ export default function HowToModal({ isOpen, onClose, updatedTime }: HowToModalP
       >
         <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-700/50">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-            <Map className="w-6 h-6 text-emerald-500" /> EduMaps 이용방법
+            <Map className="w-6 h-6 text-emerald-500" /> 에듀맵스 이용방법
           </h2>
           <button
             onClick={onClose}
@@ -49,7 +49,7 @@ export default function HowToModal({ isOpen, onClose, updatedTime }: HowToModalP
               <HelpCircle className="w-5 h-5 text-emerald-500" /> 소중한 의견을 들려주세요
             </h3>
             <div className="bg-slate-50 dark:bg-slate-700/50 rounded-xl p-5 border border-slate-100 dark:border-slate-600">
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">EduMaps는 대구광역시교육청의 사교육비 줄이기 대책의 일환으로 '초등 자기주도학습 정보모아' 팀에서 개발하였습니다. <br></br>자료 사용 중 불편한 점이나 추가되었으면 하는 장소가 있다면 아래 '의견 남기기'를 통해 알려주세요!</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">에듀맵스는 대구광역시교육청의 사교육비 줄이기 대책의 일환으로 '초등 자기주도학습 정보모아' 팀에서 개발하였습니다. <br></br>자료 사용 중 불편한 점이나 추가되었으면 하는 장소가 있다면 아래 '의견 남기기'를 통해 알려주세요!</p>
             </div>
           </section>
 
@@ -96,7 +96,7 @@ export default function HowToModal({ isOpen, onClose, updatedTime }: HowToModalP
                 const url = window.location.origin;
                 if (navigator.share) {
                   navigator.share({
-                    title: 'EduMaps - 대구 에듀테크 지도',
+                    title: '에듀맵스 - 대구 에듀테크 지도',
                     text: '대구의 체험학습과 온라인 학습 자원을 한눈에 확인하세요!',
                     url: url,
                   }).catch(() => {});

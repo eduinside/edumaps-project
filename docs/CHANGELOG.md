@@ -1,6 +1,56 @@
-# EduMaps 변경 사항 기록
+# 에듀맵스 변경 사항 기록
 
 모든 주목할 만한 변경 사항을 이 파일에 기록합니다.
+
+## [2026.06.17] - 브랜드명 한글화 · UX 개선
+
+### 변경됨
+- **사이트 이름 한글화**: 영문 `EduMaps` 표기를 전면 `에듀맵스`(한글)로 통일
+  - 헤더 로고 텍스트 (랜딩·지도 페이지)
+  - 이미지 alt 텍스트 (`에듀맵스 로고`)
+  - 로딩 화면 문구
+  - 이용방법 모달 제목 및 소개 문구
+  - 공유(navigator.share) 제목
+  - 브라우저 탭 SEO 타이틀: `에듀맵` → `에듀맵스`
+  - 관련 파일: `src/components/LandingClient.tsx`, `src/components/EduMapsClient.tsx`, `src/components/HowToModal.tsx`, `src/app/page.tsx`, `src/app/layout.tsx`
+
+### 추가됨
+- **히어로 텍스트 줄바꿈 개선**: `break-keep` 클래스 추가로 모바일에서 한글 단어 중간 잘림 방지 (`src/components/LandingClient.tsx`)
+- **푸터 에듀모아 표기**: 푸터 하단에 `에듀모아` 텍스트 추가 (`src/components/LandingClient.tsx`)
+
+---
+
+## [계획] - 캐러셀 영상 팝업 모달
+
+> 상태: 검토 완료, 미구현
+
+### 개요
+캐러셀 슬라이드에 `type: "video"` 슬라이드를 추가하여, 클릭 시 YouTube 영상을 인앱 팝업으로 재생.
+
+### 구현 계획
+
+1. **타입 확장** (`src/components/HomeCarousel.tsx`)
+   - `Slide` 인터페이스에 `type: "video"` 및 `videoUrl?: string` 필드 추가
+   - `SlideBody`에 재생 버튼(▶) 오버레이 렌더링 (video 타입일 때)
+
+2. **모달 컴포넌트** (`src/components/VideoModal.tsx` 신규)
+   - YouTube `<iframe>` embed 또는 `<video>` 태그
+   - 배경 클릭·ESC 키로 닫기, 닫을 때 영상 자동 정지
+
+3. **state 연결**
+   - 캐러셀 컨테이너의 `overflow-hidden` 클리핑을 피하기 위해 모달 state를 `LandingClient` 레벨로 올리거나 `createPortal`로 `<body>`에 렌더링
+   - `HomeCarousel`에서 `onVideoClick(videoUrl)` 콜백을 props로 받아 호출
+
+4. **데이터** (`public/banners/carousel.json`)
+   - `type: "video"`, `videoUrl: "https://www.youtube.com/embed/..."` 형태로 슬라이드 등록
+
+### 영향 파일
+- `src/components/HomeCarousel.tsx` — 타입 확장, 콜백 props 추가
+- `src/components/LandingClient.tsx` — 모달 state 관리
+- `src/components/VideoModal.tsx` — 신규
+- `public/banners/carousel.json` — 슬라이드 데이터 추가
+
+---
 
 ## [2026.06.01] - 랜딩페이지 바로가기·홍보 캐러셀 개편
 

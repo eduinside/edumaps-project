@@ -244,10 +244,10 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push("/")}>
             <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
-              <Image src="/images/daegu_logo.webp" alt="EduMaps Logo" fill className="object-contain rounded-full" />
+              <Image src="/images/daegu_logo.webp" alt="에듀맵스 로고" fill className="object-contain rounded-full" />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">
-              EduMaps
+              에듀맵스
             </h1>
             <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
               검색과 월별 추천 자료를 확인하세요
@@ -259,7 +259,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-20">
         {/* Hero + Search */}
         <section className="pt-12 sm:pt-20 pb-10 text-center">
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-slate-100 leading-tight break-keep">
             우리 아이 자기주도학습을 위한<br className="hidden sm:block" />
             <span className="text-emerald-500"> 대구 체험·온라인 학습 길잡이</span>
           </h2>
@@ -459,6 +459,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
       <footer className="border-t border-slate-100 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400 dark:text-slate-500">
           대구광역시교육청 · 초등 자기주도학습 정보모아
+          <div className="mt-1 font-semibold text-slate-500 dark:text-slate-400">에듀모아</div>
         </div>
       </footer>
 
