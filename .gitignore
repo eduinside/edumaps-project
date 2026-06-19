@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 src/data/resources.json
 .tmp_gas.json
+
+# Claude Code local settings
+.claude/settings.local.json
