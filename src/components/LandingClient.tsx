@@ -247,7 +247,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
               <Image src="/images/daegu_logo.webp" alt="에듀맵스 로고" fill className="object-contain rounded-full" />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">
-              에듀맵스
+              <span className="hidden sm:inline">대구 </span>에듀맵스
             </h1>
             <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
               검색과 월별 추천 자료를 확인하세요
