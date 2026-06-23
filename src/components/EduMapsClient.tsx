@@ -6,6 +6,7 @@ import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History, Search, LocateFixed } from "lucide-react";
 import MapComponent, { MapHandle } from "./MapComponent";
 import HowToModal from "./HowToModal";
+import { renderRichText } from "../lib/richText";
 
 interface Props {
   initialData: any[];
@@ -668,7 +669,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                         </div>
                         <div className="mb-3">
                           <h4 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-2 leading-snug">&ldquo;{gt.topic_title}&rdquo;</h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium opacity-90">{gt.description}</p>
+                          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium opacity-90">{renderRichText(gt.description)}</p>
                         </div>
                         <div className="space-y-3">
                           <div className="bg-white/70 dark:bg-slate-700/50 p-4 rounded-2xl border border-emerald-50 dark:border-slate-600">
@@ -676,7 +677,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                             <ul className="space-y-2">
                               {gt.inquiry_questions?.map((q: string, i: number) => (
                                 <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span> {q}
+                                  <span className="text-emerald-400 font-black">•</span> {renderRichText(q)}
                                 </li>
                               ))}
                             </ul>
@@ -686,7 +687,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                             <ul className="space-y-2">
                               {gt.post_activities?.map((a: string, i: number) => (
                                 <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span> {a}
+                                  <span className="text-emerald-400 font-black">•</span> {renderRichText(a)}
                                 </li>
                               ))}
                             </ul>
