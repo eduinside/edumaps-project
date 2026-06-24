@@ -462,7 +462,6 @@ var DAUM_REQUEST_INTERVAL_MS = 400;   // 연속 요청 간격(차단 방지)
 var DAUM_VALID_MARKER = '="screen_out">맞춤법 검사기 본문</h2>';
 var DAUM_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
   'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-var PROOFREAD_CELL_WARN_LIMIT = 100;  // 이 개수를 넘으면 사전 경고
 
 /**
  * [메뉴] 선택 영역 맞춤법 교정
@@ -505,19 +504,8 @@ function proofreadSelectedRange() {
     return;
   }
 
-  // 2) 덮어쓰기 전 확인 (되돌리기 어려운 작업)
-  var confirmMsg = '선택한 텍스트 셀 ' + targets.length + '개를 맞춤법 검사기로 교정하고\n' +
-    '내용을 바로 덮어씁니다. 계속할까요?';
-  if (targets.length > PROOFREAD_CELL_WARN_LIMIT) {
-    confirmMsg = '⚠️ ' + targets.length + '개 셀은 많은 편이라 시간이 오래 걸리고\n' +
-      '실행 시간 제한(약 6분)에 걸릴 수 있습니다.\n\n' + confirmMsg;
-  }
-  if (ui.alert('맞춤법 교정', confirmMsg, ui.ButtonSet.YES_NO) !== ui.Button.YES) {
-    return;
-  }
-
-  // 3) 셀별 교정 수행
-  ss.toast('맞춤법 교정을 시작합니다…', '📍 EduMaps', 5);
+  // 2) 셀별 교정 수행 (기존 '좌표 자동 입력'처럼 즉시 덮어쓰기)
+  ss.toast(targets.length + '개 셀 맞춤법 교정을 시작합니다…', '📍 EduMaps', 5);
   var changedCells = 0;
   var totalFixes = 0;
   var failedCells = 0;
@@ -543,7 +531,7 @@ function proofreadSelectedRange() {
   }
   SpreadsheetApp.flush();
 
-  // 4) 결과 요약
+  // 3) 결과 요약
   var summary = '대상 ' + targets.length + '개 중 ' + changedCells + '개 셀 수정' +
     ' (' + totalFixes + '곳 교정)';
   if (failedCells > 0) {
