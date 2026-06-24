@@ -406,6 +406,8 @@ function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('📍 EduMaps 도구')
       .addItem('선택한 행 좌표 자동 입력', 'fetchCoordinatesForSelectedRow')
+      .addSeparator()
+      .addItem('선택 영역 맞춤법 교정', 'proofreadSelectedRange')
       .addToUi();
 }
 
@@ -439,4 +441,281 @@ function fetchCoordinatesForSelectedRow() {
       Utilities.sleep(200); // 구글 맵스 API 연속 호출 오류 방지
     }
   }
+}
+
+/* ==========================================
+   선택 영역 한국어 맞춤법 교정 도구
+   --------------------------------------------
+   외부 무료 맞춤법 검사기(다음 grammar_checker)를 이용해 선택한 셀의
+   오탈자·띄어쓰기·맞춤법을 교정하고 내용을 즉시 덮어쓴다.
+
+   - 별도 API 키가 필요 없다(부산대 검사기는 서버 이전으로 비공식 호출이
+     불안정해져, 동일 계열의 다음 검사기를 사용한다).
+   - 비공식 외부 서비스 응답 포맷에 의존하므로, 서비스가 바뀌면 동작이
+     멈출 수 있다. 이 경우 해당 셀은 '실패'로 처리되어 원문이 그대로
+     보존된다(잘못된 값으로 덮어쓰지 않는다).
+   ========================================== */
+
+var DAUM_GRAMMAR_URL = 'https://dic.daum.net/grammar_checker.do';
+var DAUM_MAX_CHARS = 1000;            // 한 요청에 보낼 최대 글자 수
+var DAUM_REQUEST_INTERVAL_MS = 400;   // 연속 요청 간격(차단 방지)
+var DAUM_VALID_MARKER = '="screen_out">맞춤법 검사기 본문</h2>';
+var DAUM_UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' +
+  'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+/**
+ * [메뉴] 선택 영역 맞춤법 교정
+ * 선택한 모든 텍스트 셀을 한국어 맞춤법 검사기로 교정한 뒤 즉시 덮어쓴다.
+ * (빈 셀·숫자·날짜·수식 셀은 건너뛴다)
+ */
+function proofreadSelectedRange() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ui = SpreadsheetApp.getUi();
+  var sheet = ss.getActiveSheet();
+  var rangeList = sheet.getActiveRangeList();
+
+  if (!rangeList) {
+    ui.alert('교정할 셀을 먼저 선택해 주세요.');
+    return;
+  }
+
+  // 1) 교정 대상(문자열이 있고 수식이 아닌 셀) 수집
+  var ranges = rangeList.getRanges();
+  var targets = []; // { cell: Range, text: string }
+  for (var r = 0; r < ranges.length; r++) {
+    var range = ranges[r];
+    var values = range.getValues();
+    var formulas = range.getFormulas();
+    var startRow = range.getRow();
+    var startCol = range.getColumn();
+    for (var i = 0; i < values.length; i++) {
+      for (var j = 0; j < values[i].length; j++) {
+        var val = values[i][j];
+        var isFormula = formulas[i][j] !== '';
+        if (!isFormula && typeof val === 'string' && val.trim() !== '') {
+          targets.push({ cell: sheet.getRange(startRow + i, startCol + j), text: val });
+        }
+      }
+    }
+  }
+
+  if (targets.length === 0) {
+    ui.alert('선택한 영역에 교정할 텍스트가 없습니다.\n(빈 셀·숫자·수식 셀은 제외됩니다)');
+    return;
+  }
+
+  // 2) 셀별 교정 수행 (기존 '좌표 자동 입력'처럼 즉시 덮어쓰기)
+  ss.toast(targets.length + '개 셀 맞춤법 교정을 시작합니다…', '📍 EduMaps', 5);
+  var changedCells = 0;
+  var totalFixes = 0;
+  var failedCells = 0;
+
+  for (var t = 0; t < targets.length; t++) {
+    var result;
+    try {
+      result = daumSpellCheck_(targets[t].text);
+    } catch (e) {
+      Logger.log('맞춤법 교정 실패: ' + e);
+      result = { corrected: targets[t].text, fixCount: 0, ok: false };
+    }
+
+    if (!result.ok) {
+      failedCells++;            // 서비스 오류 → 원문 보존
+      continue;
+    }
+    if (result.corrected !== targets[t].text) {
+      targets[t].cell.setValue(result.corrected);
+      changedCells++;
+      totalFixes += result.fixCount;
+    }
+  }
+  SpreadsheetApp.flush();
+
+  // 3) 결과 요약
+  var summary = '대상 ' + targets.length + '개 중 ' + changedCells + '개 셀 수정' +
+    ' (' + totalFixes + '곳 교정)';
+  if (failedCells > 0) {
+    summary += ' · 실패 ' + failedCells + '개(원문 유지)';
+  }
+  ss.toast(summary, '📍 맞춤법 교정 완료', 8);
+}
+
+/**
+ * 다음 맞춤법 검사기로 한 셀의 텍스트를 교정한다.
+ * @param {string} text 원문
+ * @return {{corrected: string, fixCount: number, ok: boolean}}
+ *   ok=false면 서비스 오류로 교정하지 못한 것이므로 원문을 유지해야 한다.
+ */
+function daumSpellCheck_(text) {
+  var original = String(text);
+  // 요청에는 <...> 형태의 태그를 제거한 사본을 보낸다(교정은 원문에 적용).
+  var cleaned = original.replace(/<[^ㄱ-ㅎㅏ-ㅣ가-힣>]+>/g, '');
+  var chunks = splitByLengthOnSeparators_(cleaned, '.,\n', DAUM_MAX_CHARS);
+
+  // 동일 오류 토큰은 한 번만 적용 (token -> suggestion)
+  var typoMap = {};
+  for (var c = 0; c < chunks.length; c++) {
+    if (chunks[c].trim() === '') continue;
+
+    var response = UrlFetchApp.fetch(DAUM_GRAMMAR_URL, {
+      method: 'post',
+      payload: { sentence: chunks[c] },
+      headers: { 'User-Agent': DAUM_UA },
+      muteHttpExceptions: true,
+      followRedirects: true
+    });
+
+    if (response.getResponseCode() !== 200) {
+      return { corrected: original, fixCount: 0, ok: false };
+    }
+    var body = response.getContentText();
+    var looksValid = body.indexOf(DAUM_VALID_MARKER) !== -1 ||
+      body.indexOf('data-error-type') !== -1;
+    if (!looksValid) {
+      return { corrected: original, fixCount: 0, ok: false };
+    }
+
+    var typos = parseDaumTypos_(body);
+    for (var k = 0; k < typos.length; k++) {
+      var token = typos[k].token;
+      if (token && !Object.prototype.hasOwnProperty.call(typoMap, token)) {
+        typoMap[token] = typos[k].suggestion;
+      }
+    }
+    if (c < chunks.length - 1) Utilities.sleep(DAUM_REQUEST_INTERVAL_MS);
+  }
+
+  // 원문에 교정 적용
+  var corrected = original;
+  var fixCount = 0;
+  for (var tok in typoMap) {
+    if (!Object.prototype.hasOwnProperty.call(typoMap, tok)) continue;
+    var suggestion = typoMap[tok];
+    if (suggestion == null || tok === suggestion) continue;
+    var replaced = replaceWholeToken_(corrected, tok, suggestion);
+    if (replaced !== corrected) {
+      corrected = replaced;
+      fixCount++;
+    }
+  }
+  return { corrected: corrected, fixCount: fixCount, ok: true };
+}
+
+/**
+ * 다음 응답(HTML)에서 교정 정보를 추출한다.
+ * @return {Array<{token: string, suggestion: string}>}
+ */
+function parseDaumTypos_(body) {
+  var typos = [];
+  var found = -1;
+  while (true) {
+    found = body.indexOf('data-error-type', found + 1);
+    if (found === -1) break;
+    var end = body.indexOf('>', found + 1);
+    if (end === -1) break;
+    var line = body.substring(found, end);
+    var token = decodeHtmlEntities_(getDaumAttr_(line, 'data-error-input='));
+    var suggestion = decodeHtmlEntities_(getDaumAttr_(line, 'data-error-output='));
+    if (token) typos.push({ token: token, suggestion: suggestion });
+  }
+  return typos;
+}
+
+/** key="value" 형태에서 key 뒤 첫 따옴표쌍 안의 값을 추출한다. */
+function getDaumAttr_(str, key) {
+  var found = str.indexOf(key);
+  if (found === -1) return '';
+  var firstQuote = str.indexOf('"', found + 1);
+  if (firstQuote === -1) return '';
+  var secondQuote = str.indexOf('"', firstQuote + 1);
+  if (secondQuote === -1) return '';
+  return str.substring(firstQuote + 1, secondQuote);
+}
+
+/** 기본 HTML 엔티티를 디코드한다. (&amp;는 이중 디코드 방지를 위해 마지막에 처리) */
+function decodeHtmlEntities_(str) {
+  if (!str) return str;
+  return String(str)
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#x([0-9a-fA-F]+);/g, function (m, n) { return String.fromCharCode(parseInt(n, 16)); })
+    .replace(/&#(\d+);/g, function (m, n) { return String.fromCharCode(parseInt(n, 10)); })
+    .replace(/&amp;/g, '&');
+}
+
+/**
+ * 원문에서 오류 토큰을 교정어로 치환한다.
+ * 앞뒤가 한글이 아닌 '단어 경계'에서만 치환해, 더 긴 단어의 일부가
+ * 잘못 교정되는 것을 막는다. (정규식 lookbehind 미사용 → 모든 런타임 호환)
+ */
+function replaceWholeToken_(text, token, suggestion) {
+  if (!token || token === suggestion) return text;
+  var korean = /[ㄱ-ㅎㅏ-ㅣ가-힣]/;
+  var tlen = token.length;
+  var out = '';
+  var i = 0;
+  while (i < text.length) {
+    if (text.substr(i, tlen) === token) {
+      var before = i === 0 ? '' : text.charAt(i - 1);
+      var afterIdx = i + tlen;
+      var after = afterIdx >= text.length ? '' : text.charAt(afterIdx);
+      var beforeOk = before === '' || !korean.test(before);
+      var afterOk = after === '' || !korean.test(after);
+      if (beforeOk && afterOk) {
+        out += suggestion;
+        i += tlen;
+        continue;
+      }
+    }
+    out += text.charAt(i);
+    i++;
+  }
+  return out;
+}
+
+/**
+ * 문자열을 separator(각 문자)의 경계에서 limit 길이 이하 조각으로 나눈다.
+ * hanspell split-string.byLength 포트.
+ */
+function splitByLengthOnSeparators_(string, separator, limit) {
+  var splitted = [];
+  var found = -1;
+  var lastFound = -1;
+  var lastSplitted = -1;
+
+  while (true) {
+    found = indexOfAnyChar_(string, separator, lastFound + 1);
+    if (found === -1) break;
+    if (found - lastSplitted > limit) {
+      splitted.push(string.substr(lastSplitted + 1, lastFound - lastSplitted));
+      lastSplitted = lastFound;
+    }
+    lastFound = found;
+  }
+
+  if (lastSplitted + 1 !== string.length) {
+    if (string.length - lastSplitted - 1 <= limit) {
+      splitted.push(string.substr(lastSplitted + 1));
+    } else {
+      if (lastSplitted !== lastFound) {
+        splitted.push(string.substr(lastSplitted + 1, lastFound - lastSplitted));
+      }
+      splitted.push(string.substr(lastFound + 1));
+    }
+  }
+  return splitted;
+}
+
+/** string에서 chars의 문자 중 가장 먼저 나오는 위치를 반환한다(없으면 -1). */
+function indexOfAnyChar_(string, chars, from) {
+  var best = -1;
+  for (var i = 0; i < chars.length; i++) {
+    var idx = string.indexOf(chars.charAt(i), from);
+    if (idx > -1 && (best === -1 || idx < best)) best = idx;
+  }
+  return best;
 }
