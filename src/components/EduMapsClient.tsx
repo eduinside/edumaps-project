@@ -677,7 +677,8 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                             <ul className="space-y-2">
                               {gt.inquiry_questions?.map((q: string, i: number) => (
                                 <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span> {renderRichText(q)}
+                                  <span className="text-emerald-400 font-black">•</span>
+                                  <span>{renderRichText(q)}</span>
                                 </li>
                               ))}
                             </ul>
@@ -687,7 +688,8 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
                             <ul className="space-y-2">
                               {gt.post_activities?.map((a: string, i: number) => (
                                 <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span> {renderRichText(a)}
+                                  <span className="text-emerald-400 font-black">•</span>
+                                  <span>{renderRichText(a)}</span>
                                 </li>
                               ))}
                             </ul>
