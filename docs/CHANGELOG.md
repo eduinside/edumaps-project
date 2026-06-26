@@ -4,9 +4,20 @@
 
 ## [2026.06.26] - 정적 배포 전환 (Static Export + GitHub 발행)
 
-> 작업 브랜치: `feat/static-export` · 검증 후 Cloudflare Pages 연결 예정
+> Cloudflare Pages 배포 완료 (`map.dgedu.link`). 데이터·발행 모두 시트에서 운영.
+
+### 추가됨
+- **발행 이력 기록**: `publishToGitHub` 성공 시 `공통` 시트 A20부터 발행 이력 누적(시각·항목수·브랜치·커밋링크·발행자) — `appendPublishHistory_`
+- **'최근 업데이트 내용' 시트화**: How-To 모달 변경이력을 `변경이력` 시트에서 읽어 발행(`buildChangelog_` → `resources.json`의 `changelog`). 시트 없으면 `DEFAULT_CHANGELOG`로 폴백
+- **단일 도메인 리다이렉트**: `layout.tsx`에 인라인 스크립트 추가 — `edumaps-project.pages.dev` 접속 시 `map.dgedu.link`로 자동 이동(경로·쿼리 보존)
+- **Node 버전 고정**: `.node-version`(22) 추가
 
 ### 변경됨
+- **로드맵 사후 활동**: 불릿 목록(`ul/li`) → 평문 `<p>`(`whitespace-pre-line`)로 변경, `renderRichText`로 마크다운 링크 인라인 처리 (`EduMapsClient.tsx`)
+- **렌더링 방식**: Next.js ISR(런타임 GAS 페치) → **완전 정적 export**(`output: 'export'`)로 전환. 빌드 시 `out/`에 정적 HTML 생성, 사용자 요청 경로에서 서버·GAS 미접촉
+  - `next.config.ts`: `output: 'export'`, `images.unoptimized: true` 추가
+  - `src/lib/fetchResources.ts`: GAS 런타임 페치 제거 → 로컬 `resources.json` import. `{ generatedAt, items, changelog }`/배열 두 형태 수용
+  - `src/app/page.tsx`, `src/app/[tab]/page.tsx`: `revalidate` 제거, `generatedAt`을 '데이터 최종 갱신' 표시에 사용
 - **렌더링 방식**: Next.js ISR(런타임 GAS 페치) → **완전 정적 export**(`output: 'export'`)로 전환. 빌드 시 `out/`에 정적 HTML 생성, 사용자 요청 경로에서 서버·GAS 미접촉
   - `next.config.ts`: `output: 'export'`, `images.unoptimized: true` 추가
   - `src/lib/fetchResources.ts`: GAS 런타임 페치 제거 → 로컬 `resources.json` import. `{ generatedAt, items }`/배열 두 형태 수용

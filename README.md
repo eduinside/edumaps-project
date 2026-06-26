@@ -90,12 +90,14 @@
 - 가까운 장소 필터링/정렬: **낮음** (Haversine 거리 계산 + 배열 정렬)
 - 두 기능 모두 외부 API 의존 없이 클라이언트 단독으로 구현 가능
 
-## 📋 최근 개선사항 (2026.05.19 후속)
+## 📋 최근 개선사항 (2026.06.26)
 
-### 분석 도구 연동
-- **Vercel Analytics**: 페이지뷰·사용자 이벤트 분석 자동 수집 (`@vercel/analytics`)
-- **Vercel Speed Insights**: Core Web Vitals(LCP, CLS, FID 등) 실시간 측정 (`@vercel/speed-insights`)
-- 두 기능 모두 Vercel 배포 환경에서 별도 설정 없이 즉시 활성화
+### 정적 배포 전환 + 시트 기반 운영
+- **정적 export 전환**: ISR → 완전 정적(`output: 'export'`). Cloudflare Pages에서 서버 없이 서빙. (자세한 내용은 [CHANGELOG](./docs/CHANGELOG.md))
+- **시트에서 발행**: 관리자 패널 **[사이트에 발행]** → GitHub 커밋 → 자동 빌드·배포. 발행 이력은 `공통` 시트에 자동 기록.
+- **'최근 업데이트 내용' 시트 관리**: How-To 모달 변경이력을 `변경이력` 시트에서 관리.
+- **단일 도메인**: `pages.dev` 접속 시 `map.dgedu.link`로 자동 리다이렉트.
+- **분석 도구**: Vercel Analytics/Speed Insights 제거(Cloudflare 환경 무동작). 필요 시 Cloudflare Web Analytics로 대체.
 
 ---
 
