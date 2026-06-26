@@ -2,6 +2,37 @@
 
 모든 주목할 만한 변경 사항을 이 파일에 기록합니다.
 
+## [2026.06.26] - 정적 배포 전환 (Static Export + GitHub 발행)
+
+> Cloudflare Pages 배포 완료 (`map.dgedu.link`). 데이터·발행 모두 시트에서 운영.
+
+### 추가됨
+- **발행 이력 기록**: `publishToGitHub` 성공 시 `공통` 시트 A20부터 발행 이력 누적(시각·항목수·브랜치·커밋링크·발행자) — `appendPublishHistory_`
+- **'최근 업데이트 내용' 시트화**: How-To 모달 변경이력을 `변경이력` 시트에서 읽어 발행(`buildChangelog_` → `resources.json`의 `changelog`). 시트 없으면 `DEFAULT_CHANGELOG`로 폴백
+- **단일 도메인 리다이렉트**: `layout.tsx`에 인라인 스크립트 추가 — `edumaps-project.pages.dev` 접속 시 `map.dgedu.link`로 자동 이동(경로·쿼리 보존)
+- **Node 버전 고정**: `.node-version`(22) 추가
+
+### 변경됨
+- **로드맵 사후 활동**: 불릿 목록(`ul/li`) → 평문 `<p>`(`whitespace-pre-line`)로 변경, `renderRichText`로 마크다운 링크 인라인 처리 (`EduMapsClient.tsx`)
+- **렌더링 방식**: Next.js ISR(런타임 GAS 페치) → **완전 정적 export**(`output: 'export'`)로 전환. 빌드 시 `out/`에 정적 HTML 생성, 사용자 요청 경로에서 서버·GAS 미접촉
+  - `next.config.ts`: `output: 'export'`, `images.unoptimized: true` 추가
+  - `src/lib/fetchResources.ts`: GAS 런타임 페치 제거 → 로컬 `resources.json` import. `{ generatedAt, items, changelog }`/배열 두 형태 수용
+  - `src/app/page.tsx`, `src/app/[tab]/page.tsx`: `revalidate` 제거, `generatedAt`을 '데이터 최종 갱신' 표시에 사용
+- **데이터 갱신 흐름**: `/api/refresh` 호출 → **GitHub 커밋 → Cloudflare Pages 자동 배포**
+  - `docs/backend/code.gs`: `doGet` 로직을 `buildResourcesJson()`으로 추출, `triggerRevalidation` → **`publishToGitHub`**(GitHub Contents API 커밋)로 개조, `getGithubConfig_` 추가
+  - `docs/backend/index.html`: 설정 탭/사이드바의 'ISR 캐시 새로고침' → **'사이트에 발행'**으로 라벨·동작 변경
+
+### 제거됨
+- `src/app/api/refresh/route.ts` (정적 export 미지원)
+- `LandingClient.tsx`의 `?refresh=1` 관리자 모드
+- `@vercel/analytics`, `@vercel/speed-insights` (Cloudflare 환경 무동작)
+
+### 배포 메모
+- 빌드: `npm run build` → 산출물 `out/`
+- 실제 도메인을 **Kakao 개발자 콘솔 허용목록**에 등록해야 지도 동작
+
+---
+
 ## [2026.06.24] - 로드맵 본문 링크 · 백엔드 맞춤법 교정 도구
 
 ### 추가됨
@@ -10,8 +41,6 @@
 
 ### 수정됨
 - **로드맵 링크 표시**: `flex` 컨테이너에서 링크와 뒤 텍스트가 분리돼 보이던 문제를 단일 `<span>` 래핑으로 해결. (`src/components/EduMapsClient.tsx`)
-
----
 
 ## [2026.06.17] - 브랜드명 한글화 · UX 개선
 

@@ -11,6 +11,7 @@ import HomeCarousel from "./HomeCarousel";
 interface Props {
   initialData: any[];
   updatedTime?: string;
+  changelog?: { date: string; text: string }[];
 }
 
 const ONLINE_CATEGORIES = ["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"];
@@ -73,7 +74,7 @@ function LandingCard({ item, onClick }: { item: any; onClick: () => void }) {
   );
 }
 
-export default function LandingClient({ initialData, updatedTime }: Props) {
+export default function LandingClient({ initialData, updatedTime, changelog }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -82,7 +83,6 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
   const [selectedOfflineTag, setSelectedOfflineTag] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
-  const [refreshing, setRefreshing] = useState(false);
   const [isHowToOpen, setIsHowToOpen] = useState(false);
 
   // URL ?q= 파라미터로 검색어 초기화
@@ -90,20 +90,6 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
     const q = searchParams.get("q");
     if (q) setSearchQuery(decodeURIComponent(q));
   }, [searchParams]);
-
-  // 숨겨진 관리자 새로고침 모드: /?refresh=1
-  useEffect(() => {
-    if (searchParams.get("refresh")) {
-      setRefreshing(true);
-      fetch("/api/refresh", { cache: "no-store" })
-        .catch(() => { })
-        .finally(() => {
-          router.replace("/");
-          // 강제 새로고침으로 서버 컴포넌트 재실행
-          setTimeout(() => window.location.replace("/"), 200);
-        });
-    }
-  }, [searchParams, router]);
 
   // 검색어 변경 시 필터 상태 초기화
   useEffect(() => {
@@ -228,14 +214,6 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
 
     return result.slice(0, MAX);
   }, [initialData, selectedGrade, monthLabel]);
-
-  if (refreshing) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-slate-900">
-        <div className="animate-pulse text-emerald-500 font-bold">데이터 새로고침 중...</div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50/40 via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 font-sans">
@@ -463,7 +441,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
         </div>
       </footer>
 
-      <HowToModal isOpen={isHowToOpen} onClose={() => setIsHowToOpen(false)} updatedTime={updatedTime} />
+      <HowToModal isOpen={isHowToOpen} onClose={() => setIsHowToOpen(false)} updatedTime={updatedTime} changelog={changelog} />
     </div>
   );
 }

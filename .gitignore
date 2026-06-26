@@ -39,7 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-src/data/resources.json
+# 참고: src/data/resources.json 은 정적 빌드의 '데이터 원본'이므로 추적함 (GAS 발행이 커밋 → CF Pages가 빌드)
 .tmp_gas.json
 
 # Claude Code local settings

@@ -3,9 +3,17 @@
 **EduMaps**는 대구광역시교육청의 *2025 초등 자기주도학습 정보모아* 사업 취지를 웹으로 구현한 플랫폼입니다. 구글 스프레드시트를 데이터베이스로 활용하여 현장체험학습 장소와 온라인 학습 자원을 지도로 시각화하고, 학년별 맞춤 로드맵을 제공합니다.
 
 ## 🌟 핵심 가치
-- **관리의 편리함**: 개발 지식이 없어도 구글 시트 수정만으로 사이트 전체를 업데이트할 수 있습니다.
-- **최고의 성능**: Next.js ISR 기술로 0ms에 가까운 로딩 속도를 보장합니다.
+- **관리의 편리함**: 개발 지식이 없어도 구글 시트 수정 → [사이트에 발행] 버튼만으로 사이트 전체를 업데이트할 수 있습니다.
+- **최고의 성능·안정성**: 완전 정적(Static Export) 사이트로 빌드되어 런타임 서버 의존 없이 빠르고 안정적으로 서빙됩니다.
 - **연동의 깊이**: 체험학습 장소에서 관련 로드맵으로 즉시 이동하는 깊은 인터랙션을 제공합니다.
+
+## 🔄 데이터 흐름
+```
+구글 시트 (편집) ──[관리자 패널: 사이트에 발행]──▶ GitHub: src/data/resources.json 커밋
+                                                        └─▶ Cloudflare Pages 자동 빌드·배포 (~1–3분)
+사용자 ◀── 100% 정적 파일 (서버·GAS 미접촉)
+```
+> 데이터는 빌드 시점에 `resources.json`을 읽어 정적 페이지로 생성됩니다. 발행 흐름·설정은 [백엔드 가이드](./docs/backend/README.md)를 참고하세요.
 
 ## 📂 개발 문서 바로가기
 상세한 개발 및 운영 방법은 아래 문서를 참조하세요.
@@ -14,10 +22,12 @@
 - [📜 백엔드 소스 코드 (code.gs)](./docs/backend/code.gs)
 - [📋 변경 사항 기록 (Changelog)](./docs/CHANGELOG.md)
 
-## 🚀 빠른 시작 (배포)
-1. 이 레포지토리를 Vercel에 연결합니다.
-2. `NEXT_PUBLIC_KAKAO_MAP_CLIENT_ID` 및 `NEXT_PUBLIC_GAS_URL` 환경 변수를 설정합니다.
-3. 배포가 완료되면 모든 기능이 즉시 활성화됩니다.
+## 🚀 빠른 시작 (배포 — Cloudflare Pages)
+1. 이 레포지토리를 Cloudflare Pages에 연결합니다.
+2. 빌드 설정: **Build command** `npm run build`, **Output directory** `out` (Next.js Static Export).
+3. 환경 변수 `NEXT_PUBLIC_KAKAO_MAP_CLIENT_ID`를 설정합니다.
+4. 실제 도메인을 **Kakao 개발자 콘솔의 플랫폼 도메인 허용목록**에 등록해야 지도가 정상 동작합니다.
+5. 데이터 갱신은 관리자 패널의 **[사이트에 발행]** 버튼으로 수행합니다 ([백엔드 가이드](./docs/backend/README.md) 참고).
 
 ## 📖 학년별 로드맵 기능 소개
 
@@ -80,12 +90,14 @@
 - 가까운 장소 필터링/정렬: **낮음** (Haversine 거리 계산 + 배열 정렬)
 - 두 기능 모두 외부 API 의존 없이 클라이언트 단독으로 구현 가능
 
-## 📋 최근 개선사항 (2026.05.19 후속)
+## 📋 최근 개선사항 (2026.06.26)
 
-### 분석 도구 연동
-- **Vercel Analytics**: 페이지뷰·사용자 이벤트 분석 자동 수집 (`@vercel/analytics`)
-- **Vercel Speed Insights**: Core Web Vitals(LCP, CLS, FID 등) 실시간 측정 (`@vercel/speed-insights`)
-- 두 기능 모두 Vercel 배포 환경에서 별도 설정 없이 즉시 활성화
+### 정적 배포 전환 + 시트 기반 운영
+- **정적 export 전환**: ISR → 완전 정적(`output: 'export'`). Cloudflare Pages에서 서버 없이 서빙. (자세한 내용은 [CHANGELOG](./docs/CHANGELOG.md))
+- **시트에서 발행**: 관리자 패널 **[사이트에 발행]** → GitHub 커밋 → 자동 빌드·배포. 발행 이력은 `공통` 시트에 자동 기록.
+- **'최근 업데이트 내용' 시트 관리**: How-To 모달 변경이력을 `변경이력` 시트에서 관리.
+- **단일 도메인**: `pages.dev` 접속 시 `map.dgedu.link`로 자동 리다이렉트.
+- **분석 도구**: Vercel Analytics/Speed Insights 제거(Cloudflare 환경 무동작). 필요 시 Cloudflare Web Analytics로 대체.
 
 ---
 
