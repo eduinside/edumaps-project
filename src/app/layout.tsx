@@ -25,6 +25,14 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${plusJakartaSans.variable} antialiased`}>
       <head>
+        {/* pages.dev 기본 도메인 접속 시 공식 도메인(map.dgedu.link)으로 자동 이동 — 단일 도메인 노출.
+            경로·쿼리·해시 보존, location.replace로 히스토리 오염 방지.
+            정확 일치라 프리뷰 서브도메인(<hash>.edumaps-project.pages.dev)은 리다이렉트되지 않음. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if(location.hostname==='edumaps-project.pages.dev'){location.replace('https://map.dgedu.link'+location.pathname+location.search+location.hash);}})();`,
+          }}
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-RK6LDHNFXQ"
           strategy="afterInteractive"
