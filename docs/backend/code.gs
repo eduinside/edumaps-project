@@ -394,7 +394,7 @@ function getFrontUrl(password) {
  *   GITHUB_TOKEN  (필수) : Contents 읽기/쓰기 권한의 Fine-grained PAT
  *   GITHUB_OWNER  (선택, 기본 eduinside)
  *   GITHUB_REPO   (선택, 기본 edumaps-project)
- *   GITHUB_BRANCH (선택, 기본 main)  ← 개발 중에는 feat/static-export 로 지정
+ *   GITHUB_BRANCH (선택, 기본 main)  ← 커밋·배포 대상 브랜치
  *   GITHUB_PATH   (선택, 기본 src/data/resources.json)
  */
 function getGithubConfig_() {
