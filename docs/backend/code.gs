@@ -409,14 +409,12 @@ function getGithubConfig_() {
 }
 
 /**
- * 시트 데이터를 GitHub의 resources.json으로 커밋(발행)한다.
+ * [핵심] 시트 데이터를 GitHub의 resources.json으로 커밋(발행)한다.
  * → Cloudflare Pages가 push를 감지해 자동으로 빌드·배포한다.
- * (기존 triggerRevalidation을 대체: /api/refresh 호출 → GitHub 커밋)
+ * @param {string} source 커밋 메시지에 남길 발행 경로(예: '관리자 패널', '시트 버튼')
+ * @return {{ success: boolean, message: string, url?: string }}
  */
-function publishToGitHub(password) {
-  if (!verifyPassword(password)) {
-    throw new Error('인증 오류: 권한이 없습니다.');
-  }
+function publishCore_(source) {
   var cfg = getGithubConfig_();
   if (!cfg.token) {
     return { success: false, message: 'GITHUB_TOKEN이 설정되지 않았습니다. 스크립트 속성에 PAT를 등록해주세요.' };
@@ -443,7 +441,7 @@ function publishToGitHub(password) {
 
     // 2) PUT으로 커밋 (한글 보존을 위해 UTF-8 base64 인코딩)
     var body = {
-      message: '데이터 발행: ' + payload.generatedAt + ' (관리자 패널)',
+      message: '데이터 발행: ' + payload.generatedAt + ' (' + (source || '발행') + ')',
       content: Utilities.base64Encode(contentStr, Utilities.Charset.UTF_8),
       branch: cfg.branch
     };
@@ -468,6 +466,42 @@ function publishToGitHub(password) {
     return { success: false, message: 'GitHub 커밋 실패 (HTTP ' + code + '): ' + putResp.getContentText() };
   } catch (e) {
     return { success: false, message: '네트워크/실행 오류: ' + e.toString() };
+  }
+}
+
+/**
+ * [관리자 패널용] 비밀번호 인증 후 발행한다. (google.script.run에서 호출)
+ * 기존 triggerRevalidation을 대체.
+ */
+function publishToGitHub(password) {
+  if (!verifyPassword(password)) {
+    throw new Error('인증 오류: 권한이 없습니다.');
+  }
+  return publishCore_('관리자 패널');
+}
+
+/**
+ * [시트 이미지/그림 버튼용] 인자 없는 발행 진입점.
+ * 시트에 삽입한 이미지/그림 → 우측 상단 ⋮ → '스크립트 할당' → "publishFromButton" 입력.
+ * 시트 편집 권한자가 직접 누르므로 비밀번호 인증은 생략한다.
+ * (이미지 버튼은 배포 버전이 아닌 '저장된 최신 코드'로 실행되므로 새 배포 불필요)
+ */
+function publishFromButton() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ui = SpreadsheetApp.getUi();
+  var resp = ui.alert(
+    '사이트에 발행',
+    '현재 시트 데이터를 사이트에 발행할까요?\n약 1~3분 후 반영됩니다.',
+    ui.ButtonSet.OK_CANCEL
+  );
+  if (resp !== ui.Button.OK) return;
+
+  ss.toast('발행 중입니다... 잠시만 기다려주세요.', '⏳ 사이트 발행', 30);
+  var result = publishCore_('시트 버튼');
+  if (result.success) {
+    ss.toast(result.message, '✅ 발행 완료', 8);
+  } else {
+    ui.alert('발행 실패', result.message, ui.ButtonSet.OK);
   }
 }
 
