@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -46,8 +44,6 @@ export default function RootLayout({
       </head>
       <body className="font-sans">
         {children}
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

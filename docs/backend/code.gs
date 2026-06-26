@@ -12,14 +12,26 @@ function doGet(e) {
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   }
 
-  // 기존 API 로직 (ISR 데이터 제공)
+  // (참고용) 시트 데이터를 JSON으로 직접 확인하고 싶을 때의 엔드포인트.
+  // 실제 사이트는 '발행' 버튼이 GitHub에 커밋한 resources.json을 빌드 시점에 읽으므로,
+  // 사용자 요청 경로에서는 더 이상 이 엔드포인트를 호출하지 않는다.
+  return ContentService.createTextOutput(JSON.stringify(buildResourcesJson()))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * 시트(아이템 + 활용)를 프론트엔드가 소비하는 JSON 페이로드로 변환한다.
+ * doGet(참고용 API)과 publishToGitHub(발행)에서 공용으로 사용한다.
+ * @return {{ generatedAt: string, items: Object[] }}
+ */
+function buildResourcesJson() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var itemsSheet = spreadsheet.getSheetByName("아이템");
   var itemsData = getSheetDataAsObjects(itemsSheet);
   var usageSheet = spreadsheet.getSheetByName("활용");
   var usageData = getSheetDataAsObjects(usageSheet);
-  
-  var result = itemsData.map(function(item) {
+
+  var items = itemsData.map(function(item) {
     var relatedUsages = usageData.map(function(u, idx) {
       u._original_index = idx; // 활용 시트의 원래 행 순서 저장
       return u;
@@ -62,9 +74,10 @@ function doGet(e) {
       grade_topics: gradeTopics
     };
   });
-  
-  return ContentService.createTextOutput(JSON.stringify(result))
-    .setMimeType(ContentService.MimeType.JSON);
+
+  // 발행 시각(KST). 프론트의 '데이터 최종 갱신' 표시에 사용된다.
+  var generatedAt = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy.MM.dd HH:mm');
+  return { generatedAt: generatedAt, items: items };
 }
 
 function getSheetDataAsObjects(sheet) {
@@ -347,34 +360,84 @@ function getFrontUrl(password) {
 }
 
 /**
- * Next.js 캐시 갱신(Revalidate) 트리거
+ * GitHub 발행 설정을 스크립트 속성에서 읽는다.
+ * [설정 방법] Apps Script 편집기 → 프로젝트 설정 → 스크립트 속성에 등록:
+ *   GITHUB_TOKEN  (필수) : Contents 읽기/쓰기 권한의 Fine-grained PAT
+ *   GITHUB_OWNER  (선택, 기본 eduinside)
+ *   GITHUB_REPO   (선택, 기본 edumaps-project)
+ *   GITHUB_BRANCH (선택, 기본 main)  ← 개발 중에는 feat/static-export 로 지정
+ *   GITHUB_PATH   (선택, 기본 src/data/resources.json)
  */
-function triggerRevalidation(password) {
+function getGithubConfig_() {
+  var props = PropertiesService.getScriptProperties();
+  return {
+    token: props.getProperty('GITHUB_TOKEN') || '',
+    owner: props.getProperty('GITHUB_OWNER') || 'eduinside',
+    repo: props.getProperty('GITHUB_REPO') || 'edumaps-project',
+    branch: props.getProperty('GITHUB_BRANCH') || 'main',
+    path: props.getProperty('GITHUB_PATH') || 'src/data/resources.json'
+  };
+}
+
+/**
+ * 시트 데이터를 GitHub의 resources.json으로 커밋(발행)한다.
+ * → Cloudflare Pages가 push를 감지해 자동으로 빌드·배포한다.
+ * (기존 triggerRevalidation을 대체: /api/refresh 호출 → GitHub 커밋)
+ */
+function publishToGitHub(password) {
   if (!verifyPassword(password)) {
     throw new Error('인증 오류: 권한이 없습니다.');
   }
-  var url = getFrontUrl(password);
-  if (!url) {
-    throw new Error('웹사이트 URL이 설정되지 않았습니다. 설정 탭에서 입력해주세요.');
+  var cfg = getGithubConfig_();
+  if (!cfg.token) {
+    return { success: false, message: 'GITHUB_TOKEN이 설정되지 않았습니다. 스크립트 속성에 PAT를 등록해주세요.' };
   }
-  
-  if (url.substring(url.length - 1) === '/') {
-    url = url.substring(0, url.length - 1);
-  }
-  var refreshUrl = url + '/api/refresh';
-  
+
+  var payload = buildResourcesJson();
+  var contentStr = JSON.stringify(payload, null, 2);
+  var apiBase = 'https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + '/contents/' + cfg.path;
+  var headers = {
+    'Authorization': 'Bearer ' + cfg.token,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+
   try {
-    var response = UrlFetchApp.fetch(refreshUrl, { muteHttpExceptions: true });
-    var code = response.getResponseCode();
-    var content = response.getContentText();
-    
-    if (code === 200) {
-      return { success: true, message: '캐시가 성공적으로 갱신되었습니다.' };
-    } else {
-      return { success: false, message: '서버 응답 오류 (HTTP ' + code + '): ' + content };
+    // 1) 현재 파일의 SHA 조회 (없으면 신규 생성)
+    var sha = null;
+    var getResp = UrlFetchApp.fetch(apiBase + '?ref=' + encodeURIComponent(cfg.branch), {
+      method: 'get', headers: headers, muteHttpExceptions: true
+    });
+    if (getResp.getResponseCode() === 200) {
+      sha = JSON.parse(getResp.getContentText()).sha;
     }
+
+    // 2) PUT으로 커밋 (한글 보존을 위해 UTF-8 base64 인코딩)
+    var body = {
+      message: '데이터 발행: ' + payload.generatedAt + ' (관리자 패널)',
+      content: Utilities.base64Encode(contentStr, Utilities.Charset.UTF_8),
+      branch: cfg.branch
+    };
+    if (sha) body.sha = sha;
+
+    var putResp = UrlFetchApp.fetch(apiBase, {
+      method: 'put', headers: headers,
+      contentType: 'application/json',
+      payload: JSON.stringify(body), muteHttpExceptions: true
+    });
+    var code = putResp.getResponseCode();
+    if (code === 200 || code === 201) {
+      var commit = JSON.parse(putResp.getContentText());
+      var commitUrl = (commit && commit.commit && commit.commit.html_url) || '';
+      return {
+        success: true,
+        message: '발행 완료! 약 1~3분 내 사이트에 반영됩니다. (' + payload.items.length + '개 항목, ' + cfg.branch + ' 브랜치)',
+        url: commitUrl
+      };
+    }
+    return { success: false, message: 'GitHub 커밋 실패 (HTTP ' + code + '): ' + putResp.getContentText() };
   } catch (e) {
-    return { success: false, message: '네트워크 연결 오류: ' + e.toString() };
+    return { success: false, message: '네트워크/실행 오류: ' + e.toString() };
   }
 }
 

@@ -142,12 +142,12 @@
 
         <!-- 하단 프로필/로그아웃 -->
         <div class="p-4 border-t border-slate-800 flex flex-col gap-3">
-          <!-- Next.js 캐시 갱신 단축 버튼 -->
+          <!-- 사이트에 발행 단축 버튼 (GitHub 커밋 → Cloudflare Pages 자동 배포) -->
           <button @click="revalidateCache" :disabled="revalidating"
                   class="w-full py-2.5 px-4 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
             <span v-if="revalidating" class="animate-spin"><i class="fas fa-spinner"></i></span>
-            <i v-else class="fas fa-sync-alt"></i>
-            데이터 웹 즉시 동기화
+            <i v-else class="fas fa-rocket"></i>
+            사이트에 발행
           </button>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -530,36 +530,31 @@
             <!-- ==================== TAB 2-4: 설정 & 동기화 ==================== -->
             <div v-if="activeTab === 'settings'" class="space-y-6 max-w-3xl">
               
-              <!-- 데이터 강제 동기화 (ISR Refresh) -->
+              <!-- 사이트에 발행 (GitHub 커밋 → Cloudflare Pages 자동 배포) -->
               <div class="bg-slate-900/40 border border-slate-800 p-6 rounded-3xl space-y-4">
                 <h3 class="font-bold text-white text-base flex items-center gap-2">
-                  <i class="fas fa-sync-alt text-emerald-400"></i>
-                  Next.js 프론트엔드 캐시 새로고침 (ISR Revalidate)
+                  <i class="fas fa-rocket text-emerald-400"></i>
+                  사이트에 발행 (GitHub → Cloudflare Pages)
                 </h3>
                 <p class="text-slate-400 text-xs leading-relaxed">
-                  스프레드시트에 데이터를 추가/수정/삭제했더라도, 실제 퍼블리시된 웹사이트(Next.js)에는 고성능 로딩을 위해 데이터가 캐싱되어 있습니다. 
-                  수정 사항을 웹에 즉시 반영하려면 아래 동기화 버튼을 눌러 캐시를 실시간 갱신해 주어야 합니다.
+                  스프레드시트 수정 내용을 실제 사이트에 반영합니다. 아래 <b class="text-emerald-400">지금 발행</b> 버튼을 누르면
+                  현재 시트 데이터가 GitHub의 <code class="bg-slate-950 px-1 py-0.5 rounded text-emerald-400">resources.json</code>으로 커밋되고,
+                  Cloudflare Pages가 이를 감지해 자동으로 사이트를 다시 빌드·배포합니다. <b>약 1~3분 뒤</b> 반영됩니다.
                 </p>
 
-                <div class="space-y-3 pt-2">
-                  <label class="block text-slate-300 text-xs font-semibold">퍼블리시된 웹 주소 (Next.js 사이트 URL)</label>
-                  <div class="flex gap-3">
-                    <input type="url" v-model="frontUrl" placeholder="https://edumaps.vercel.app"
-                           class="flex-1 bg-slate-950/60 border border-slate-800 text-white rounded-xl py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
-                    <button @click="saveFrontUrl" :disabled="savingFrontUrl"
-                            class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold rounded-xl text-sm transition-all shrink-0">
-                      {{ savingFrontUrl ? '저장 중...' : 'URL 저장' }}
-                    </button>
-                  </div>
+                <div class="rounded-xl bg-slate-950/50 border border-slate-800 p-3 text-xs text-slate-400 leading-relaxed">
+                  <i class="fas fa-info-circle text-slate-500 mr-1"></i>
+                  발행 대상(리포지토리·브랜치·토큰)은 Apps Script <b>스크립트 속성</b>에서 관리됩니다.
+                  (<code class="text-slate-300">GITHUB_TOKEN</code>, <code class="text-slate-300">GITHUB_BRANCH</code> 등)
                 </div>
 
                 <div class="pt-4 flex items-center justify-between border-t border-slate-800/80">
-                  <span class="text-xs text-slate-500">지정된 주소의 <code class="bg-slate-950 px-1 py-0.5 rounded text-emerald-400">/api/refresh</code> 엔드포인트를 호출합니다.</span>
-                  <button @click="revalidateCache" :disabled="revalidating || !frontUrl"
+                  <span class="text-xs text-slate-500">시트 데이터를 GitHub 리포지토리에 커밋합니다.</span>
+                  <button @click="revalidateCache" :disabled="revalidating"
                           class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold rounded-xl text-sm transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/15">
                     <span v-if="revalidating" class="animate-spin"><i class="fas fa-spinner"></i></span>
-                    <i v-else class="fas fa-bolt"></i>
-                    웹서버 데이터 즉시 동기화
+                    <i v-else class="fas fa-rocket"></i>
+                    지금 발행
                   </button>
                 </div>
               </div>
@@ -1021,7 +1016,8 @@
             .saveFrontUrl(password.value, frontUrl.value);
         };
 
-        // Next.js ISR 캐시 새로고침
+        // 사이트에 발행 (GitHub 커밋 → Cloudflare Pages 자동 배포)
+        // 참고: 함수/상태 이름은 기존 호환을 위해 유지하되, 동작은 GitHub 발행으로 변경됨.
         const revalidateCache = () => {
           revalidating.value = true;
           google.script.run
@@ -1035,9 +1031,9 @@
             })
             .withFailureHandler((err) => {
               revalidating.value = false;
-              showToast('새로고침 요청 중 기술 오류: ' + err.message, 'error');
+              showToast('발행 요청 중 기술 오류: ' + err.message, 'error');
             })
-            .triggerRevalidation(password.value);
+            .publishToGitHub(password.value);
         };
 
         // 패스코드 변경

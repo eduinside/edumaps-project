@@ -3,8 +3,6 @@ import { fetchResources } from "../../lib/fetchResources";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export const revalidate = 3600;
-
 const ALLOWED_TABS = ["visitmap", "online", "roadmap"];
 
 export default async function TabPage({ params }: { params: Promise<{ tab: string }> }) {
@@ -15,17 +13,18 @@ export default async function TabPage({ params }: { params: Promise<{ tab: strin
     notFound();
   }
 
-  const resources = await fetchResources();
-  const updatedTime = new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+  const { items, generatedAt } = await fetchResources();
+  const updatedTime =
+    generatedAt ?? new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EduMapsClient initialData={resources} updatedTime={updatedTime} />
+      <EduMapsClient initialData={items} updatedTime={updatedTime} />
     </Suspense>
   );
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return ALLOWED_TABS.map((tab) => ({
     tab: tab,
   }));
