@@ -685,13 +685,9 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                           </div>
                           <div className="bg-white/70 dark:bg-slate-700/50 p-4 rounded-2xl border border-emerald-50 dark:border-slate-600">
                             <h5 className="text-xs font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
-                            <ul className="space-y-2">
-                              {gt.post_activities?.map((a: string, i: number) => (
-                                <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span> {renderRichText(a)}
-                                </li>
-                              ))}
-                            </ul>
+                            <p className="text-[13px] text-slate-600 dark:text-slate-300 font-medium leading-relaxed whitespace-pre-line">
+                              {renderRichText((gt.post_activities || []).join("\n"))}
+                            </p>
                           </div>
                         </div>
                       </div>
