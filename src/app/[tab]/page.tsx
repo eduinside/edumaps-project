@@ -13,13 +13,13 @@ export default async function TabPage({ params }: { params: Promise<{ tab: strin
     notFound();
   }
 
-  const { items, generatedAt } = await fetchResources();
+  const { items, generatedAt, changelog } = await fetchResources();
   const updatedTime =
     generatedAt ?? new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EduMapsClient initialData={items} updatedTime={updatedTime} />
+      <EduMapsClient initialData={items} updatedTime={updatedTime} changelog={changelog} />
     </Suspense>
   );
 }

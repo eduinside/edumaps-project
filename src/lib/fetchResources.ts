@@ -1,9 +1,13 @@
 import rawData from "../data/resources.json";
 
+export type ChangelogEntry = { date: string; text: string };
+
 export type ResourcesPayload = {
   items: any[];
   // 데이터 발행(GitHub 커밋) 시각. 배열 형태의 구버전 데이터에는 없으므로 null.
   generatedAt: string | null;
+  // '최근 업데이트 내용' 항목. 시트에 없으면 빈 배열 → 컴포넌트가 기본값으로 폴백.
+  changelog: ChangelogEntry[];
 };
 
 /**
@@ -18,11 +22,12 @@ export async function fetchResources(): Promise<ResourcesPayload> {
   const data = rawData as any;
 
   if (Array.isArray(data)) {
-    return { items: data, generatedAt: null };
+    return { items: data, generatedAt: null, changelog: [] };
   }
 
   return {
     items: Array.isArray(data?.items) ? data.items : [],
     generatedAt: typeof data?.generatedAt === "string" ? data.generatedAt : null,
+    changelog: Array.isArray(data?.changelog) ? data.changelog : [],
   };
 }

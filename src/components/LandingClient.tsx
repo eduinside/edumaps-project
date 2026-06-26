@@ -11,6 +11,7 @@ import HomeCarousel from "./HomeCarousel";
 interface Props {
   initialData: any[];
   updatedTime?: string;
+  changelog?: { date: string; text: string }[];
 }
 
 const ONLINE_CATEGORIES = ["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"];
@@ -73,7 +74,7 @@ function LandingCard({ item, onClick }: { item: any; onClick: () => void }) {
   );
 }
 
-export default function LandingClient({ initialData, updatedTime }: Props) {
+export default function LandingClient({ initialData, updatedTime, changelog }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -440,7 +441,7 @@ export default function LandingClient({ initialData, updatedTime }: Props) {
         </div>
       </footer>
 
-      <HowToModal isOpen={isHowToOpen} onClose={() => setIsHowToOpen(false)} updatedTime={updatedTime} />
+      <HowToModal isOpen={isHowToOpen} onClose={() => setIsHowToOpen(false)} updatedTime={updatedTime} changelog={changelog} />
     </div>
   );
 }

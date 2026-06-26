@@ -2,14 +2,31 @@
 
 import { X, Map, Info, HelpCircle, History } from "lucide-react";
 
+interface ChangelogEntry {
+  date: string;
+  text: string;
+}
+
 interface HowToModalProps {
   isOpen: boolean;
   onClose: () => void;
   updatedTime?: string;
+  changelog?: ChangelogEntry[];
 }
 
-export default function HowToModal({ isOpen, onClose, updatedTime }: HowToModalProps) {
+// '변경이력' 시트가 비어있거나 아직 없을 때의 폴백 (시트 데이터가 있으면 그쪽 우선)
+const DEFAULT_CHANGELOG: ChangelogEntry[] = [
+  { date: "2026.06.01", text: "검색창 아래 바로가기 아이콘과 추천 자료 홍보 캐러셀이 추가되었습니다." },
+  { date: "2026.05.19", text: "내 근처 필터·지역 필터 시 지도 자동 이동, 로드맵 연계 버튼 개선, 학년 간 전환 기능이 추가되었습니다." },
+  { date: "2026.05.08", text: "온라인 탭 UI 개선 및 학년 표시 통합으로 더 나은 사용 경험을 제공합니다." },
+  { date: "2026.05.04", text: "랜딩페이지에서 학년 미선택 시에도 모든 학년 자료를 표시하도록 개선했습니다." },
+  { date: "2026.05.03", text: "사이트를 처음 만들었습니다." },
+];
+
+export default function HowToModal({ isOpen, onClose, updatedTime, changelog }: HowToModalProps) {
   if (!isOpen) return null;
+
+  const entries = changelog && changelog.length > 0 ? changelog : DEFAULT_CHANGELOG;
 
   return (
     <div
@@ -61,26 +78,15 @@ export default function HowToModal({ isOpen, onClose, updatedTime }: HowToModalP
               <p className="text-[11px] text-slate-400 mb-4 ml-7 font-medium italic">데이터 최종 갱신: {updatedTime}</p>
 
               <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-3 border-l-2 border-slate-200 dark:border-slate-600 ml-2 pl-4">
-                <li className="relative">
-                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 shadow-sm"></span>
-                  <strong className="text-slate-800 dark:text-slate-100">2026.06.01</strong> - 검색창 아래 바로가기 아이콘과 추천 자료 홍보 캐러셀이 추가되었습니다.
-                </li>
-                <li className="relative">
-                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 shadow-sm"></span>
-                  <strong className="text-slate-800 dark:text-slate-100">2026.05.19</strong> - 내 근처 필터·지역 필터 시 지도 자동 이동, 로드맵 연계 버튼 개선, 학년 간 전환 기능이 추가되었습니다.
-                </li>
-                <li className="relative">
-                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 shadow-sm"></span>
-                  <strong className="text-slate-800 dark:text-slate-100">2026.05.08</strong> - 온라인 탭 UI 개선 및 학년 표시 통합으로 더 나은 사용 경험을 제공합니다.
-                </li>
-                <li className="relative">
-                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800 shadow-sm"></span>
-                  <strong className="text-slate-800 dark:text-slate-100">2026.05.04</strong> - 랜딩페이지에서 학년 미선택 시에도 모든 학년 자료를 표시하도록 개선했습니다.
-                </li>
-                <li className="relative">
-                  <span className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-slate-300 border-2 border-white dark:border-slate-800 shadow-sm"></span>
-                  <strong className="text-slate-800 dark:text-slate-100">2026.05.03</strong> - 사이트를 처음 만들었습니다.
-                </li>
+                {entries.map((entry, idx) => (
+                  <li key={`${entry.date}-${idx}`} className="relative">
+                    <span
+                      className={`absolute -left-[21px] top-1.5 w-2 h-2 rounded-full border-2 border-white dark:border-slate-800 shadow-sm ${idx === entries.length - 1 ? "bg-slate-300" : "bg-emerald-500"
+                        }`}
+                    ></span>
+                    <strong className="text-slate-800 dark:text-slate-100">{entry.date}</strong> - {entry.text}
+                  </li>
+                ))}
               </ul>
             </section>
           )}

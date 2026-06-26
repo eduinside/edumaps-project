@@ -11,6 +11,7 @@ import { renderRichText } from "../lib/richText";
 interface Props {
   initialData: any[];
   updatedTime: string;
+  changelog?: { date: string; text: string }[];
 }
 
 const categoryColorMap: Record<string, { border: string; bg: string; text: string; bgLight: string }> = {
@@ -26,7 +27,7 @@ const getCategoryColor = (category: string | null) => {
   return category && categoryColorMap[category] ? categoryColorMap[category] : { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" };
 };
 
-export default function EduMapsClient({ initialData, updatedTime }: Props) {
+export default function EduMapsClient({ initialData, updatedTime, changelog }: Props) {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -776,7 +777,7 @@ export default function EduMapsClient({ initialData, updatedTime }: Props) {
         )}
       </main>
 
-      <HowToModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} updatedTime={updatedTime} />
+      <HowToModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} updatedTime={updatedTime} changelog={changelog} />
     </div>
   );
 }

@@ -77,7 +77,36 @@ function buildResourcesJson() {
 
   // 발행 시각(KST). 프론트의 '데이터 최종 갱신' 표시에 사용된다.
   var generatedAt = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy.MM.dd HH:mm');
-  return { generatedAt: generatedAt, items: items };
+  return { generatedAt: generatedAt, items: items, changelog: buildChangelog_() };
+}
+
+/**
+ * '변경이력' 시트에서 '최근 업데이트 내용' 항목을 읽는다.
+ *   A=날짜, B=내용 (1행 헤더, 2행부터 데이터, 행 순서 그대로 — 최신을 위에)
+ * 시트가 없거나 비면 빈 배열을 반환하고, 프론트는 기본(하드코딩) 항목으로 폴백한다.
+ * @return {{ date: string, text: string }[]}
+ */
+function buildChangelog_() {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('변경이력');
+    if (!sheet) return [];
+    var lastRow = sheet.getLastRow();
+    if (lastRow < 2) return [];
+    var rows = sheet.getRange(2, 1, lastRow - 1, 2).getValues(); // A,B
+    var out = [];
+    for (var i = 0; i < rows.length; i++) {
+      var d = rows[i][0];
+      var t = rows[i][1];
+      if (String(d).trim() === '' && String(t).trim() === '') continue;
+      var dateStr = (d instanceof Date)
+        ? Utilities.formatDate(d, 'Asia/Seoul', 'yyyy.MM.dd')
+        : String(d).trim();
+      out.push({ date: dateStr, text: String(t).trim() });
+    }
+    return out;
+  } catch (e) {
+    return [];
+  }
 }
 
 function getSheetDataAsObjects(sheet) {
