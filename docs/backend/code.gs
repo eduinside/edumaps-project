@@ -429,6 +429,7 @@ function publishToGitHub(password) {
     if (code === 200 || code === 201) {
       var commit = JSON.parse(putResp.getContentText());
       var commitUrl = (commit && commit.commit && commit.commit.html_url) || '';
+      appendPublishHistory_(payload, cfg.branch, commitUrl);
       return {
         success: true,
         message: '발행 완료! 약 1~3분 내 사이트에 반영됩니다. (' + payload.items.length + '개 항목, ' + cfg.branch + ' 브랜치)',
@@ -438,6 +439,43 @@ function publishToGitHub(password) {
     return { success: false, message: 'GitHub 커밋 실패 (HTTP ' + code + '): ' + putResp.getContentText() };
   } catch (e) {
     return { success: false, message: '네트워크/실행 오류: ' + e.toString() };
+  }
+}
+
+/**
+ * 발행 이력을 '공통' 시트 A20부터 한 줄씩(아래로) 기록한다.
+ *   A=발행시각, B=항목수, C=브랜치, D=커밋링크, E=발행자(이메일)
+ * 이력 기록 실패가 발행 자체를 막지 않도록 try/catch로 보호한다.
+ * (헤더가 필요하면 A19 등 19행 이하에 수동으로 넣으면 됨 — 이력은 20행부터)
+ */
+function appendPublishHistory_(payload, branch, commitUrl) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('공통');
+    if (!sheet) return; // 공통 시트가 없으면 조용히 스킵
+    var START_ROW = 20;
+
+    // START_ROW부터 A열에서 첫 번째 빈 행을 찾아 그 행에 기록 (append)
+    var row = START_ROW;
+    var lastRow = sheet.getLastRow();
+    if (lastRow >= START_ROW) {
+      var colA = sheet.getRange(START_ROW, 1, lastRow - START_ROW + 1, 1).getValues();
+      var i = 0;
+      while (i < colA.length && String(colA[i][0]).trim() !== '') i++;
+      row = START_ROW + i;
+    }
+
+    var who = '';
+    try { who = Session.getActiveUser().getEmail() || ''; } catch (e2) {}
+
+    sheet.getRange(row, 1, 1, 5).setValues([[
+      payload.generatedAt,
+      payload.items.length,
+      branch,
+      commitUrl,
+      who
+    ]]);
+  } catch (e) {
+    // 이력 기록 실패는 무시 — 발행(커밋)은 이미 성공한 상태
   }
 }
 
