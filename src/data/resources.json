@@ -1,71 +1,2969 @@
-[
+{
+  "generatedAt": "2026.06.26 22:01",
+  "items": [
     {
-        "id": "res_001",
-        "type": "OFFLINE",
-        "title": "대구시민안전테마파크",
-        "category": "동구",
-        "tags": [
-            "체험",
-            "관람",
-            "생태"
-        ],
-        "recommended_grade": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"
-        ],
-        "description": "각종 재난과 안전사고 예방을 위한 체험 운영",
-        "location": {
-            "lat": 35.9891717,
-            "lng": 128.691943
-        },
-        "image_url": "/image/res_001.png",
-        "external_url": "https://www.daegu.go.kr/safe119/index.do",
-        "grade_topics": [
-            {
-                "grade": 1,
-                "subject": "사람들",
-                "month": "4월",
-                "topic_title": "불이 났을 때는",
-                "description": "화재 등 재난상황에 슬기롭게 대처하는 방법을 알아봅시다.",
-                "inquiry_questions": [
-                    "불이 났을 때 어떻게 해야 할까요?"
-                ],
-                "post_activities": [
-                    "집과 학교에서 불이 났을 때 해야 하는 일을 떠올려 봅시다.",
-                    "소방관이 하는 일을 알아봅시다."
-                ]
-            }
-        ]
+      "id": "res_011",
+      "type": "ONLINE",
+      "title": "초등 어휘싹",
+      "category": "언어",
+      "tags": [
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "description": "학년별 주요 어휘를 다섯 고개 놀이로 배우며 문해력을 키워요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_011.webp",
+      "external_url": "https://ssac.dgedu.link/",
+      "grade_topics": []
     },
     {
-        "id": "res_002",
-        "type": "ONLINE",
-        "title": "EBS MATH",
-        "category": "수리",
-        "tags": [
-            "로그인필요",
-            "영상자료",
-            "문제풀이"
-        ],
-        "recommended_grade": [
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6"
-        ],
-        "description": "다양한 콘텐츠로 재미있는 수학 학습을 제공해요",
-        "location": {
-            "lat": 0,
-            "lng": 0
+      "id": "res_012",
+      "type": "ONLINE",
+      "title": "초등 개념싹",
+      "category": "언어",
+      "tags": [
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "사회, 수학, 과학 교과서에 나오는 주요 개념을 익혀요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_012.webp",
+      "external_url": "https://ssac.dgedu.link/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_013",
+      "type": "ONLINE",
+      "title": "책열매",
+      "category": "언어",
+      "tags": [
+        "로그인필요",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "인공지능이 나를 위해 책을 추천하고 낱말 학습을 도와줘요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_013.webp",
+      "external_url": "https://ireading.kr/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_014",
+      "type": "ONLINE",
+      "title": "국가기초학력지원포털",
+      "category": "언어",
+      "tags": [
+        "로그인필요",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "기초학습자료와 학습준비도 검사 도구를 제공해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_014.webp",
+      "external_url": "https://www.basics.go.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_015",
+      "type": "ONLINE",
+      "title": "다국어 동화",
+      "category": "언어",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "다양한 언어의 동화 세상을 여행해 보세요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_015.webp",
+      "external_url": "https://nlcy.go.kr/MANY/main/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_021",
+      "type": "ONLINE",
+      "title": "EBS MATH",
+      "category": "수리",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "다양한 콘텐츠로 재미있는 수학 학습을 제공해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_021.webp",
+      "external_url": "https://www.ebsmath.co.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_022",
+      "type": "ONLINE",
+      "title": "짜잔수학",
+      "category": "수리",
+      "tags": [
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "학년, 학기, 단원, 난이도를 선택하면 수학 문제가 짜잔!",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_022.webp",
+      "external_url": "https://aig.edunet.net/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_023",
+      "type": "ONLINE",
+      "title": "똑똑! 수학탐험대",
+      "category": "수리",
+      "tags": [
+        "로그인필요",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "수학 실력을 진단하고 인공지능이 나에게 필요한 활동을 추천해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_023.webp",
+      "external_url": "https://www.toctocmath.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_024",
+      "type": "ONLINE",
+      "title": "알지오매스 키즈",
+      "category": "수리",
+      "tags": [
+        "로그인필요",
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "평면, 입체도형 등을 통해 수학적 사고력과 탐구력을 길러요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_024.webp",
+      "external_url": "https://www.algeomath.kr/kids",
+      "grade_topics": []
+    },
+    {
+      "id": "res_025",
+      "type": "ONLINE",
+      "title": "애스크매스",
+      "category": "수리",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "수학교육 소식, 수학 학습 진단과 다양한 콘텐츠를 체험해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_025.webp",
+      "external_url": "https://askmath.kosac.re.kr/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_031",
+      "type": "ONLINE",
+      "title": "AI 디지털 교육자료",
+      "category": "디지털",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "가정에서도 AI 디지털 교육자료로 자기주도학습을 해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_031.webp",
+      "external_url": "https://www.aidtbook.kr/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_032",
+      "type": "ONLINE",
+      "title": "코드닷오알지",
+      "category": "디지털",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "재미있는 활동을 통해 코딩의 기초를 쉽게 익혀요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_032.webp",
+      "external_url": "https://code.org/ko/students",
+      "grade_topics": []
+    },
+    {
+      "id": "res_033",
+      "type": "ONLINE",
+      "title": "EBS 이솦",
+      "category": "디지털",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "온라인으로 다양한 소프트웨어 체험을 할 수 있는 SW교실",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_033.webp",
+      "external_url": "https://www.ebssw.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_034",
+      "type": "ONLINE",
+      "title": "엔트리",
+      "category": "디지털",
+      "tags": [
+        "로그인필요",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "상상한 것을 코딩을 통해 만들고 여러 사람들과 함께 공유해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_034.webp",
+      "external_url": "https://playentry.org/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_035",
+      "type": "ONLINE",
+      "title": "소프트웨어야 놀자",
+      "category": "디지털",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "SW의 기초부터 학습할 수 있는 다양한 영상을 제공해요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_035.webp",
+      "external_url": "https://www.playsw.or.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_041",
+      "type": "ONLINE",
+      "title": "AI 펭톡",
+      "category": "외국어",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "AI 펭수와 함께 하는 게임처럼 즐거운 영어 말하기",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_041.webp",
+      "external_url": "https://pengtalk-student.ebse.co.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_042",
+      "type": "ONLINE",
+      "title": "EBS Kids",
+      "category": "외국어",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "이야기를 읽고 들으며 자연스럽게 키우는 영어 읽기 실력",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_042.webp",
+      "external_url": "https://www.youtube.com/@EBSKidsWorld/playlists",
+      "grade_topics": []
+    },
+    {
+      "id": "res_043",
+      "type": "ONLINE",
+      "title": "EBS English 펀리딩",
+      "category": "외국어",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "이야기를 읽고 들으며 자연스럽게 영어 읽기 실력을 키워요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_043.webp",
+      "external_url": "https://www.ebse.co.kr/apps/funReading/funMain.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_044",
+      "type": "ONLINE",
+      "title": "Oxford OWL",
+      "category": "외국어",
+      "tags": [
+        "로그인필요",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "수준별 책 읽기와 워크시트를 활용한 독후 활동으로 영어 읽기 정복",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_044.webp",
+      "external_url": "https://www.oxfordowl.co.uk/for-home/find-a-book/library-page",
+      "grade_topics": []
+    },
+    {
+      "id": "res_045",
+      "type": "ONLINE",
+      "title": "구글 Read Along",
+      "category": "외국어",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "description": "파닉스부터 읽기, 말하기, 퀴즈까지 차근차근 배워나가는 영어 학습",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_045.webp",
+      "external_url": "https://readalong.google.com/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_051",
+      "type": "ONLINE",
+      "title": "얼씨구 국악여행",
+      "category": "문화",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "소고, 단소, 소금의 연주 방법을 배워요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_051.webp",
+      "external_url": "https://www.youtube.com/playlist?list=PL5hgB-lWdFZL1OT4HOfyVCKTZiLsnCuya",
+      "grade_topics": []
+    },
+    {
+      "id": "res_052",
+      "type": "ONLINE",
+      "title": "알쏭달쏭 음악감상",
+      "category": "문화",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "널리 활용되는 감상곡의 작곡가와 배경을 알아보아요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_052.webp",
+      "external_url": "https://www.youtube.com/playlist?list=PL5hgB-lWdFZKCRMq1romg-iLfs0-kzGzA",
+      "grade_topics": []
+    },
+    {
+      "id": "res_053",
+      "type": "ONLINE",
+      "title": "두근두근 미술교실",
+      "category": "문화",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "미술 교과의 9가지 주제 관련 이론과 활동을 배워요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_053.webp",
+      "external_url": "https://www.youtube.com/playlist?list=PL5hgB-lWdFZLtF02pLj1_iRLbWHRGAVU-",
+      "grade_topics": []
+    },
+    {
+      "id": "res_054",
+      "type": "ONLINE",
+      "title": "어린이 국악누리",
+      "category": "문화",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "description": "국립국악원이 준비한 고품질 국악 콘텐츠를 활용해 보세요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_054.webp",
+      "external_url": "https://academy.gugak.go.kr/open/children/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_055",
+      "type": "ONLINE",
+      "title": "구글 아트 앤 컬쳐",
+      "category": "문화",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "전세계 박물관, 미술관의 전시품을 손쉽게 살펴봐요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_055.webp",
+      "external_url": "https://artsandculture.google.com",
+      "grade_topics": []
+    },
+    {
+      "id": "res_056",
+      "type": "ONLINE",
+      "title": "크롬 뮤직랩",
+      "category": "문화",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "음악을 재미있는 방법으로 배우고 만들 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_056.webp",
+      "external_url": "https://musiclab.chromeexperiments.com/",
+      "grade_topics": [
+        {
+          "usage_index": 6,
+          "grade": 1,
+          "subject": "상상",
+          "month": "11월",
+          "topic_title": "내가 음악을 만든다면",
+          "description": "스마트 기기로 나의 상상을 음악으로 표현해 봅시다.",
+          "inquiry_questions": [
+            "나의 상상을 다양한 음악으로 표현해볼까요?"
+          ],
+          "post_activities": [
+            "생활 속 다양한 도구를 활용해 음악을 만들어 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_061",
+      "type": "ONLINE",
+      "title": "대구교육포털 에듀나비",
+      "category": "더 알아보기",
+      "tags": [
+        "로그인필요",
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구교육 맞춤서비스를 제공하는 누리집",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_061.webp",
+      "external_url": "https://www.edunavi.kr/portal/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_062",
+      "type": "ONLINE",
+      "title": "대구학부모교육",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "자녀의 성장을 돕는 교육 정보와 학부모를 위한 교육 영상 자료",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_062.webp",
+      "external_url": "https://www.youtube.com/@대구학부모교육",
+      "grade_topics": []
+    },
+    {
+      "id": "res_063",
+      "type": "ONLINE",
+      "title": "주니어 커리어넷",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "적성 검사로 나를 이해하고 전문 상담으로 꿈을 찾아봐요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_063.webp",
+      "external_url": "https://www.career.go.kr/cloud/j/main/home",
+      "grade_topics": []
+    },
+    {
+      "id": "res_064",
+      "type": "ONLINE",
+      "title": "어린이 기상교실",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "날씨, 기후, 지진! 기상청과 함께 놀면서 배우는 날씨 이야기",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_064.webp",
+      "external_url": "https://www.kma.go.kr/kids/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_065",
+      "type": "ONLINE",
+      "title": "우리역사넷",
+      "category": "더 알아보기",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "고대부터 현대 역사까지 초등학생을 위한 우리 역사 이야기",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_065.webp",
+      "external_url": "https://contents.history.go.kr/front/newEh/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_066",
+      "type": "ONLINE",
+      "title": "마음챙김 5분 명상",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "몸과 마음이 지칠 때 5분 투자 명상을 통해 집중력 쑥! 행복 쑥!",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_066.webp",
+      "external_url": "https://www.edunavi.kr/arc/ad/edunavi/arc/cp/selectChnnlPackageInfo.do?chnnlSn=175&packageSn=840",
+      "grade_topics": []
+    },
+    {
+      "id": "res_067",
+      "type": "ONLINE",
+      "title": "성평등가족부 어린이",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "우리 모두 평등해요 행복한 가족, 밝은 세상을 만들어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_067.webp",
+      "external_url": "https://www.mogef.go.kr/kids/index.jsp",
+      "grade_topics": []
+    },
+    {
+      "id": "res_068",
+      "type": "ONLINE",
+      "title": "어린이 지도여행",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "지도 속 숨어있는 재미있는 이야기 지도와 함께 여행을 떠나요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_068.webp",
+      "external_url": "https://www.ngii.go.kr/child/content.do?sq=148",
+      "grade_topics": []
+    },
+    {
+      "id": "res_069",
+      "type": "ONLINE",
+      "title": "메이커활동",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "직접 만들며 실력 쑥쑥 메이커활동 기본 도구 사용법",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_069.webp",
+      "external_url": "https://www.youtube.com/playlist?list=PLPhnrj-tuZvw4g8HdI0rEqcGVGOGWmEcg",
+      "grade_topics": []
+    },
+    {
+      "id": "res_070",
+      "type": "ONLINE",
+      "title": "국토정보플랫폼",
+      "category": "더 알아보기",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "지도 기반의 공간정보(통계, 역사, 도로 등)를 총망라한 사이트",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "/images/res_070.webp",
+      "external_url": "https://map.ngii.go.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 34,
+          "grade": 4,
+          "subject": "사회",
+          "month": "4월",
+          "topic_title": "지도로 만나는 우리 지역",
+          "description": "온라인 지도로 우리 동네를 찾아보고 지역의 변화를 비교해 봅시다.",
+          "inquiry_questions": [
+            "옛날 지도와 지금의 디지털 지도를 비교해 보면, 대구 사람들이 모여 사는 곳은 어떻게 변해왔을까요?"
+          ],
+          "post_activities": [
+            "온라인 지도를 캡처한 뒤, 우리 가족만의 '단골 맛집/놀이터 맞춤형 기호 지도'를 만들어봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_111",
+      "type": "OFFLINE",
+      "title": "삼국유사테마파크",
+      "category": "군위군",
+      "tags": [
+        "체험",
+        "관람",
+        "놀이",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "삼국유사 전시·조형물 및 교육·체험 제공",
+      "location": {
+        "lat": 36.1614561,
+        "lng": 128.6968859
+      },
+      "image_url": "/images/res_111.webp",
+      "external_url": "https://gunwi3964.co.kr/gunwi/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_112",
+      "type": "OFFLINE",
+      "title": "사라온이야기마을",
+      "category": "군위군",
+      "tags": [
+        "체험",
+        "관람",
+        "놀이",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "조선 역사·지혜를 체험하는 세 가지 테마 마을 체험·교육·전시 제공",
+      "location": {
+        "lat": 36.2363329,
+        "lng": 128.5673951
+      },
+      "image_url": "/images/res_112.webp",
+      "external_url": "https://saraon.gunwi.go.kr:6450/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_121",
+      "type": "OFFLINE",
+      "title": "낙동강승전기념관",
+      "category": "남구",
+      "tags": [
+        "관람",
+        "역사"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "6.25 전쟁과 관련된 다양한 역사적 자료와 전시 제공",
+      "location": {
+        "lat": 35.8271907,
+        "lng": 128.5887067
+      },
+      "image_url": "/images/res_121.webp",
+      "external_url": "http://www.nakdongwar.or.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 55,
+          "grade": 5,
+          "subject": "사회",
+          "month": "11월",
+          "topic_title": "식민 통치와 저항, 전쟁이 바꾼 사회와 생활",
+          "description": "6.25 전쟁 관련 역사 자료를 관찰하며 전쟁이 우리 사회와 생활에 미친 영향을 파악해 봅시다.",
+          "inquiry_questions": [
+            "6.25 전쟁은 오늘날까지 우리 사회의 모습과 평화 통일의 필요성에 어떤 영향을 주나요?"
+          ],
+          "post_activities": [
+            "전쟁 기념관의 전시물을 분석하고 평화 통일을 위한 실천 목록을 만들어 봅시다."
+          ]
         },
-        "image_url": "/image/res_002.png",
-        "external_url": "https://www.ebsmath.co.kr/",
-        "grade_topics": []
+        {
+          "usage_index": 59,
+          "grade": 6,
+          "subject": "사회",
+          "month": "3월",
+          "topic_title": "평화 통일을 위한 노력",
+          "description": "6.25 전쟁 관련 역사 자료와 전시물을 관찰하며 분단의 아픔과 통일의 필요성을 느껴 봅시다.",
+          "inquiry_questions": [
+            "전쟁은 우리 사회와 사람들의 생활에 어떤 영향을 미쳤을까요?"
+          ],
+          "post_activities": [
+            "[우리 역사넷](https://contents.history.go.kr/front/newEh/list.do?code=eh_age_50)에서 6.25. 전쟁 관련 역사 이야기를 읽고 소감문을 작성해 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_122",
+      "type": "OFFLINE",
+      "title": "고산골공룡공원",
+      "category": "남구",
+      "tags": [
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "고산골 일대 1억년 전 중생대 백악기의 흔적을 볼 수 있는 곳",
+      "location": {
+        "lat": 35.8294673,
+        "lng": 128.6037566
+      },
+      "image_url": "/images/res_122.webp",
+      "external_url": "https://nam.daegu.kr/tour/index.do?menu_id=00003601",
+      "grade_topics": [
+        {
+          "usage_index": 4,
+          "grade": 1,
+          "subject": "상상",
+          "month": "11월",
+          "topic_title": "우리 반에 공룡이 나타난다면",
+          "description": "공룡이 남긴 다양한 흔적을 찾아봅시다.",
+          "inquiry_questions": [
+            "공룡이 나타난 우리 반을 상상해 볼까요?"
+          ],
+          "post_activities": [
+            "공룡이 나타난 우리 반이나 우리 동네를 그림으로 그려 봅시다.",
+            "공룡과 친구가 되려면 어떻게 해야 할 지 이야기 나누어 봅시다."
+          ]
+        },
+        {
+          "usage_index": 39,
+          "grade": 4,
+          "subject": "과학",
+          "month": "3월",
+          "topic_title": "지층과 화석",
+          "description": "고산골에 남겨진 공룡 발자국 화석과 지층을 직접 관찰하며 과거의 흔적을 찾아봅시다.",
+          "inquiry_questions": [
+            "이 화석을 남긴 공룡이 살았던 시대의 대구는 어떤 자연환경이었을까요?"
+          ],
+          "post_activities": [
+            "공룡 발자국 화석이 어떤 과정으로 만들어졌을지 설명하는 글을 써봅시다."
+          ]
+        },
+        {
+          "usage_index": 46,
+          "grade": 5,
+          "subject": "과학",
+          "month": "3월",
+          "topic_title": "지층과 화석",
+          "description": "고산골에 남겨진 공룡 발자국 화석과 지층을 직접 관찰하며 과거의 흔적을 찾아봅시다.",
+          "inquiry_questions": [
+            "이 화석을 남긴 공룡이 살았던 시대의 대구는 어떤 자연환경이었을까요?"
+          ],
+          "post_activities": [
+            "화석이 만들어지는 과정을 설명하는 글을 쓰거나 중생대 대구의 모습을 상상하여 그려봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_123",
+      "type": "OFFLINE",
+      "title": "앞산공원",
+      "category": "남구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구에서 가장 큰 자연공원으로 대구를 대표하는 공원",
+      "location": {
+        "lat": 35.828921,
+        "lng": 128.589141
+      },
+      "image_url": "/images/res_123.webp",
+      "external_url": "https://tour.daegu.go.kr/index.do?menu_id=00002942&menu_link=/front/tour/tourMapsView.do?tourId=KOATTR_114",
+      "grade_topics": []
+    },
+    {
+      "id": "res_124",
+      "type": "OFFLINE",
+      "title": "대구도서관",
+      "category": "남구",
+      "tags": [
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "미래를 여는 지식문화공간 대구 최초의 직영·대표 도서관",
+      "location": {
+        "lat": 35.8420817,
+        "lng": 128.5918751
+      },
+      "image_url": "/images/res_124.webp",
+      "external_url": "https://library.daegu.go.kr/dglib/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_131",
+      "type": "OFFLINE",
+      "title": "대구수목원",
+      "category": "달서구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "다채로운 식물을 살펴볼 수 있는 자연 생태 공간",
+      "location": {
+        "lat": 35.80122,
+        "lng": 128.520284
+      },
+      "image_url": "/images/res_131.webp",
+      "external_url": "https://www.daegu.go.kr/cts/index.do?menu_id=00000952&servletPath=%2Fcts",
+      "grade_topics": [
+        {
+          "usage_index": 16,
+          "grade": 2,
+          "subject": "계절",
+          "month": "9월",
+          "topic_title": "꼼지락꼼지락",
+          "description": "계절을 느끼며 다양한 자연물로 놀이해 봅시다.",
+          "inquiry_questions": [
+            "어떤 자연물에서 계절의 변화를 느낄 수 있을까요?"
+          ],
+          "post_activities": [
+            "현재 계절에서 볼 수 있는 자연물로 그림을 그려 봅시다.",
+            "내가 만져 본 자연물의 특징을 글로 써 봅시다."
+          ]
+        },
+        {
+          "usage_index": 32,
+          "grade": 3,
+          "subject": "과학",
+          "month": "7월",
+          "topic_title": "식물의 생활",
+          "description": "다양한 조건의 장소에 있는 여러 가지 식물을 관찰해 봅시다.",
+          "inquiry_questions": [
+            "식물이 사는 환경에 따라 잎이나 줄기의 모양은 왜 서로 다를까요?"
+          ],
+          "post_activities": [
+            "내가 수목원에서 찾은 특이한 식물을 한 가지 골라 모습과 특징을 담은 관찰 보고서를 만들어봅시다."
+          ]
+        },
+        {
+          "usage_index": 41,
+          "grade": 4,
+          "subject": "과학",
+          "month": "6월",
+          "topic_title": "다양한 생물과 우리 생활",
+          "description": "수목원의 습지나 숲 속 그늘을 관찰하며 식물 외에도 버섯, 곰팡이 등 다양한 생물이 살고 있음을 탐구해 봅시다.",
+          "inquiry_questions": [
+            "우리 눈에 잘 띄지 않는 균류(버섯, 곰팡이)는 자연환경과 우리 생활에 어떤 이로움과 해로움을 줄까요?"
+          ],
+          "post_activities": [
+            "디지털 현미경이나 스마트폰 확대 카메라로 주변의 다양한 생물을 촬영해 보고, '다양한 생물 도감'을 만들어봅시다."
+          ]
+        },
+        {
+          "usage_index": 57,
+          "grade": 5,
+          "subject": "과학",
+          "month": "11월",
+          "topic_title": "자원과 에너지",
+          "description": "수목원의 다양한 식물을 관찰하며 자연 생태계의 소중함과 자원으로서의 가치를 탐구합시다.",
+          "inquiry_questions": [
+            "식물의 각 기관은 서로 어떻게 연결되어 생명을 유지하며 우리에게 어떤 자원을 주나요?"
+          ],
+          "post_activities": [
+            "식물 사진을 찍어 특징을 설명하는 '나만의 식물 도감'을 만들어 봅시다."
+          ]
+        },
+        {
+          "usage_index": 63,
+          "grade": 6,
+          "subject": "과학",
+          "month": "6월",
+          "topic_title": "식물의 구조와 기능",
+          "description": "수목원의 다양한 식물을 직접 관찰하며 뿌리, 줄기, 잎, 꽃의 생김새와 각각이 하는 일을 조사해 봅시다.",
+          "inquiry_questions": [
+            "식물의 각 기관은 서로 어떻게 연결되어 생명을 유지할까요?"
+          ],
+          "post_activities": [
+            "식물 사진을 찍어 나만의 식물도감을 만들어 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_132",
+      "type": "OFFLINE",
+      "title": "대구인공지능교육센터",
+      "category": "달서구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "인공지능을 중심으로 창의력을 기르는 교육 기관",
+      "location": {
+        "lat": 35.853959,
+        "lng": 128.496238
+      },
+      "image_url": "/images/res_132.webp",
+      "external_url": "https://www.dge.go.kr/dgai",
+      "grade_topics": [
+        {
+          "usage_index": 20,
+          "grade": 2,
+          "subject": "물건",
+          "month": "11월",
+          "topic_title": "컴퓨터를 잘 다루고 싶어요",
+          "description": "생활을 편리하게 해주는 다양한 컴퓨터와 인공지능 도구에 대해 알아봅시다.",
+          "inquiry_questions": [
+            "컴퓨터로 할 수 있는 것에는 어떤 것들이 있을까요?"
+          ],
+          "post_activities": [
+            "체험관의 여러 시설들을 체험해 보고 신기했던 곳 한 군데를 소개하는 글을 써 봅시다.",
+            "내 주변에 있는 어떤 종류의 컴퓨터가 있는지 알아보고 작동 방법을 알아봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_133",
+      "type": "OFFLINE",
+      "title": "달서목재문화관",
+      "category": "달서구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "description": "목재 및 목재 제품에 관한 다양한 체험 공간",
+      "location": {
+        "lat": 35.823416,
+        "lng": 128.557193
+      },
+      "image_url": "/images/res_133.webp",
+      "external_url": "https://www.dalseowood.kr/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_134",
+      "type": "OFFLINE",
+      "title": "달서선사관",
+      "category": "달서구",
+      "tags": [
+        "체험",
+        "관람",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "선사시대 유물이 전시된 공간",
+      "location": {
+        "lat": 35.8203011,
+        "lng": 128.5171133
+      },
+      "image_url": "/images/res_134.webp",
+      "external_url": "https://dalseomuseum.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 22,
+          "grade": 3,
+          "subject": "사회",
+          "month": "5월",
+          "topic_title": "주변에서 만나는 과거의 모습",
+          "description": "구석기·신석기 유물을 관찰하며 당시 사람들의 도구를 찾아봅시다.",
+          "inquiry_questions": [
+            "옛날 사람들은 주변의 자연물을 어떻게 도구로 활용했을까요?"
+          ],
+          "post_activities": [
+            "내가 관찰한 선사 유물을 주제로 선사 시대를 살아가는 어린이가 되어 상상 일기를 써봅시다."
+          ]
+        },
+        {
+          "usage_index": 51,
+          "grade": 5,
+          "subject": "사회",
+          "month": "9월",
+          "topic_title": "유적과 유물로 살펴본 옛 사람들의 생활",
+          "description": "대구 지역의 다양한 선사 시대 유물을 관찰하며 당시 사람들의 생활 모습을 추론해 봅시다.",
+          "inquiry_questions": [
+            "선사 시대의 유물들은 당시 사람들의 사고방식과 생활상을 어떻게 보여주나요?"
+          ],
+          "post_activities": [
+            "관찰한 유물을 바탕으로 선사 시대 사람들의 하루를 상상하여 일기를 써 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_135",
+      "type": "OFFLINE",
+      "title": "녹색에너지체험관",
+      "category": "달서구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "다양한 에너지 및 에너지 절약에 대해 배울 수 있는 공간",
+      "location": {
+        "lat": 35.83460480000001,
+        "lng": 128.4882897
+      },
+      "image_url": "/images/res_135.webp",
+      "external_url": "https://dco.energy.or.kr/green_tk/",
+      "grade_topics": [
+        {
+          "usage_index": 3,
+          "grade": 1,
+          "subject": "약속",
+          "month": "10월",
+          "topic_title": "수도꼭지를 잠그면, 지구가 뜨끈뜨끈",
+          "description": "우리의 환경을 지키기 위해서 사람들은 어떤 노력을 하고 있나요?",
+          "inquiry_questions": [
+            "우리의 생활과 관련된 지속 가능성의 다양한 사례를 알아볼까요?"
+          ],
+          "post_activities": [
+            "우리 집과 학교에서 실천할 수 있는 환경 보호 약속은 무엇이 있는지 이야기하여 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_141",
+      "type": "OFFLINE",
+      "title": "달성화석박물관",
+      "category": "달성군",
+      "tags": [
+        "체험",
+        "관람",
+        "생태",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "여러 화석을 소장한 공립 화석 전문 박물관",
+      "location": {
+        "lat": 35.6845561,
+        "lng": 128.4644605
+      },
+      "image_url": "/images/res_141.webp",
+      "external_url": "https://fossilmuseum.dssiseol.or.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 5,
+          "grade": 1,
+          "subject": "상상",
+          "month": "11월",
+          "topic_title": "우리 반에 공룡이 나타난다면",
+          "description": "공룡이 남긴 다양한 흔적을 찾아봅시다.",
+          "inquiry_questions": [
+            "공룡이 나타난 우리 반을 상상해 볼까요?"
+          ],
+          "post_activities": [
+            "공룡이 나타난 우리 반이나 우리 동네를 그림으로 그려 봅시다.",
+            "공룡과 친구가 되려면 어떻게 해야 할 지 이야기 나누어 봅시다."
+          ]
+        },
+        {
+          "usage_index": 47,
+          "grade": 5,
+          "subject": "과학",
+          "month": "3월",
+          "topic_title": "지층과 화석",
+          "description": "다양한 화석 표본을 관찰하며 지구의 과거 생물과 환경을 추리해 봅시다.",
+          "inquiry_questions": [
+            "화석을 통해 알 수 있는 과거 지구의 비밀은 무엇이며, 화석은 어떤 가치가 있을까요?"
+          ],
+          "post_activities": [
+            "관찰한 화석 중 하나를 골라 그 생물이 살았던 당시 환경을 상상하여 이야기해봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_142",
+      "type": "OFFLINE",
+      "title": "국립대구과학관",
+      "category": "달성군",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "국내 최초 다양한 주제의 상설전시 및 과학 문화 체험",
+      "location": {
+        "lat": 35.686998,
+        "lng": 128.465466
+      },
+      "image_url": "/images/res_142.webp",
+      "external_url": "https://www.dnsm.or.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 2,
+          "grade": 1,
+          "subject": "탐험",
+          "month": "6월",
+          "topic_title": "내가 도착한 세상은 어떤 모습일까",
+          "description": "전시관 및 천체투영관 관람을 통해 다양한 세계에 대해 관심을 가져 봅시다.",
+          "inquiry_questions": [
+            "내가 궁금한 세상은 어떻게 표현하면 좋을까요?"
+          ],
+          "post_activities": [
+            "내가 상상한 세상에 대해 그림을 그려 보고 설명하여 봅시다.",
+            "또 다른 궁금한 세계를 탐험하기 위해 다양한 매체를 활용하여 봅시다."
+          ]
+        },
+        {
+          "usage_index": 17,
+          "grade": 2,
+          "subject": "인물",
+          "month": "10월",
+          "topic_title": "세종대왕과 장영실",
+          "description": "전시관 내 자격루를 살펴보고, 세종대왕이 왜 시계를 만들었을지 생각해 봅시다.",
+          "inquiry_questions": [
+            "우리 생활에 필요한 시계에는 어떤 것이 있을까요?"
+          ],
+          "post_activities": [
+            "주변의 다양한 시계의 모습과 쓰임새를 살펴봅시다.",
+            "나만의 시계를 만들어 봅시다."
+          ]
+        },
+        {
+          "usage_index": 19,
+          "grade": 2,
+          "subject": "물건",
+          "month": "11월",
+          "topic_title": "발명왕이 되고 싶어요",
+          "description": "사람들을 편하게 해 주는 다양한 물건에 대해 알아봅시다.",
+          "inquiry_questions": [
+            "우리의 생활을 더 편리하게 만들기 위해 어떤 발명이 필요할까요?"
+          ],
+          "post_activities": [
+            "생활 속 불편함을 줄이기 위해 만들어진 발명품 하나를 골라 소개하여 봅시다.",
+            "발명 원리를 이용하여 내 주변 물건을 편리하게 발명하기 위한 계획을 세워 봅시다."
+          ]
+        },
+        {
+          "usage_index": 25,
+          "grade": 3,
+          "subject": "사회",
+          "month": "12월",
+          "topic_title": "통신수단의 변화로 달라진 생활 모습",
+          "description": "옛날부터 오늘날까지의 통신 기기 변화 과정을 관찰해 봅시다.",
+          "inquiry_questions": [
+            "소식을 전하는 방법이 빨라지면서 우리 삶은 어떻게 달라졌을까요?"
+          ],
+          "post_activities": [
+            "통신 기술의 발달과 관련지어 미래의 통신 기술을 상상해보고, 내가 미래에 사용하고 싶은 새로운 통신 기기를 그려봅시다."
+          ]
+        },
+        {
+          "usage_index": 40,
+          "grade": 4,
+          "subject": "과학",
+          "month": "3월",
+          "topic_title": "자석의 이용",
+          "description": "과학관의 자석 체험물을 통해 자석과 철 사이에 작용하는 힘의 특징을 알아보고, 생활 속 활용 사례를 찾아봅시다.",
+          "inquiry_questions": [
+            "보이지 않는 자석의 힘(끌어당기거나 밀어내는 힘)을 이용해 우리 생활을 편리하게 해주는 발명품에는 어떤 원리가 숨어있을까요?"
+          ],
+          "post_activities": [
+            "자석의 성질을 이용한 새로운 발명품 아이디어를 떠올려봅시다."
+          ]
+        },
+        {
+          "usage_index": 42,
+          "grade": 4,
+          "subject": "과학",
+          "month": "9월",
+          "topic_title": "밤하늘 관찰",
+          "description": "천체투영관에서 태양계 행성들의 생김새를 관찰하고, 입체적으로 체험해 봅시다.",
+          "inquiry_questions": [
+            "태양계의 여러 행성들은 지구와 어떻게 다를까요?"
+          ],
+          "post_activities": [
+            "태양계 행성을 골라 그 행성을 소개하는 자료를 만들어봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_143",
+      "type": "OFFLINE",
+      "title": "디아크문화관",
+      "category": "달성군",
+      "tags": [
+        "관람",
+        "문화예술",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "물과 자연과 문화가 오롯이 담긴 건축 예술품",
+      "location": {
+        "lat": 35.8388375,
+        "lng": 128.4682031
+      },
+      "image_url": "/images/res_143.webp",
+      "external_url": "https://www.riverguide.go.kr/kor/page.do?menuIdx=381",
+      "grade_topics": [
+        {
+          "usage_index": 48,
+          "grade": 5,
+          "subject": "사회",
+          "month": "3월",
+          "topic_title": "우리나라 국토 여행",
+          "description": "낙동강의 지형적 특징과 물, 자연, 문화가 어우러진 건축 예술을 관찰해 봅시다.",
+          "inquiry_questions": [
+            "강 주변의 지형적 특징은 그 지역 사람들의 생활 모습과 여가 활동에 어떤 영향을 줄까요?"
+          ],
+          "post_activities": [
+            "아름다운 국토 사진 공모전을 열거나 가족과 함께하는 지형 탐방 계획을 세워 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_144",
+      "type": "OFFLINE",
+      "title": "달성습지생태학습관",
+      "category": "달성군",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "달성 습지 보전과 생태관광 활용을 위한 문화 확산 공간",
+      "location": {
+        "lat": 35.8166414,
+        "lng": 128.4868747
+      },
+      "image_url": "/images/res_144.webp",
+      "external_url": "https://dswetland.daegu.go.kr/index.do",
+      "grade_topics": [
+        {
+          "usage_index": 9,
+          "grade": 2,
+          "subject": "자연",
+          "month": "4월",
+          "topic_title": "숲속 회의에 누가 왔을까",
+          "description": "자연을 지키기 위해 우리는 어떤 노력을 하여야 하는지 알아봅시다.",
+          "inquiry_questions": [
+            "우리의 자연을 왜 보호해야 할까요?"
+          ],
+          "post_activities": [
+            "생명을 소중히 여기기 위한 다짐을 일기로 나타내어 봅시다.",
+            "생명을 지키기 위해 내가 집에서 실천할 수 있는 것을 알아보고, 함께 실천해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 33,
+          "grade": 3,
+          "subject": "과학",
+          "month": "10월",
+          "topic_title": "지구와 바다",
+          "description": "습지 주변의 지형을 보며 흐르는 물에 의한 지표의 변화를 살펴봅시다.",
+          "inquiry_questions": [
+            "강물은 우리 주변의 땅 모양을 어떻게 깎고 쌓아서 변화시킬까요?"
+          ],
+          "post_activities": [
+            "습지의 중요성과 보존의 필요성을 깨닫고 달성습지를 다양한 방법(카드뉴스, 포스터, 만화 등)으로 홍보해봅시다."
+          ]
+        },
+        {
+          "usage_index": 43,
+          "grade": 4,
+          "subject": "과학",
+          "month": "10월",
+          "topic_title": "생물과 환경",
+          "description": "달성습지에 사는 다양한 생물들을 관찰하고, 이들이 서로 어떤 먹고 먹히는 관계를 맺고 있는지 알아봅시다.",
+          "inquiry_questions": [
+            "달성습지의 생태계에서 특정 생물이 갑자기 사라지거나 늘어나면 다른 생물들에게는 어떤 일이 벌어질까요?"
+          ],
+          "post_activities": [
+            "지도 앱을 활용해 달성습지 주변의 환경 변화를 살펴보고, 생태계 보전을 위한 캠페인 포스터를 만들어봅시다."
+          ]
+        },
+        {
+          "usage_index": 49,
+          "grade": 5,
+          "subject": "과학",
+          "month": "3월",
+          "topic_title": "우리나라 국토 여행",
+          "description": "습지에 사는 다양한 생물들을 관찰하고 습지 생태계 보전의 중요성을 알아봅시다.",
+          "inquiry_questions": [
+            "습지 생태계에서 특정 생물이 사라지면 다른 생물들에게는 어떤 일이 벌어질까요?"
+          ],
+          "post_activities": [
+            "생태계 보전을 위한 캠페인 포스터를 만들고 학교나 가정에서 공유하여 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_145",
+      "type": "OFFLINE",
+      "title": "사문진역사공원",
+      "category": "달성군",
+      "tags": [
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "description": "국내 최초 피아노 유입지로 여러 즐길거리가 있는 공원",
+      "location": {
+        "lat": 35.811332,
+        "lng": 128.477695
+      },
+      "image_url": "/images/res_145.webp",
+      "external_url": "https://www.dssiseol.or.kr/pages/sisul/page.html?mc=1058",
+      "grade_topics": []
+    },
+    {
+      "id": "res_146",
+      "type": "OFFLINE",
+      "title": "화원역사문화체험관",
+      "category": "달성군",
+      "tags": [
+        "체험",
+        "관람",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "낙동강·화원 역사를 미디어아트와 체험으로 즐기는 실내 복합문화공간",
+      "location": {
+        "lat": 35.812803,
+        "lng": 128.480584
+      },
+      "image_url": "",
+      "external_url": "https://www.dssiseol.or.kr/pages/sisul/page.html?mc=1564",
+      "grade_topics": []
+    },
+    {
+      "id": "res_151",
+      "type": "OFFLINE",
+      "title": "대구섬유박물관",
+      "category": "동구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "섬유 관련 전시와 어린이체험실 운영",
+      "location": {
+        "lat": 35.9189809,
+        "lng": 128.6399047
+      },
+      "image_url": "/images/res_151.webp",
+      "external_url": "https://www.dtmuseum.org/main",
+      "grade_topics": [
+        {
+          "usage_index": 14,
+          "grade": 2,
+          "subject": "세계",
+          "month": "7월",
+          "topic_title": "이런 옷을 입어요",
+          "description": "다른 나라의 전통 의상을 알아봅시다.",
+          "inquiry_questions": [
+            "다른 나라 사람들은 어떤 옷을 입고 살아갈까요?"
+          ],
+          "post_activities": [
+            "다른 나라 사람들이 왜 그런 전통 의상을 입는지 떠올려봅시다.",
+            "다른 나라 사람들이 살고 있는 다양한 집의 모양에 대해서도 알아봅시다."
+          ]
+        },
+        {
+          "usage_index": 36,
+          "grade": 4,
+          "subject": "사회",
+          "month": "7월",
+          "topic_title": "경제활동과 지역 간 교류",
+          "description": "과거 대구를 대표했던 섬유 산업의 역사를 알아보고, 대구에서 만든 옷감이 어떻게 다른 지역으로 갔는지 알아봅시다.",
+          "inquiry_questions": [
+            "대구에서 만들어진 섬유(물건)는 어떻게 다른 지역이나 나라로 이동하며, 이 교류는 대구를 어떻게 발전시켰을까요?"
+          ],
+          "post_activities": [
+            "내가 소비하는 물건의 원산지를 확인해 보고, 이 물건이 우리 집까지 온 '교류 경로 지도'를 그려봅시다."
+          ]
+        },
+        {
+          "usage_index": 54,
+          "grade": 5,
+          "subject": "사회",
+          "month": "10월",
+          "topic_title": "달라지는 시대, 변화하는 생활 모습",
+          "description": "대구 섬유 산업의 역사를 통해 경제 성장 과정과 의생활의 변화를 이해해 봅시다.",
+          "inquiry_questions": [
+            "산업화와 경제 성장은 우리 일상생활과 소비 모습에 어떤 변화를 가져왔나요?"
+          ],
+          "post_activities": [
+            "부모님께 산업화 시기의 생활 모습에 대해 인터뷰하고 조사 보고서를 작성해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 60,
+          "grade": 6,
+          "subject": "사회",
+          "month": "4월",
+          "topic_title": "경제성장과 산업화",
+          "description": "대구의 주력 산업이었던 섬유 산업의 변천사를 통해 우리나라의 경제 성장 과정을 이해해 봅시다.",
+          "inquiry_questions": [
+            "경제 성장은 우리 일상생활과 소비 모습에 어떤 변화를 가져왔을까요?"
+          ],
+          "post_activities": [
+            "가정에서 부모님이나 조부모님께 산업화 시기(1960~80년대)의 생활 모습에 대해 인터뷰하고, 조사보고서를 작성해 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_152",
+      "type": "OFFLINE",
+      "title": "국립대구기상과학관",
+      "category": "동구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "기상·기후에 대한 교육과 체험 운영",
+      "location": {
+        "lat": 35.8782158,
+        "lng": 128.6539001
+      },
+      "image_url": "/images/res_152.webp",
+      "external_url": "https://science.kma.go.kr/daegu/",
+      "grade_topics": [
+        {
+          "usage_index": 15,
+          "grade": 2,
+          "subject": "세계",
+          "month": "7월",
+          "topic_title": "태풍이 오고 있어요",
+          "description": "전시실을 체험하며 태풍 등 다양한 자연재해에 대해 알아봅시다.",
+          "inquiry_questions": [
+            "태풍이 있는 날에는 어떻게 대비해야 할까요?"
+          ],
+          "post_activities": [
+            "태풍 등 여름철 자연재해에 대해 더 알아봅시다.",
+            "자연재해를 예방하는 사람들의 노력에 대해 알아봅시다."
+          ]
+        },
+        {
+          "usage_index": 45,
+          "grade": 4,
+          "subject": "과학",
+          "month": "11월",
+          "topic_title": "기후변화와 우리 생활",
+          "description": "기상과학관에서 우리나라의 기후 특징을 알아보고, 태풍 등 다양한 자연재해를 체험해 봅시다.",
+          "inquiry_questions": [
+            "기후변화로 심해지는 자연재해를 줄이기 위해 우리 가족이 당장 할 수 있는 일은 무엇일까요?"
+          ],
+          "post_activities": [
+            "우리 지역의 기후 변화 데이터를 [기상청 누리집](https://climate.go.kr/atlas/dsh/ccf)에서 찾아보고, 뉴스 앵커가 되어 기상 특보 대본을 써봅시다."
+          ]
+        },
+        {
+          "usage_index": 56,
+          "grade": 5,
+          "subject": "과학",
+          "month": "10월",
+          "topic_title": "날씨와 우리 생활",
+          "description": "기상 요소와 기상 관측 장비의 원리를 이해하고 날씨가 우리 생활에 주는 영향을 알아봅시다.",
+          "inquiry_questions": [
+            "기상 요소(기온, 바람 등)의 변화는 기후변화 및 자연재해와 어떤 관련이 있을까요?"
+          ],
+          "post_activities": [
+            "우리 지역의 기후 변화 데이터를 [기상청 누리집](https://climate.go.kr/atlas/dsh/ccf)에서 찾아보고, 뉴스 앵커가 되어 기상 특보 대본을 써봅시다."
+          ]
+        },
+        {
+          "usage_index": 62,
+          "grade": 6,
+          "subject": "과학",
+          "month": "9월",
+          "topic_title": "계절의 변화",
+          "description": "기상 및 기후 변화 체험을 통해 태양 고도와 기온의 관계를 이해하고 계절이 변하는 원리를 알아봅시다.",
+          "inquiry_questions": [
+            "계절에 따라 태양의 남중 고도와 낮의 길이는 어떻게 달라질까요?"
+          ],
+          "post_activities": [
+            "[어린이 기상교실](https://www.kma.go.kr/kids/)을 활용하여 우리나라의 계절별 날씨 특징을 보고서로 작성합니다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_153",
+      "type": "OFFLINE",
+      "title": "대구시민안전테마파크",
+      "category": "동구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2"
+      ],
+      "description": "각종 재난과 안전사고 예방을 위한 체험 운영",
+      "location": {
+        "lat": 35.9891717,
+        "lng": 128.691943
+      },
+      "image_url": "/images/res_153.webp",
+      "external_url": "https://www.daegu.go.kr/safe119/index.do",
+      "grade_topics": [
+        {
+          "usage_index": 0,
+          "grade": 1,
+          "subject": "사람들",
+          "month": "4월",
+          "topic_title": "불이 났을 때는",
+          "description": "화재 등 재난상황에 슬기롭게 대처하는 방법을 알아봅시다.",
+          "inquiry_questions": [
+            "불이 났을 때 어떻게 해야 할까요?"
+          ],
+          "post_activities": [
+            "집과 학교에서 불이 났을 때 해야 하는 일을 떠올려 봅시다.",
+            "소방관이 하는 일을 알아봅시다."
+          ]
+        },
+        {
+          "usage_index": 12,
+          "grade": 2,
+          "subject": "마을",
+          "month": "6월",
+          "topic_title": "자동차를 안전하게",
+          "description": "교통안전 체험에 참여하며 자동차를 안전하게 이용하는 방법을 알아봅시다.",
+          "inquiry_questions": [
+            "자동차를 안전하게 이용하려면 어떻게 해야 할까요?"
+          ],
+          "post_activities": [
+            "대중교통을 이용할 때의 안전 수칙과 예절도 알아봅시다.",
+            "생활 속 안전 수칙에 대해 알아봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_154",
+      "type": "OFFLINE",
+      "title": "봉무나비생태원",
+      "category": "동구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "나비 및 곤충의 전시 및 체험 운영",
+      "location": {
+        "lat": 35.9213461,
+        "lng": 128.6506826
+      },
+      "image_url": "/images/res_154.webp",
+      "external_url": "https://dong.daegu.kr/nabipark/main.do",
+      "grade_topics": [
+        {
+          "usage_index": 8,
+          "grade": 2,
+          "subject": "자연",
+          "month": "4월",
+          "topic_title": "난 네가 궁금해",
+          "description": "전시실을 체험하며 신비한 나비의 세계를 탐구하여 봅시다.",
+          "inquiry_questions": [
+            "관심 있는 나비의 모습과 생김새에 대해 알아볼까요?"
+          ],
+          "post_activities": [
+            "학교와 집 주변에서 볼 수 있는 나비에는 어떤 것이 있는지 더 알아봅시다."
+          ]
+        },
+        {
+          "usage_index": 28,
+          "grade": 3,
+          "subject": "과학",
+          "month": "4월",
+          "topic_title": "동물의 생활",
+          "description": "나비의 생김새와 곤충의 구조를 관찰해 봅시다.",
+          "inquiry_questions": [
+            "나비와 같은 곤충들은 어떤 생김새를 가지고 있나요?"
+          ],
+          "post_activities": [
+            "가장 인상 깊었던 곤충을 떠올려보고, 자세히 조사하여 곤충의 몸 구조 세밀화를 그려봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_155",
+      "type": "OFFLINE",
+      "title": "대구방짜유기박물관",
+      "category": "동구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "방짜유기를 테마로 한 전문박물관",
+      "location": {
+        "lat": 35.965647,
+        "lng": 128.700844
+      },
+      "image_url": "/images/res_155.webp",
+      "external_url": "https://www.bangjja.or.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_161",
+      "type": "OFFLINE",
+      "title": "대구교육박물관",
+      "category": "북구",
+      "tags": [
+        "체험",
+        "관람",
+        "놀이",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "다양한 문화유산 수집·보존·관리·전시",
+      "location": {
+        "lat": 35.897541,
+        "lng": 128.61209
+      },
+      "image_url": "/images/res_161.webp",
+      "external_url": "https://www.dge.go.kr/dme/main.do",
+      "grade_topics": [
+        {
+          "usage_index": 52,
+          "grade": 5,
+          "subject": "사회",
+          "month": "9월",
+          "topic_title": "역사 전 단원",
+          "description": "우리나라와 대구의 교육 역사, 다양한 문화유산을 통해 과거의 삶을 성찰해 봅시다.",
+          "inquiry_questions": [
+            "과거의 교육 모습과 문화유산은 오늘날 우리의 삶과 정체성에 어떤 의미를 주나요?"
+          ],
+          "post_activities": [
+            "박물관에서 인상 깊었던 유물을 찾아 그 유산에 담긴 가치를 소개하는 뉴스나 신문기사를 제작해 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_162",
+      "type": "OFFLINE",
+      "title": "경북대학교박물관",
+      "category": "북구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구·경북 지역 유물을 수집·보존·관리·전시",
+      "location": {
+        "lat": 35.8887118,
+        "lng": 128.613693
+      },
+      "image_url": "/images/res_162.webp",
+      "external_url": "https://museum.knu.ac.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_171",
+      "type": "OFFLINE",
+      "title": "서구어린이도서관",
+      "category": "서구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "다양한 체험으로 상상력과 창의성을 키우는 문화·학습 허브",
+      "location": {
+        "lat": 35.8743119,
+        "lng": 128.5463842
+      },
+      "image_url": "/images/res_171.webp",
+      "external_url": "https://library.daegu.go.kr/seogulib/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_172",
+      "type": "OFFLINE",
+      "title": "이현공원",
+      "category": "서구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "자연 속 휴식과 생태체험을 즐길 수 있는 도심 공원",
+      "location": {
+        "lat": 35.8732606,
+        "lng": 128.5436128
+      },
+      "image_url": "/images/res_172.webp",
+      "external_url": "https://www.dgs.go.kr/portal/contents.do?mid=0402000000",
+      "grade_topics": []
+    },
+    {
+      "id": "res_181",
+      "type": "OFFLINE",
+      "title": "국립대구박물관",
+      "category": "수성구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구·경북의 문화유산 보존, 전시, 교육 프로그램 운영",
+      "location": {
+        "lat": 35.8456135,
+        "lng": 128.6379176
+      },
+      "image_url": "/images/res_181.webp",
+      "external_url": "https://daegu.museum.go.kr/kor/index.do",
+      "grade_topics": [
+        {
+          "usage_index": 10,
+          "grade": 2,
+          "subject": "마을",
+          "month": "6월",
+          "topic_title": "우리 마을 전시회",
+          "description": "우리 마을에서 볼 수 있는 다양한 전시에 바른 태도로 참여하여 봅시다.",
+          "inquiry_questions": [
+            "우리 마을에서 참여할 수 있는 다양한 전시에는 어떤 것이 있을까요?"
+          ],
+          "post_activities": [
+            "우리 지역의 공연장에서 실시하는 다양한 주제의 공연을 바른 태도로 감상하여 봅시다.",
+            "나는 무엇을 전시할지 생각해 보고, 학교 또는 가정에서 작은 전시회를 열어 봅시다."
+          ]
+        },
+        {
+          "usage_index": 18,
+          "grade": 2,
+          "subject": "인물",
+          "month": "10월",
+          "topic_title": "시간이 흐르면",
+          "description": "시간의 변화에 따라 달라지는 생활 모습에 대해 관심을 가져 봅시다.",
+          "inquiry_questions": [
+            "시간이 흐름에 따라 우리가 사용하는 물건은 어떻게 달라졌을까요?"
+          ],
+          "post_activities": [
+            "할아버지, 할머니가 쓰셨던 옛날 물건에 대해 대화를 나누어 봅시다.",
+            "내가 쓰고 있는 물건이 앞으로 어떻게 달라질지 예상하여 봅시다."
+          ]
+        },
+        {
+          "usage_index": 26,
+          "grade": 3,
+          "subject": "사회",
+          "month": "11월",
+          "topic_title": "옛날과 오늘날의 풍습",
+          "description": "전시물 속 조상들의 명절 풍속과 당시의 옷차림을 관찰해 봅시다.",
+          "inquiry_questions": [
+            "옛날부터 전해 내려오는 풍속에는 조상들의 어떤 지혜가 담겨 있을까요?"
+          ],
+          "post_activities": [
+            "새롭게 알게 된 우리 풍습을 되짚어보면서 우리 가족이 지키고 싶은 명절 풍속을 정하고 실천을 약속합시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_182",
+      "type": "OFFLINE",
+      "title": "대구창의융합교육원",
+      "category": "수성구",
+      "tags": [
+        "체험",
+        "관람",
+        "놀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "재미있는 과학, 수학 체험 프로그램 제공",
+      "location": {
+        "lat": 35.8450833,
+        "lng": 128.6270121
+      },
+      "image_url": "/images/res_182.webp",
+      "external_url": "https://www.dge.go.kr/dicce/main.do",
+      "grade_topics": [
+        {
+          "usage_index": 24,
+          "grade": 3,
+          "subject": "사회",
+          "month": "9월",
+          "topic_title": "사회 변화로 달라진 생활 모습",
+          "description": "ICT 홍보관에서 인공지능, 미래 기술을 직접 체험해 봅시다.",
+          "inquiry_questions": [
+            "과학 기술의 발달은 우리 가족의 삶을 어떻게 변화시킬까요?"
+          ],
+          "post_activities": [
+            "과학 기술의 발달에 따라 미래 지능정보화 시대에 우리 가족을 도와줄 로봇을 설계해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 64,
+          "grade": 6,
+          "subject": "과학",
+          "month": "7월",
+          "topic_title": "지구의 운동",
+          "description": "천체관측체험 프로그램이나 과학관의 전시물을 통해 지구의 자전과 공전 원리를 입체적으로 이해해 봅시다.",
+          "inquiry_questions": [
+            "우리가 지구의 움직임을 직접 느끼지 못하는데도 지구가 움직인다는 것을 어떻게 알 수 있을까요?"
+          ],
+          "post_activities": [
+            "지구의 자전과 공전 원리를 조사해 보고서를 작성해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 65,
+          "grade": 6,
+          "subject": "과학",
+          "month": "12월",
+          "topic_title": "전기의 이용",
+          "description": "전기 회로를 구성해 보고, 전자석의 성질이 영구 자석과 어떻게 다른지 체험해 봅시다.",
+          "inquiry_questions": [
+            "전자석의 세기와 극을 우리가 마음대로 조절하려면 어떻게 해야 할까요?"
+          ],
+          "post_activities": [
+            "[에듀나비 수업꾸러미](https://www.edunavi.kr/arc/ad/edunavi/arc/cc/selectChnnlCntntsDocLinkInfo.do?chnnlSn=346&cntntsSn=29242&packageSn=1643&isPackage=Y)에서 '식물의 구조와 기능' 관련 영상을 살펴봅시다."
+          ]
+        },
+        {
+          "usage_index": 66,
+          "grade": 5,
+          "subject": "사회",
+          "month": "4월",
+          "topic_title": "소중한 우리 땅, 독도",
+          "description": "대구창의융합교육원 1층의 독도체험관을 방문하여 독도의 아름다운 자연환경과 역사적 기록을 생생하게 체험해 봅시다.",
+          "inquiry_questions": [
+            "옛날 사람들은 어떤 기록을 통해 독도가 우리 땅임을 남겼을까요? 지금 우리가 일상에서 독도를 알리고 지키기 위해 할 수 있는 일은 무엇일까요?"
+          ],
+          "post_activities": [
+            "에듀테크 도구(미리캔버스, 캔바 등)를 활용하여 '독도 명예 홍보대사'가 되어 세계 사람들에게 독도를 알리는 디지털 엽서나 카드뉴스를 제작해 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_183",
+      "type": "OFFLINE",
+      "title": "대구어린이세상",
+      "category": "수성구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "놀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "오감을 활용한 참여형 체험활동",
+      "location": {
+        "lat": 35.8466356,
+        "lng": 128.6277986
+      },
+      "image_url": "/images/res_183.webp",
+      "external_url": "https://dcw.daegu.go.kr/ko/page/main.do",
+      "grade_topics": [
+        {
+          "usage_index": 1,
+          "grade": 1,
+          "subject": "사람들",
+          "month": "4월",
+          "topic_title": "고마운 사람들",
+          "description": "꿈누리관 사회탐험대 시설을 체험해 보고 우리 주변에서 도움을 주고받는 사람들에 대해 알아봅시다.",
+          "inquiry_questions": [
+            "우리는 누구와 어떤 도움을 주고받으며 살아갈까요?"
+          ],
+          "post_activities": [
+            "나와 많은 사람들이 연결되어 있음을 생각 그림으로 나타내어 봅시다.",
+            "고마운 사람에게 감사의 마음을 담은 카드를 만들어 전달하여 봅시다."
+          ]
+        },
+        {
+          "usage_index": 13,
+          "grade": 2,
+          "subject": "마을",
+          "month": "6월",
+          "topic_title": "마을 사람들을 만나요",
+          "description": "꿈누리관 사회탐험대 시설을 체험해보고 마을 속에서 만날 수 있는 다양한 사람들에 대해 체험해 봅시다.",
+          "inquiry_questions": [
+            "우리 마을 사람들은 어떤 일을 할까요?"
+          ],
+          "post_activities": [
+            "다양한 마을 구성원의 역할에 대해 더 알아봅시다.",
+            "마을 구성원이 되어 역할놀이를 해 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_184",
+      "type": "OFFLINE",
+      "title": "대구녹색학습원",
+      "category": "수성구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "생태 체험 및 환경 보전 체험활동 제공",
+      "location": {
+        "lat": 35.837091,
+        "lng": 128.701899
+      },
+      "image_url": "/images/res_184.webp",
+      "external_url": "https://www.dge.go.kr/dggreen/main.do",
+      "grade_topics": [
+        {
+          "usage_index": 7,
+          "grade": 2,
+          "subject": "자연",
+          "month": "4월",
+          "topic_title": "난 네가 궁금해",
+          "description": "전시실 및 곤충생태관을 체험하며 신비한 곤충의 세계를 탐구하여 봅시다.",
+          "inquiry_questions": [
+            "관심 있는 곤충의 모습과 생김새에 대해 알아볼까요?"
+          ],
+          "post_activities": [
+            "학교와 집 주변에서 볼 수 있는 곤충에는 어떤 것이 있는지 더 알아봅시다.",
+            "우리에게 이로움을 주는 곤충에 대 더 알아봅시다."
+          ]
+        },
+        {
+          "usage_index": 29,
+          "grade": 3,
+          "subject": "과학",
+          "month": "5월",
+          "topic_title": "동물의 생활",
+          "description": "물속 동물과 육상 동물(곤충 등)을 관찰하며 사는 곳에 따른 특징을 비교해 봅시다.",
+          "inquiry_questions": [
+            "동물들이 사는 곳(환경)에 따라 생김새가 다른 이유는 무엇일까요?"
+          ],
+          "post_activities": [
+            "친구(혹은 가족)와 함께 다양한 생태계 속 동물이 되어 서로의 생활에 대해 질문을 주고받는 인터뷰 역할극을 해봅시다."
+          ]
+        },
+        {
+          "usage_index": 30,
+          "grade": 3,
+          "subject": "과학",
+          "month": "6월",
+          "topic_title": "식물의 생활",
+          "description": "우리 주변의 식물을 관찰하고 다양한 기준에 따라 분류해 봅시다.",
+          "inquiry_questions": [
+            "식물의 저마다 어떤 다양한 모양과 특징을 가지고 있을까요?"
+          ],
+          "post_activities": [
+            "학교 또는 우리 집 주변의 다양한 식물의 잎을 채집하여 잎 프로타주 활동을 해봅시다."
+          ]
+        },
+        {
+          "usage_index": 31,
+          "grade": 3,
+          "subject": "과학",
+          "month": "6월",
+          "topic_title": "생물의 한살이",
+          "description": "씨앗이 싹터서 자라는 과정과 생물의 성장 단계 관찰하기",
+          "inquiry_questions": [
+            "생물이 자라는 과정(알-애벌레-번데기-어른벌레)은 어떻게 다를까요?"
+          ],
+          "post_activities": [
+            "나만의 반려 식물을 정하여 일정한 간격으로 변화를 관찰하며 성장 일기를 써봅시다."
+          ]
+        },
+        {
+          "usage_index": 44,
+          "grade": 4,
+          "subject": "과학",
+          "month": "11월",
+          "topic_title": "기후변화와 우리 생활",
+          "description": "녹색환경탐구관에서 기후변화가 우리 환경에 미치는 영향을 확인하고, 이를 줄이기 위한 방법을 체험해 봅시다.",
+          "inquiry_questions": [
+            "기후변화 현상(지구 온난화 등)을 늦추기 위해 우리 가족이 오늘 당장 집에서 실천할 수 있는 행동은 무엇일까요?"
+          ],
+          "post_activities": [
+            "기후 위기로 고통받는 동물의 입장에서 사람들에게 보내는 '환경 보호 호소문'을 작성해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 58,
+          "grade": 5,
+          "subject": "과학",
+          "month": "11월",
+          "topic_title": "자원과 에너지",
+          "description": "기후 위기의 심각성을 체감하고 탄소 중립을 위한 지속 가능한 생활 방법을 체험해 봅시다.",
+          "inquiry_questions": [
+            "기후변화를 늦추기 위해 우리 가족이 오늘 당장 실천할 수 있는 탄소 중립 행동은 무엇일까요?"
+          ],
+          "post_activities": [
+            "기후 위기로 고통받는 동물의 입장에서 사람들에게 보내는 호소문을 작성해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 61,
+          "grade": 6,
+          "subject": "사회",
+          "month": "12월",
+          "topic_title": "지속가능한 미래",
+          "description": "대구녹색학습원의 녹색환경탐구관과 자연관찰학습관을 방문하여 기후변화와 생태계 위기의 심각성을 체감해 봅시다.",
+          "inquiry_questions": [
+            "지구촌이 당면한 환경 문제는 우리의 삶과 미래에 어떤 영향을 미칠까요?"
+          ],
+          "post_activities": [
+            "[대구녹색학습원-환경실천 365](https://www.dge.go.kr/dggreen/cm/cntnts/cntntsView.do?mi=2480&cntntsId=5583)에 자신의 체험 후기와 가정에서 실천 중인 환경 보호 활동을 사진과 함께 공유해 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_185",
+      "type": "OFFLINE",
+      "title": "대구미술관",
+      "category": "수성구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "재미있는 현대미술을 경험할 수 있는 문화 놀이터",
+      "location": {
+        "lat": 35.827262,
+        "lng": 128.67447
+      },
+      "image_url": "/images/res_185.webp",
+      "external_url": "https://daeguartmuseum.or.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_186",
+      "type": "OFFLINE",
+      "title": "대구아트웨이",
+      "category": "수성구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "범어역 지하에서 다양한 문화예술 프로그램을 체험할 수 있는 공간",
+      "location": {
+        "lat": 35.85901,
+        "lng": 128.626991
+      },
+      "image_url": "/images/res_186.webp",
+      "external_url": "https://daeguartway.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_191",
+      "type": "OFFLINE",
+      "title": "대구예술발전소",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "실험적 예술 창작 및 미디어 아트 전시 공간 운영",
+      "location": {
+        "lat": 35.8755076,
+        "lng": 128.5845613
+      },
+      "image_url": "/images/res_191.webp",
+      "external_url": "https://www.daeguartfactory.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 11,
+          "grade": 2,
+          "subject": "마을",
+          "month": "6월",
+          "topic_title": "우리 마을 전시회",
+          "description": "우리 마을에서 볼 수 있는 다양한 전시에 바른 태도로 참여하여 봅시다.",
+          "inquiry_questions": [
+            "우리 마을에서 참여할 수 있는 다양한 전시에는 어떤 것이 있을까요?"
+          ],
+          "post_activities": [
+            "우리 지역의 공연장에서 실시하는 다양한 주제의 공연을 바른 태도로 감상하여 봅시다.",
+            "나는 무엇을 전시할지 생각해 보고, 학교 또는 가정에서 작은 전시회를 열어 봅시다."
+          ]
+        },
+        {
+          "usage_index": 38,
+          "grade": 4,
+          "subject": "사회",
+          "month": "11월",
+          "topic_title": "다양한 환경과 삶의 모습",
+          "description": "과거 연초제조창(담배 공장)이었던 낡은 건물이 예술 공간으로 바뀐 모습을 보며 도시 환경의 변화를 살펴봅시다.",
+          "inquiry_questions": [
+            "낡은 공장을 부수지 않고 새로운 문화 공간으로 바꾸는 것(도시 재생)은 도시 사람들의 삶에 어떤 좋은 점을 줄까요?"
+          ],
+          "post_activities": [
+            "우리 동네의 버려진 공간이나 낡은 건물을 사람들이 즐겨 찾는 멋진 '미래형 문화 공간'으로 새롭게 디자인해봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_192",
+      "type": "OFFLINE",
+      "title": "대구근대역사관",
+      "category": "중구",
+      "tags": [
+        "관람",
+        "역사"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "대구 근현대사를 한눈에 조명할 수 있는 공간",
+      "location": {
+        "lat": 35.8717871,
+        "lng": 128.5911694
+      },
+      "image_url": "/images/res_192.webp",
+      "external_url": "https://www.dmhm.or.kr",
+      "grade_topics": [
+        {
+          "usage_index": 53,
+          "grade": 5,
+          "subject": "사회",
+          "month": "10월",
+          "topic_title": "달라지는 시대, 변화하는 생활 모습",
+          "description": "대구의 근대 역사 전시를 통해 근대 문물 수용 과정과 생활 문화의 변화를 이해해 봅시다.",
+          "inquiry_questions": [
+            "근대 문물의 도입은 당시 대구 사람들의 생활과 생각에 어떤 변화를 가져왔나요?"
+          ],
+          "post_activities": [
+            "근대와 현재의 대구 모습을 비교하는 시간 여행자 가상 그림일기를 써 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_193",
+      "type": "OFFLINE",
+      "title": "국채보상운동기념도서관",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "우리말 이야기와 대구의 역사문화를 체험하며 배우는 참여형 공간",
+      "location": {
+        "lat": 35.868464,
+        "lng": 128.6016669
+      },
+      "image_url": "/images/res_193.webp",
+      "external_url": "https://library.daegu.go.kr/gukbo/index.do",
+      "grade_topics": [
+        {
+          "usage_index": 37,
+          "grade": 4,
+          "subject": "사회",
+          "month": "9월",
+          "topic_title": "민주주의와 자치",
+          "description": "나라의 빚을 갚기 위해 대구 시민들이 스스로 나섰던 기록을 보며, 주민 참여와 자치의 진정한 의미를 알아봅시다.",
+          "inquiry_questions": [
+            "과거 시민들이 스스로 나라의 문제를 해결하려 했던 것처럼, 오늘날 우리가 지역사회를 위해 참여할 수 있는 방법은 무엇일까요?"
+          ],
+          "post_activities": [
+            "우리 동네에서 고쳐야 할 문제점을 찾아 '우리 동네에서 해결할 10대 과제'를 선정해 봅시다."
+          ]
+        },
+        {
+          "usage_index": 50,
+          "grade": 5,
+          "subject": "사회",
+          "month": "6월",
+          "topic_title": "법과 인권의 보장",
+          "description": "국채보상운동 기록을 통해 시민 참여와 권리 보장, 주민 자치의 의미를 알아봅시다.",
+          "inquiry_questions": [
+            "과거 시민들의 자발적 참여 노력은 오늘날 우리 지역 사회 문제 해결에 어떤 교훈을 주나요?"
+          ],
+          "post_activities": [
+            "우리 동네에서 해결이 필요한 문제를 찾아 시청에 편지를 써 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_194",
+      "type": "OFFLINE",
+      "title": "달성공원",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "생태"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구에서 가장 오래된 도심공원으로 동물원도 운영. 공원 내 향토역사관 방문 가능",
+      "location": {
+        "lat": 35.874004,
+        "lng": 128.5780991
+      },
+      "image_url": "/images/res_194.webp",
+      "external_url": "https://tour.daegu.go.kr/index.do?menu_id=00002943&menu_link=/front/tour/tourMapsView.do?tourId=KOATTR_124",
+      "grade_topics": [
+        {
+          "usage_index": 27,
+          "grade": 3,
+          "subject": "과학",
+          "month": "3월",
+          "topic_title": "동물의 생활",
+          "description": "달성공원에서 볼 수 있는 다양한 동물을 관찰해 봅시다.",
+          "inquiry_questions": [
+            "동물들은 각각 어떤 생김새를 가지고 어떻게 살아가고 있나요?"
+          ],
+          "post_activities": [
+            "공원에서 만난 여러 가지 동물들의 모습과 특징을 담아 나만의 작은 동물 사전을 만들어 봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_195",
+      "type": "OFFLINE",
+      "title": "향촌문화관",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "대구 근대도시와 생활문화를 전시·체험으로 배우는 문화교육 공간",
+      "location": {
+        "lat": 35.8733774,
+        "lng": 128.5941989
+      },
+      "image_url": "/images/res_195.webp",
+      "external_url": "https://www.hyangchon.or.kr/",
+      "grade_topics": [
+        {
+          "usage_index": 23,
+          "grade": 3,
+          "subject": "사회",
+          "month": "6월",
+          "topic_title": "우리 지역 사람들의 달라진 생활 모습",
+          "description": "1950~60년대 대구의 거리 모습을 보고 오늘날과 비교해 봅시다.",
+          "inquiry_questions": [
+            "시간이 흐르며 우리 고장 사람들의 생활 모습은 어떻게 변했을까요?"
+          ],
+          "post_activities": [
+            "우리 지역의 옛 모습을 떠올리며 70년 전의 대구에 살고 있는 친구에게 편지를 써봅시다."
+          ]
+        },
+        {
+          "usage_index": 35,
+          "grade": 4,
+          "subject": "사회",
+          "month": "5월",
+          "topic_title": "우리 지역의 국가유산",
+          "description": "대구의 근대역사 골목과 전시관을 걸으며, 옛날 대구 사람들의 생활 모습과 남겨진 유산의 가치를 알아봅시다.",
+          "inquiry_questions": [
+            "대구 도심 한가운데 남겨진 100년 전의 낡은 건물들은 오늘날 우리에게 어떤 이야기를 들려주고 있을까요?"
+          ],
+          "post_activities": [
+            "옛날 대구 모습을 보여주는 유산을 홍보하는 자료를 만들어봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_196",
+      "type": "OFFLINE",
+      "title": "서문시장",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구 최대의 시장",
+      "location": {
+        "lat": 35.8688875,
+        "lng": 128.5807946
+      },
+      "image_url": "/images/res_196.webp",
+      "external_url": "https://www.dtmsa.or.kr/tradition/21",
+      "grade_topics": [
+        {
+          "usage_index": 21,
+          "grade": 3,
+          "subject": "사회",
+          "month": "4월",
+          "topic_title": "우리 생활에 도움을 주는 장소",
+          "description": "우리 생활에 도움을 주는 상점과 공공기관(은행, 우체국 등)을 관찰해 봅시다.",
+          "inquiry_questions": [
+            "시장은 우리 고장 사람들의 생활에 어떤 도움을 줄까요?"
+          ],
+          "post_activities": [
+            "직접 관찰한 우리 생활에 도움을 주는 장소들로 그림 지도를 만들어봅시다."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "res_197",
+      "type": "OFFLINE",
+      "title": "대구향교",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "600년 역사의 대구향교에서 배우는 성현의 지혜와 선비정신",
+      "location": {
+        "lat": 35.859856,
+        "lng": 128.596012
+      },
+      "image_url": "/images/res_197.webp",
+      "external_url": "http://www.daeguhyanggyo.org/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_198",
+      "type": "OFFLINE",
+      "title": "대구약령시한의약박물관",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구 한방의 역사를 알아보고 다양한 한방 체험을 할 수 있는 공간",
+      "location": {
+        "lat": 35.868401,
+        "lng": 128.589868
+      },
+      "image_url": "/images/res_198.webp",
+      "external_url": "https://www.daegu.go.kr/dgom/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_199",
+      "type": "OFFLINE",
+      "title": "한방의료체험타운",
+      "category": "중구",
+      "tags": [
+        "체험",
+        "관람",
+        "문화예술",
+        "역사"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대구약령시를 알리고 한의학을 쉽게 접할 수 있는 공간",
+      "location": {
+        "lat": 35.868401,
+        "lng": 128.590941
+      },
+      "image_url": "/images/res_199.webp",
+      "external_url": "http://kmeditown.go.kr/",
+      "grade_topics": []
     }
-]
+  ]
+}
