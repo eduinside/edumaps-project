@@ -437,7 +437,7 @@ export default function LandingClient({ initialData, updatedTime, changelog }: P
       <footer className="border-t border-slate-100 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 py-6">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400 dark:text-slate-500">
           대구광역시교육청 · 초등 자기주도학습 정보모아
-          <div className="mt-1 font-semibold text-slate-500 dark:text-slate-400">에듀모아</div>
+          <div className="mt-1 font-semibold text-slate-500 dark:text-slate-400">에듀맵스</div>
         </div>
       </footer>
 
