@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Search, MapPin, MonitorPlay, Sparkles } from "lucide-react";
+import { Search, MapPin, MonitorPlay, Sparkles, TrendingUp } from "lucide-react";
 import HowToModal from "./HowToModal";
 import CategoryNav from "./CategoryNav";
 import HomeCarousel from "./HomeCarousel";
@@ -16,6 +16,7 @@ interface Props {
 
 const ONLINE_CATEGORIES = ["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"];
 const FALLBACK_IMAGE = "/images/res_000.webp";
+const EDU_LINK_API = process.env.NEXT_PUBLIC_EDU_LINK_API;
 
 function ResourceImage({ src, alt }: { src?: string; alt: string }) {
   const [errored, setErrored] = useState(false);
@@ -71,6 +72,51 @@ function LandingCard({ item, onClick }: { item: any; onClick: () => void }) {
         <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1 leading-relaxed">{item.description}</p>
       </div>
     </div>
+  );
+}
+
+// edu-link(D1) 클릭 집계를 조회해 실제 resources와 매칭한다. 데이터가 없으면 섹션째 숨긴다.
+function PopularSection({ initialData, onItemClick }: { initialData: any[]; onItemClick: (item: any) => void }) {
+  const [items, setItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!EDU_LINK_API) return;
+    let active = true;
+    fetch(`${EDU_LINK_API}/resource-stats/top?metric=click&limit=8`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!active || !data?.success) return;
+        const byId = new Map(initialData.map((r: any) => [String(r.id), r]));
+        const resolved = (data.items || [])
+          .map((row: any) => byId.get(String(row.resource_id)))
+          .filter(Boolean);
+        setItems(resolved);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [initialData]);
+
+  if (items.length === 0) return null;
+
+  return (
+    <section className="mt-16 mb-4">
+      <div className="mb-6">
+        <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <TrendingUp className="w-6 h-6 text-emerald-500" />
+          많이 찾는 자료
+        </h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
+          다른 학부모님들이 많이 확인한 현장체험·온라인 자료예요.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {items.map((item) => (
+          <LandingCard key={item.id} item={item} onClick={() => onItemClick(item)} />
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -432,6 +478,8 @@ export default function LandingClient({ initialData, updatedTime, changelog }: P
             )}
           </section>
         )}
+
+        {!isSearching && <PopularSection initialData={initialData} onItemClick={(item) => navigateToItem(item)} />}
       </main>
 
       <footer className="border-t border-slate-100 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 py-6">

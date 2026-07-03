@@ -7,6 +7,7 @@ import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft,
 import MapComponent, { MapHandle } from "./MapComponent";
 import HowToModal from "./HowToModal";
 import { renderRichText } from "../lib/richText";
+import { trackResourceStat } from "../lib/trackResourceStat";
 
 interface Props {
   initialData: any[];
@@ -128,6 +129,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
     if (idParam) {
       const resource = initialData.find(r => r.id.toString() === idParam);
       if (resource) {
+        trackResourceStat(resource.id, "click");
         setSelectedResource(resource);
         if (gradeParam) {
           setSelectedGrade(parseInt(gradeParam));
@@ -337,7 +339,10 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
             className="w-full h-full"
             resources={activeTab === "ONLINE" ? [] : filteredResources}
             centerOn={centerOn}
-            onMarkerClick={(resource) => setSelectedResource(resource)}
+            onMarkerClick={(resource) => {
+              trackResourceStat(resource.id, "click");
+              setSelectedResource(resource);
+            }}
             userLocation={activeTab === "OFFLINE" || activeTab === "GRADE" ? userLocation : null}
           />
           {activeTab === "ONLINE" && (
@@ -452,6 +457,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                   <div
                     key={resource.id}
                     onClick={() => {
+                      trackResourceStat(resource.id, "click");
                       setSelectedResource(resource);
                       if (resource.location?.lat && resource.location?.lng) {
                         setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
@@ -520,7 +526,10 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                       categoryResources.map((resource) => (
                         <div
                           key={resource.id}
-                          onClick={() => setSelectedResource(resource)}
+                          onClick={() => {
+                            trackResourceStat(resource.id, "click");
+                            setSelectedResource(resource);
+                          }}
                           className={`group p-3 rounded-2xl transition-all cursor-pointer border ${
                             selectedResource?.id === resource.id
                               ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 shadow-md"
@@ -732,7 +741,13 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
             <div className="p-8 pt-0 mt-auto shrink-0 space-y-4">
               <div className={`${selectedResource.type === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
                 {selectedResource.external_url && (
-                  <a href={selectedResource.external_url} target="_blank" rel="noopener noreferrer" className={`flex items-center justify-center gap-3 py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 dark:hover:bg-slate-600 transition-all shadow-xl active:scale-95 ${selectedResource.type === "ONLINE" ? "w-full" : ""}`}>
+                  <a
+                    href={selectedResource.external_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackResourceStat(selectedResource.id, "download")}
+                    className={`flex items-center justify-center gap-3 py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 dark:hover:bg-slate-600 transition-all shadow-xl active:scale-95 ${selectedResource.type === "ONLINE" ? "w-full" : ""}`}
+                  >
                     <ExternalLink className="w-5 h-5" /> 웹사이트
                   </a>
                 )}
