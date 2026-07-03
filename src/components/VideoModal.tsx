@@ -18,7 +18,7 @@ export default function VideoModal({ isOpen, onClose, videoId, title }: VideoMod
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-xs animate-in fade-in zoom-in duration-200"
+        className="relative h-[85vh] max-h-[900px] max-w-[92vw] animate-in fade-in zoom-in duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -28,7 +28,7 @@ export default function VideoModal({ isOpen, onClose, videoId, title }: VideoMod
         >
           <X className="w-6 h-6" />
         </button>
-        <div className="relative w-full aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl bg-black">
+        <div className="relative h-full max-w-full aspect-[9/16] mx-auto rounded-2xl overflow-hidden shadow-2xl bg-black">
           <iframe
             className="absolute inset-0 w-full h-full"
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
