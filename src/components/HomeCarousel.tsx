@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ArrowRight, Download, MonitorPlay } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Download, MonitorPlay, PlayCircle } from "lucide-react";
+import VideoModal from "./VideoModal";
 
 declare global {
   interface Window {
@@ -12,13 +13,14 @@ declare global {
 
 interface Slide {
   id: string;
-  type: "promo" | "download";
+  type: "promo" | "download" | "video";
   title: string;
   subtitle?: string;
   bgImage?: string;
   linkUrl?: string;
   linkLabel?: string;
   fileUrl?: string;
+  videoId?: string;
   featured?: boolean;
 }
 
@@ -44,11 +46,29 @@ function trackDownload(slide: Slide) {
   });
 }
 
+function trackVideoClick(slide: Slide, target: "app" | "modal") {
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("event", "video_click", {
+    video_title: slide.title,
+    video_id: slide.videoId,
+    open_target: target,
+  });
+}
+
+// 유튜브 앱으로 바로 연결하기 위한 모바일 기기 판별 (레이아웃 반응형과는 별개로 클릭 시점에만 사용)
+function isMobileDevice(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 function SlideBody({ slide }: { slide: Slide }) {
   const isDownload = slide.type === "download";
+  const isVideo = slide.type === "video";
   const fallback = isDownload
     ? "linear-gradient(135deg, #059669, #0ea5e9)"
-    : "linear-gradient(135deg, #0ea5e9, #6366f1)";
+    : isVideo
+      ? "linear-gradient(135deg, #e11d48, #f97316)"
+      : "linear-gradient(135deg, #0ea5e9, #6366f1)";
   const backgroundImage = slide.bgImage
     ? `${OVERLAY}, url("${encodeURI(slide.bgImage)}")`
     : `${OVERLAY}, ${fallback}`;
@@ -63,6 +83,8 @@ function SlideBody({ slide }: { slide: Slide }) {
         <span className="absolute top-4 left-14 sm:left-16 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black text-white bg-white/20 backdrop-blur-sm">
           {isDownload ? (
             <><Download className="w-3 h-3" />자료실</>
+          ) : isVideo ? (
+            <><PlayCircle className="w-3 h-3" />영상</>
           ) : (
             <><MonitorPlay className="w-3 h-3" />온라인</>
           )}
@@ -78,6 +100,8 @@ function SlideBody({ slide }: { slide: Slide }) {
         <span className="mt-2.5 inline-flex w-fit items-center gap-1 px-3.5 py-1.5 rounded-full bg-white text-slate-900 text-xs font-bold shadow-md group-hover:bg-emerald-50 transition-colors">
           {isDownload ? (
             <>다운로드 <Download className="w-3.5 h-3.5" /></>
+          ) : isVideo ? (
+            <>영상보기 <PlayCircle className="w-3.5 h-3.5" /></>
           ) : (
             <>{slide.linkLabel || "바로가기"} <ArrowRight className="w-3.5 h-3.5" /></>
           )}
@@ -87,12 +111,36 @@ function SlideBody({ slide }: { slide: Slide }) {
   );
 }
 
-function CarouselSlide({ slide }: { slide: Slide }) {
+function CarouselSlide({ slide, onOpenVideo }: { slide: Slide; onOpenVideo: (slide: Slide) => void }) {
   const slideClass = "block min-w-full w-full shrink-0 h-full group";
 
   if (slide.type === "download") {
     return (
       <a href={encodeURI(slide.fileUrl || "")} download onClick={() => trackDownload(slide)} className={slideClass}>
+        <SlideBody slide={slide} />
+      </a>
+    );
+  }
+
+  if (slide.type === "video") {
+    const videoId = slide.videoId || "";
+    return (
+      <a
+        href={`https://www.youtube.com/shorts/${videoId}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => {
+          // 모바일은 유튜브 앱(딥링크)으로, 데스크탑은 모달 재생으로 분기
+          if (isMobileDevice()) {
+            trackVideoClick(slide, "app");
+            return;
+          }
+          e.preventDefault();
+          trackVideoClick(slide, "modal");
+          onOpenVideo(slide);
+        }}
+        className={slideClass}
+      >
         <SlideBody slide={slide} />
       </a>
     );
@@ -132,6 +180,7 @@ export default function HomeCarousel() {
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [videoSlide, setVideoSlide] = useState<Slide | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -171,50 +220,58 @@ export default function HomeCarousel() {
   if (count === 0) return null;
 
   return (
-    <section className="mt-8 mb-10" aria-label="추천 자료 배너">
-      <div
-        className="relative overflow-hidden rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 h-40 sm:h-44"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
+    <>
+      <section className="mt-8 mb-10" aria-label="추천 자료 배너">
         <div
-          className="flex h-full transition-transform duration-500 ease-out"
-          style={{ transform: `translateX(-${current * 100}%)` }}
+          className="relative overflow-hidden rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 h-40 sm:h-44"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
         >
-          {slides.map((slide) => (
-            <CarouselSlide key={slide.id} slide={slide} />
-          ))}
-        </div>
+          <div
+            className="flex h-full transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
+            {slides.map((slide) => (
+              <CarouselSlide key={slide.id} slide={slide} onOpenVideo={setVideoSlide} />
+            ))}
+          </div>
 
-        {count > 1 && (
-          <>
-            <button
-              onClick={() => go(current - 1)}
-              aria-label="이전 배너"
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/80 dark:bg-slate-900/70 text-slate-700 dark:text-slate-200 shadow-md flex items-center justify-center hover:bg-white dark:hover:bg-slate-900 transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => go(current + 1)}
-              aria-label="다음 배너"
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/80 dark:bg-slate-900/70 text-slate-700 dark:text-slate-200 shadow-md flex items-center justify-center hover:bg-white dark:hover:bg-slate-900 transition-colors"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
-              {slides.map((s, i) => (
-                <button
-                  key={s.id}
-                  onClick={() => setCurrent(i)}
-                  aria-label={`${i + 1}번째 배너로 이동`}
-                  className={`h-2 rounded-full transition-all ${i === current ? "w-5 bg-white" : "w-2 bg-white/50 hover:bg-white/80"}`}
-                />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+          {count > 1 && (
+            <>
+              <button
+                onClick={() => go(current - 1)}
+                aria-label="이전 배너"
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/80 dark:bg-slate-900/70 text-slate-700 dark:text-slate-200 shadow-md flex items-center justify-center hover:bg-white dark:hover:bg-slate-900 transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => go(current + 1)}
+                aria-label="다음 배너"
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-white/80 dark:bg-slate-900/70 text-slate-700 dark:text-slate-200 shadow-md flex items-center justify-center hover:bg-white dark:hover:bg-slate-900 transition-colors"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+                {slides.map((s, i) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setCurrent(i)}
+                    aria-label={`${i + 1}번째 배너로 이동`}
+                    className={`h-2 rounded-full transition-all ${i === current ? "w-5 bg-white" : "w-2 bg-white/50 hover:bg-white/80"}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+      <VideoModal
+        isOpen={!!videoSlide}
+        onClose={() => setVideoSlide(null)}
+        videoId={videoSlide?.videoId || ""}
+        title={videoSlide?.title || ""}
+      />
+    </>
   );
 }

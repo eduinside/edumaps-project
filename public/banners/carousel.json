@@ -28,6 +28,40 @@
       "linkUrl": "https://www.ebsmath.co.kr/",
       "linkLabel": "바로가기",
       "featured": true
+    },
+    {
+      "id": "video-jaju-1",
+      "type": "video",
+      "title": "학습&체험까지 한 번에! 자기주도학습 정보모아!",
+      "bgImage": "https://i.ytimg.com/vi/r_ZXXpDY8WE/hqdefault.jpg",
+      "videoId": "r_ZXXpDY8WE",
+      "featured": true
+    },
+    {
+      "id": "video-jaju-2",
+      "type": "video",
+      "title": "주말나들이 걱정 뚝! 자기주도학습 정보모아!",
+      "bgImage": "https://i.ytimg.com/vi/Bs7Q7PExNyY/hqdefault.jpg",
+      "videoId": "Bs7Q7PExNyY",
+      "featured": true
+    },
+    {
+      "id": "video-jaju-3",
+      "type": "video",
+      "title": "클릭 한 번으로 완성하는 온라인 자기주도학습!",
+      "bgImage": "https://i.ytimg.com/vi/PrxdtlKgv0s/hqdefault.jpg",
+      "videoId": "PrxdtlKgv0s",
+      "featured": true
+    },
+    {
+      "id": "blog-jaju-intro",
+      "type": "promo",
+      "title": "사교육 걱정 뚝! 자기주도학습 정보모아!",
+      "subtitle": "대구교육청 블로그에서 자세히 보기",
+      "bgImage": "",
+      "linkUrl": "https://m.blog.naver.com/dgeduon/224330947465",
+      "linkLabel": "블로그 보기",
+      "featured": true
     }
   ]
 }
