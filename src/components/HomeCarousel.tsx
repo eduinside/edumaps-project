@@ -180,7 +180,7 @@ export default function HomeCarousel() {
   const [loading, setLoading] = useState(true);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [videoSlide, setVideoSlide] = useState<Slide | null>(null);
+  const [videoIndex, setVideoIndex] = useState<number | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -201,6 +201,7 @@ export default function HomeCarousel() {
   }, []);
 
   const count = slides.length;
+  const videoSlides = slides.filter((s) => s.type === "video");
 
   const go = useCallback(
     (next: number) => {
@@ -219,6 +220,17 @@ export default function HomeCarousel() {
   if (loading) return <CarouselSkeleton />;
   if (count === 0) return null;
 
+  const openVideo = (slide: Slide) => {
+    const idx = videoSlides.findIndex((s) => s.id === slide.id);
+    if (idx >= 0) setVideoIndex(idx);
+  };
+
+  const goVideo = (delta: number) => {
+    setVideoIndex((i) => (i === null || videoSlides.length === 0 ? i : (i + delta + videoSlides.length) % videoSlides.length));
+  };
+
+  const activeVideo = videoIndex !== null ? videoSlides[videoIndex] : null;
+
   return (
     <>
       <section className="mt-8 mb-10" aria-label="추천 자료 배너">
@@ -232,7 +244,7 @@ export default function HomeCarousel() {
             style={{ transform: `translateX(-${current * 100}%)` }}
           >
             {slides.map((slide) => (
-              <CarouselSlide key={slide.id} slide={slide} onOpenVideo={setVideoSlide} />
+              <CarouselSlide key={slide.id} slide={slide} onOpenVideo={openVideo} />
             ))}
           </div>
 
@@ -267,10 +279,13 @@ export default function HomeCarousel() {
         </div>
       </section>
       <VideoModal
-        isOpen={!!videoSlide}
-        onClose={() => setVideoSlide(null)}
-        videoId={videoSlide?.videoId || ""}
-        title={videoSlide?.title || ""}
+        isOpen={!!activeVideo}
+        onClose={() => setVideoIndex(null)}
+        videoId={activeVideo?.videoId || ""}
+        title={activeVideo?.title || ""}
+        onPrev={() => goVideo(-1)}
+        onNext={() => goVideo(1)}
+        hasMultiple={videoSlides.length > 1}
       />
     </>
   );
