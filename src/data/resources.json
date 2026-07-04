@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026.06.27 08:46",
+  "generatedAt": "2026.07.04 12:07",
   "items": [
     {
       "id": "res_011",
@@ -21,7 +21,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_011.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_011.webp",
       "external_url": "https://ssac.dgedu.link/",
       "grade_topics": []
     },
@@ -45,7 +45,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_012.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_012.webp",
       "external_url": "https://ssac.dgedu.link/",
       "grade_topics": []
     },
@@ -72,7 +72,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_013.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_013.webp",
       "external_url": "https://ireading.kr/index.do",
       "grade_topics": []
     },
@@ -99,7 +99,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_014.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_014.webp",
       "external_url": "https://www.basics.go.kr/",
       "grade_topics": []
     },
@@ -125,8 +125,54 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_015.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_015.webp",
       "external_url": "https://nlcy.go.kr/MANY/main/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_016",
+      "type": "ONLINE",
+      "title": "한국어기초사전",
+      "category": "언어",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "쉬운 뜻풀이로 우리말 어휘를 찾아보는 국립국어원 학습사전이에요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_016.webp",
+      "external_url": "https://krdict.korean.go.kr/kor/mainAction",
+      "grade_topics": []
+    },
+    {
+      "id": "res_017",
+      "type": "ONLINE",
+      "title": "온용어",
+      "category": "언어",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "국립국어원 전문 분야 용어지식 플랫폼",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_017.webp",
+      "external_url": "https://kli.korean.go.kr/term?lang=kr",
       "grade_topics": []
     },
     {
@@ -150,7 +196,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_021.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_021.webp",
       "external_url": "https://www.ebsmath.co.kr/",
       "grade_topics": []
     },
@@ -173,7 +219,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_022.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_022.webp",
       "external_url": "https://aig.edunet.net/",
       "grade_topics": []
     },
@@ -199,7 +245,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_023.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_023.webp",
       "external_url": "https://www.toctocmath.kr/",
       "grade_topics": []
     },
@@ -225,7 +271,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_024.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_024.webp",
       "external_url": "https://www.algeomath.kr/kids",
       "grade_topics": []
     },
@@ -252,8 +298,58 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_025.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_025.webp",
       "external_url": "https://askmath.kosac.re.kr/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_026",
+      "type": "ONLINE",
+      "title": "매쓰포올",
+      "category": "수리",
+      "tags": [
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "무료로 제공되는 수학 학습지로 실력을 길러요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_026.webp",
+      "external_url": "https://mathforall.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_027",
+      "type": "ONLINE",
+      "title": "일일수학",
+      "category": "수리",
+      "tags": [
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "교과서 진도에 맞춘 전학년 연산문제지를 무료로 프린트하여 풀 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_027.webp",
+      "external_url": "https://11math.com/",
       "grade_topics": []
     },
     {
@@ -277,7 +373,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_031.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_031.webp",
       "external_url": "https://www.aidtbook.kr/index.do",
       "grade_topics": []
     },
@@ -304,7 +400,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_032.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_032.webp",
       "external_url": "https://code.org/ko/students",
       "grade_topics": []
     },
@@ -329,7 +425,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_033.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_033.webp",
       "external_url": "https://www.ebssw.kr/",
       "grade_topics": []
     },
@@ -356,7 +452,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_034.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_034.webp",
       "external_url": "https://playentry.org/",
       "grade_topics": []
     },
@@ -382,8 +478,31 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_035.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_035.webp",
       "external_url": "https://www.playsw.or.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_036",
+      "type": "ONLINE",
+      "title": "블록리 게임",
+      "category": "디지털",
+      "tags": [
+        "문제풀이"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "블록코딩으로 놀며 프로그래밍의 원리를 배울 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_036.webp",
+      "external_url": "https://blockly.games/?lang=ko",
       "grade_topics": []
     },
     {
@@ -409,7 +528,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_041.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_041.webp",
       "external_url": "https://pengtalk-student.ebse.co.kr/",
       "grade_topics": []
     },
@@ -435,7 +554,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_042.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_042.webp",
       "external_url": "https://www.youtube.com/@EBSKidsWorld/playlists",
       "grade_topics": []
     },
@@ -460,7 +579,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_043.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_043.webp",
       "external_url": "https://www.ebse.co.kr/apps/funReading/funMain.do",
       "grade_topics": []
     },
@@ -486,7 +605,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_044.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_044.webp",
       "external_url": "https://www.oxfordowl.co.uk/for-home/find-a-book/library-page",
       "grade_topics": []
     },
@@ -511,8 +630,34 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_045.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_045.webp",
       "external_url": "https://readalong.google.com/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_046",
+      "type": "ONLINE",
+      "title": "스토리라인",
+      "category": "외국어",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "유명 배우들이 영어 동화책을 읽어주는 영상을 볼 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_046.webp",
+      "external_url": "https://storylineonline.net/",
       "grade_topics": []
     },
     {
@@ -534,7 +679,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_051.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_051.webp",
       "external_url": "https://www.youtube.com/playlist?list=PL5hgB-lWdFZL1OT4HOfyVCKTZiLsnCuya",
       "grade_topics": []
     },
@@ -557,7 +702,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_052.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_052.webp",
       "external_url": "https://www.youtube.com/playlist?list=PL5hgB-lWdFZKCRMq1romg-iLfs0-kzGzA",
       "grade_topics": []
     },
@@ -580,7 +725,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_053.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_053.webp",
       "external_url": "https://www.youtube.com/playlist?list=PL5hgB-lWdFZLtF02pLj1_iRLbWHRGAVU-",
       "grade_topics": []
     },
@@ -603,7 +748,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_054.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_054.webp",
       "external_url": "https://academy.gugak.go.kr/open/children/main.do",
       "grade_topics": []
     },
@@ -629,7 +774,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_055.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_055.webp",
       "external_url": "https://artsandculture.google.com",
       "grade_topics": []
     },
@@ -654,7 +799,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_056.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_056.webp",
       "external_url": "https://musiclab.chromeexperiments.com/",
       "grade_topics": [
         {
@@ -672,6 +817,56 @@
           ]
         }
       ]
+    },
+    {
+      "id": "res_057",
+      "type": "ONLINE",
+      "title": "어린이민속사전",
+      "category": "문화",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "명절과 세시풍속을 배울 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_057.webp",
+      "external_url": "https://www.nfm.go.kr/kids/elecontents/index.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_058",
+      "type": "ONLINE",
+      "title": "국립고궁박물관 온라인박물관",
+      "category": "문화",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "조선왕실 유물을 온라인으로 만날 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_058.webp",
+      "external_url": "https://www.gogung.go.kr/onlinemuseum/main/main.do",
+      "grade_topics": []
     },
     {
       "id": "res_061",
@@ -696,7 +891,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_061.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_061.webp",
       "external_url": "https://www.edunavi.kr/portal/main.do",
       "grade_topics": []
     },
@@ -721,82 +916,34 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_062.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_062.webp",
       "external_url": "https://www.youtube.com/@대구학부모교육",
       "grade_topics": []
     },
     {
       "id": "res_063",
       "type": "ONLINE",
-      "title": "주니어 커리어넷",
+      "title": "메이커활동",
       "category": "더 알아보기",
       "tags": [
         "영상자료",
-        "문제풀이",
         "자료검색"
       ],
       "recommended_grade": [
-        "3",
-        "4",
         "5",
         "6"
       ],
-      "description": "적성 검사로 나를 이해하고 전문 상담으로 꿈을 찾아봐요",
+      "description": "직접 만들며 실력 쑥쑥 메이커활동 기본 도구 사용법",
       "location": {
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_063.webp",
-      "external_url": "https://www.career.go.kr/cloud/j/main/home",
+      "image_url": "https://dgedu.link/media/edumaps/res_063.webp",
+      "external_url": "https://www.youtube.com/playlist?list=PLPhnrj-tuZvw4g8HdI0rEqcGVGOGWmEcg",
       "grade_topics": []
     },
     {
       "id": "res_064",
-      "type": "ONLINE",
-      "title": "어린이 기상교실",
-      "category": "더 알아보기",
-      "tags": [
-        "영상자료",
-        "자료검색"
-      ],
-      "recommended_grade": [
-        "3",
-        "4",
-        "5",
-        "6"
-      ],
-      "description": "날씨, 기후, 지진! 기상청과 함께 놀면서 배우는 날씨 이야기",
-      "location": {
-        "lat": 0,
-        "lng": 0
-      },
-      "image_url": "/images/res_064.webp",
-      "external_url": "https://www.kma.go.kr/kids/",
-      "grade_topics": []
-    },
-    {
-      "id": "res_065",
-      "type": "ONLINE",
-      "title": "우리역사넷",
-      "category": "더 알아보기",
-      "tags": [
-        "자료검색"
-      ],
-      "recommended_grade": [
-        "5",
-        "6"
-      ],
-      "description": "고대부터 현대 역사까지 초등학생을 위한 우리 역사 이야기",
-      "location": {
-        "lat": 0,
-        "lng": 0
-      },
-      "image_url": "/images/res_065.webp",
-      "external_url": "https://contents.history.go.kr/front/newEh/main.do",
-      "grade_topics": []
-    },
-    {
-      "id": "res_066",
       "type": "ONLINE",
       "title": "마음챙김 5분 명상",
       "category": "더 알아보기",
@@ -816,12 +963,81 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_066.webp",
-      "external_url": "https://www.edunavi.kr/arc/ad/edunavi/arc/cp/selectChnnlPackageInfo.do?chnnlSn=175&packageSn=840",
+      "image_url": "https://dgedu.link/media/edumaps/res_064.webp",
+      "external_url": "https://www.youtube.com/watch?v=XJ83FhVMJO4&list=PLhuVsVmRlLyXPBoydZ0m3hJEC0-rF0pgh",
+      "grade_topics": []
+    },
+    {
+      "id": "res_065",
+      "type": "ONLINE",
+      "title": "우리역사넷",
+      "category": "더 알아보기",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "5",
+        "6"
+      ],
+      "description": "고대부터 현대 역사까지 초등학생을 위한 우리 역사 이야기",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_065.webp",
+      "external_url": "https://contents.history.go.kr/front/newEh/main.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_066",
+      "type": "ONLINE",
+      "title": "주니어 커리어넷",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "문제풀이",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "적성 검사로 나를 이해하고 전문 상담으로 꿈을 찾아봐요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_066.webp",
+      "external_url": "https://www.career.go.kr/cloud/j/main/home",
       "grade_topics": []
     },
     {
       "id": "res_067",
+      "type": "ONLINE",
+      "title": "어린이 정부포털",
+      "category": "더 알아보기",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "대한민국 정부와 공공에서 제공하는 어린이 서비스를 모아두었어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_067.webp",
+      "external_url": "https://kids.gov.kr/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_068",
       "type": "ONLINE",
       "title": "성평등가족부 어린이",
       "category": "더 알아보기",
@@ -841,12 +1057,35 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_067.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_068.webp",
       "external_url": "https://www.mogef.go.kr/kids/index.jsp",
       "grade_topics": []
     },
     {
-      "id": "res_068",
+      "id": "res_069",
+      "type": "ONLINE",
+      "title": "에듀넷 실감형콘텐츠",
+      "category": "더 알아보기",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "실감형 콘텐츠로 다양한 학습주제를 체험할 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_069.webp",
+      "external_url": "https://www.edunet.net/webImmrsvConts/list/530",
+      "grade_topics": []
+    },
+    {
+      "id": "res_070",
       "type": "ONLINE",
       "title": "어린이 지도여행",
       "category": "더 알아보기",
@@ -866,34 +1105,12 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_068.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_070.webp",
       "external_url": "https://www.ngii.go.kr/child/content.do?sq=148",
       "grade_topics": []
     },
     {
-      "id": "res_069",
-      "type": "ONLINE",
-      "title": "메이커활동",
-      "category": "더 알아보기",
-      "tags": [
-        "영상자료",
-        "자료검색"
-      ],
-      "recommended_grade": [
-        "5",
-        "6"
-      ],
-      "description": "직접 만들며 실력 쑥쑥 메이커활동 기본 도구 사용법",
-      "location": {
-        "lat": 0,
-        "lng": 0
-      },
-      "image_url": "/images/res_069.webp",
-      "external_url": "https://www.youtube.com/playlist?list=PLPhnrj-tuZvw4g8HdI0rEqcGVGOGWmEcg",
-      "grade_topics": []
-    },
-    {
-      "id": "res_070",
+      "id": "res_071",
       "type": "ONLINE",
       "title": "국토정보플랫폼",
       "category": "더 알아보기",
@@ -911,7 +1128,7 @@
         "lat": 0,
         "lng": 0
       },
-      "image_url": "/images/res_070.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_071.webp",
       "external_url": "https://map.ngii.go.kr/",
       "grade_topics": [
         {
@@ -929,6 +1146,77 @@
           ]
         }
       ]
+    },
+    {
+      "id": "res_072",
+      "type": "ONLINE",
+      "title": "대구지도포털",
+      "category": "더 알아보기",
+      "tags": [
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "우리 지역을 2D·3D 지도와 항공사진 등으로 살펴보아요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_072.webp",
+      "external_url": "https://gis.go.kr/intro.do",
+      "grade_topics": []
+    },
+    {
+      "id": "res_073",
+      "type": "ONLINE",
+      "title": "어린이 기상교실",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "날씨, 기후, 지진! 기상청과 함께 놀면서 배우는 날씨 이야기",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_073.webp",
+      "external_url": "https://www.kma.go.kr/kids/",
+      "grade_topics": []
+    },
+    {
+      "id": "res_074",
+      "type": "ONLINE",
+      "title": "기상청 기후변화과학",
+      "category": "더 알아보기",
+      "tags": [
+        "영상자료",
+        "자료검색"
+      ],
+      "recommended_grade": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "description": "기후변화와 기후위기 대응에 대해 익힐 수 있어요",
+      "location": {
+        "lat": 0,
+        "lng": 0
+      },
+      "image_url": "https://dgedu.link/media/edumaps/res_074.webp",
+      "external_url": "https://www.climate.go.kr/edu/",
+      "grade_topics": []
     },
     {
       "id": "res_111",
@@ -954,7 +1242,7 @@
         "lat": 36.1614561,
         "lng": 128.6968859
       },
-      "image_url": "/images/res_111.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_111.webp",
       "external_url": "https://gunwi3964.co.kr/gunwi/main.do",
       "grade_topics": []
     },
@@ -982,7 +1270,7 @@
         "lat": 36.2363329,
         "lng": 128.5673951
       },
-      "image_url": "/images/res_112.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_112.webp",
       "external_url": "https://saraon.gunwi.go.kr:6450/",
       "grade_topics": []
     },
@@ -1004,7 +1292,7 @@
         "lat": 35.8271907,
         "lng": 128.5887067
       },
-      "image_url": "/images/res_121.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_121.webp",
       "external_url": "http://www.nakdongwar.or.kr/",
       "grade_topics": [
         {
@@ -1059,7 +1347,7 @@
         "lat": 35.8294673,
         "lng": 128.6037566
       },
-      "image_url": "/images/res_122.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_122.webp",
       "external_url": "https://nam.daegu.kr/tour/index.do?menu_id=00003601",
       "grade_topics": [
         {
@@ -1130,7 +1418,7 @@
         "lat": 35.828921,
         "lng": 128.589141
       },
-      "image_url": "/images/res_123.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_123.webp",
       "external_url": "https://tour.daegu.go.kr/index.do?menu_id=00002942&menu_link=/front/tour/tourMapsView.do?tourId=KOATTR_114",
       "grade_topics": []
     },
@@ -1156,7 +1444,7 @@
         "lat": 35.8420817,
         "lng": 128.5918751
       },
-      "image_url": "/images/res_124.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_124.webp",
       "external_url": "https://library.daegu.go.kr/dglib/index.do",
       "grade_topics": []
     },
@@ -1183,7 +1471,7 @@
         "lat": 35.80122,
         "lng": 128.520284
       },
-      "image_url": "/images/res_131.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_131.webp",
       "external_url": "https://www.daegu.go.kr/cts/index.do?menu_id=00000952&servletPath=%2Fcts",
       "grade_topics": [
         {
@@ -1282,7 +1570,7 @@
         "lat": 35.853959,
         "lng": 128.496238
       },
-      "image_url": "/images/res_132.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_132.webp",
       "external_url": "https://www.dge.go.kr/dgai",
       "grade_topics": [
         {
@@ -1323,7 +1611,7 @@
         "lat": 35.823416,
         "lng": 128.557193
       },
-      "image_url": "/images/res_133.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_133.webp",
       "external_url": "https://www.dalseowood.kr/index.do",
       "grade_topics": []
     },
@@ -1350,7 +1638,7 @@
         "lat": 35.8203011,
         "lng": 128.5171133
       },
-      "image_url": "/images/res_134.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_134.webp",
       "external_url": "https://dalseomuseum.kr/",
       "grade_topics": [
         {
@@ -1406,7 +1694,7 @@
         "lat": 35.83460480000001,
         "lng": 128.4882897
       },
-      "image_url": "/images/res_135.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_135.webp",
       "external_url": "https://dco.energy.or.kr/green_tk/",
       "grade_topics": [
         {
@@ -1449,7 +1737,7 @@
         "lat": 35.6845561,
         "lng": 128.4644605
       },
-      "image_url": "/images/res_141.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_141.webp",
       "external_url": "https://fossilmuseum.dssiseol.or.kr/",
       "grade_topics": [
         {
@@ -1507,7 +1795,7 @@
         "lat": 35.686998,
         "lng": 128.465466
       },
-      "image_url": "/images/res_142.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_142.webp",
       "external_url": "https://www.dnsm.or.kr/",
       "grade_topics": [
         {
@@ -1622,7 +1910,7 @@
         "lat": 35.8388375,
         "lng": 128.4682031
       },
-      "image_url": "/images/res_143.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_143.webp",
       "external_url": "https://www.riverguide.go.kr/kor/page.do?menuIdx=381",
       "grade_topics": [
         {
@@ -1664,7 +1952,7 @@
         "lat": 35.8166414,
         "lng": 128.4868747
       },
-      "image_url": "/images/res_144.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_144.webp",
       "external_url": "https://dswetland.daegu.go.kr/index.do",
       "grade_topics": [
         {
@@ -1746,7 +2034,7 @@
         "lat": 35.811332,
         "lng": 128.477695
       },
-      "image_url": "/images/res_145.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_145.webp",
       "external_url": "https://www.dssiseol.or.kr/pages/sisul/page.html?mc=1058",
       "grade_topics": []
     },
@@ -1773,7 +2061,7 @@
         "lat": 35.812803,
         "lng": 128.480584
       },
-      "image_url": "",
+      "image_url": "https://dgedu.link/media/edumaps/res_146.webp",
       "external_url": "https://www.dssiseol.or.kr/pages/sisul/page.html?mc=1564",
       "grade_topics": []
     },
@@ -1801,7 +2089,7 @@
         "lat": 35.9189809,
         "lng": 128.6399047
       },
-      "image_url": "/images/res_151.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_151.webp",
       "external_url": "https://www.dtmuseum.org/main",
       "grade_topics": [
         {
@@ -1886,7 +2174,7 @@
         "lat": 35.8782158,
         "lng": 128.6539001
       },
-      "image_url": "/images/res_152.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_152.webp",
       "external_url": "https://science.kma.go.kr/daegu/",
       "grade_topics": [
         {
@@ -1967,7 +2255,7 @@
         "lat": 35.9891717,
         "lng": 128.691943
       },
-      "image_url": "/images/res_153.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_153.webp",
       "external_url": "https://www.daegu.go.kr/safe119/index.do",
       "grade_topics": [
         {
@@ -2022,7 +2310,7 @@
         "lat": 35.9213461,
         "lng": 128.6506826
       },
-      "image_url": "/images/res_154.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_154.webp",
       "external_url": "https://dong.daegu.kr/nabipark/main.do",
       "grade_topics": [
         {
@@ -2076,7 +2364,7 @@
         "lat": 35.965647,
         "lng": 128.700844
       },
-      "image_url": "/images/res_155.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_155.webp",
       "external_url": "https://www.bangjja.or.kr/",
       "grade_topics": []
     },
@@ -2104,7 +2392,7 @@
         "lat": 35.897541,
         "lng": 128.61209
       },
-      "image_url": "/images/res_161.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_161.webp",
       "external_url": "https://www.dge.go.kr/dme/main.do",
       "grade_topics": [
         {
@@ -2145,7 +2433,7 @@
         "lat": 35.8887118,
         "lng": 128.613693
       },
-      "image_url": "/images/res_162.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_162.webp",
       "external_url": "https://museum.knu.ac.kr/",
       "grade_topics": []
     },
@@ -2172,7 +2460,7 @@
         "lat": 35.8743119,
         "lng": 128.5463842
       },
-      "image_url": "/images/res_171.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_171.webp",
       "external_url": "https://library.daegu.go.kr/seogulib/index.do",
       "grade_topics": []
     },
@@ -2200,7 +2488,7 @@
         "lat": 35.8732606,
         "lng": 128.5436128
       },
-      "image_url": "/images/res_172.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_172.webp",
       "external_url": "https://www.dgs.go.kr/portal/contents.do?mid=0402000000",
       "grade_topics": []
     },
@@ -2228,7 +2516,7 @@
         "lat": 35.8456135,
         "lng": 128.6379176
       },
-      "image_url": "/images/res_181.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_181.webp",
       "external_url": "https://daegu.museum.go.kr/kor/index.do",
       "grade_topics": [
         {
@@ -2300,7 +2588,7 @@
         "lat": 35.8450833,
         "lng": 128.6270121
       },
-      "image_url": "/images/res_182.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_182.webp",
       "external_url": "https://www.dge.go.kr/dicce/main.do",
       "grade_topics": [
         {
@@ -2385,7 +2673,7 @@
         "lat": 35.8466356,
         "lng": 128.6277986
       },
-      "image_url": "/images/res_183.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_183.webp",
       "external_url": "https://dcw.daegu.go.kr/ko/page/main.do",
       "grade_topics": [
         {
@@ -2443,7 +2731,7 @@
         "lat": 35.837091,
         "lng": 128.701899
       },
-      "image_url": "/images/res_184.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_184.webp",
       "external_url": "https://www.dge.go.kr/dggreen/main.do",
       "grade_topics": [
         {
@@ -2570,7 +2858,7 @@
         "lat": 35.827262,
         "lng": 128.67447
       },
-      "image_url": "/images/res_185.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_185.webp",
       "external_url": "https://daeguartmuseum.or.kr/",
       "grade_topics": []
     },
@@ -2597,7 +2885,7 @@
         "lat": 35.85901,
         "lng": 128.626991
       },
-      "image_url": "/images/res_186.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_186.webp",
       "external_url": "https://daeguartway.kr/",
       "grade_topics": []
     },
@@ -2624,7 +2912,7 @@
         "lat": 35.8755076,
         "lng": 128.5845613
       },
-      "image_url": "/images/res_191.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_191.webp",
       "external_url": "https://www.daeguartfactory.kr/",
       "grade_topics": [
         {
@@ -2676,7 +2964,7 @@
         "lat": 35.8717871,
         "lng": 128.5911694
       },
-      "image_url": "/images/res_192.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_192.webp",
       "external_url": "https://www.dmhm.or.kr",
       "grade_topics": [
         {
@@ -2715,7 +3003,7 @@
         "lat": 35.868464,
         "lng": 128.6016669
       },
-      "image_url": "/images/res_193.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_193.webp",
       "external_url": "https://library.daegu.go.kr/gukbo/index.do",
       "grade_topics": [
         {
@@ -2771,7 +3059,7 @@
         "lat": 35.874004,
         "lng": 128.5780991
       },
-      "image_url": "/images/res_194.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_194.webp",
       "external_url": "https://tour.daegu.go.kr/index.do?menu_id=00002943&menu_link=/front/tour/tourMapsView.do?tourId=KOATTR_124",
       "grade_topics": [
         {
@@ -2810,7 +3098,7 @@
         "lat": 35.8733774,
         "lng": 128.5941989
       },
-      "image_url": "/images/res_195.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_195.webp",
       "external_url": "https://www.hyangchon.or.kr/",
       "grade_topics": [
         {
@@ -2865,7 +3153,7 @@
         "lat": 35.8688875,
         "lng": 128.5807946
       },
-      "image_url": "/images/res_196.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_196.webp",
       "external_url": "https://www.dtmsa.or.kr/tradition/21",
       "grade_topics": [
         {
@@ -2905,7 +3193,7 @@
         "lat": 35.859856,
         "lng": 128.596012
       },
-      "image_url": "/images/res_197.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_197.webp",
       "external_url": "http://www.daeguhyanggyo.org/",
       "grade_topics": []
     },
@@ -2933,7 +3221,7 @@
         "lat": 35.868401,
         "lng": 128.589868
       },
-      "image_url": "/images/res_198.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_198.webp",
       "external_url": "https://www.daegu.go.kr/dgom/index.do",
       "grade_topics": []
     },
@@ -2961,12 +3249,16 @@
         "lat": 35.868401,
         "lng": 128.590941
       },
-      "image_url": "/images/res_199.webp",
+      "image_url": "https://dgedu.link/media/edumaps/res_199.webp",
       "external_url": "http://kmeditown.go.kr/",
       "grade_topics": []
     }
   ],
   "changelog": [
+    {
+      "date": "2026.07.04",
+      "text": "홈 화면에 다른 사용자가 많이 찾는 자료 바로가기를 추가하였습니다."
+    },
     {
       "date": "2026.06.26",
       "text": "학년별 로드맵 본문에 관련 자료 링크를 추가하고, 시스템을 안정화하였습니다."
