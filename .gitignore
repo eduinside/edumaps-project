@@ -47,3 +47,8 @@ next-env.d.ts
 
 # 이미지가 R2(edu-link)로 이전됨. 레포에는 안 두되 로컬 참고용으로만 보관
 /local-images/
+
+# Cloudflare Wrangler
+.wrangler/
+wrangler.toml
+
