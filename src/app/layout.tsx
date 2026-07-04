@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
+import { mediaUrl } from "../lib/media";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
   title: "대구 에듀맵스 - 대구광역시교육청",
   description: "초등 교육과정 연계 체험학습 및 자기주도학습자료 정보제공",
   icons: {
-    icon: '/images/daegu_logo.webp',
-    apple: '/images/daegu_logo.webp',
+    icon: mediaUrl("daegu_logo.webp"),
+    apple: mediaUrl("daegu_logo.webp"),
   },
 };
 

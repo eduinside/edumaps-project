@@ -13,7 +13,7 @@
       "type": "promo",           // "promo"(온라인 홍보) 또는 "download"(자료 다운로드)
       "title": "제목",            // 필수, 흰색 큰 글씨
       "subtitle": "소개 문구",     // 선택, 제목 아래 작은 글씨
-      "bgImage": "/images/x.webp", // 배경 이미지 URL. 비우면 그라데이션 배경 사용
+      "bgImage": "https://dgedu.link/media/edumaps/x.webp", // 배경 이미지 URL(R2). 비우면 그라데이션 배경 사용
 
       // type === "promo" 일 때
       "linkUrl": "/online",       // 내부 경로(/online 등) 또는 https:// 외부 링크

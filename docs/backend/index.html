@@ -298,7 +298,7 @@
                   <div>
                     <!-- 카드 썸네일 영역 -->
                     <div class="h-44 bg-slate-950 relative overflow-hidden flex items-center justify-center border-b border-slate-800">
-                      <img v-if="place.image_url" :src="getImageUrl(place.image_url)" alt="" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
+                      <img v-if="place.image_url || place.id" :src="getImageUrl(place.image_url, place.id)" alt="" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500">
                       <div v-else class="text-slate-700"><i class="far fa-image text-4xl"></i></div>
                       
                       <!-- 타입 배지 -->
@@ -705,8 +705,8 @@
           <!-- 6. 이미지 URL 및 외부 링크 -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-slate-400 text-xs font-semibold mb-1.5">이미지 파일 경로</label>
-              <input type="text" v-model="placeModal.item.image_url" placeholder="/images/res_xxx.webp"
+              <label class="block text-slate-400 text-xs font-semibold mb-1.5">이미지 URL (비워두면 R2의 {{ placeModal.item.id || 'res_id' }}.webp를 자동 사용)</label>
+              <input type="text" v-model="placeModal.item.image_url" placeholder="비워두면 자동 · 직접 입력 시 해당 URL 사용"
                      class="w-full bg-slate-950/60 border border-slate-800 text-white rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/30 text-sm">
             </div>
             <div>
@@ -1086,9 +1086,9 @@
           return String(tagsStr).split(',').map(s => s.trim()).filter(s => s !== '');
         };
 
-        // 이미지 절대 경로 도메인 바인딩 헬퍼
-        const getImageUrl = (url) => {
-          if (!url) return '';
+        // 이미지 URL 헬퍼: 직접 입력값이 있으면 그대로(상대경로면 프론트 도메인 결합), 없으면 id 기준 R2 자동 참조
+        const getImageUrl = (url, id) => {
+          if (!url) return id ? `https://dgedu.link/media/edumaps/${id}.webp` : '';
           if (String(url).startsWith('/')) {
             let base = frontUrl.value || 'https://map.dgedu.link';
             if (base.endsWith('/')) {

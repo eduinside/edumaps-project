@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# 이미지가 R2(edu-link)로 이전됨. 레포에는 안 두되 로컬 참고용으로만 보관
+/local-images/

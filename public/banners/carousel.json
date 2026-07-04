@@ -5,7 +5,7 @@
       "type": "promo",
       "title": "대구 온라인 학습 자원 한눈에",
       "subtitle": "언어·수리·디지털·문화 추천 사이트 모음",
-      "bgImage": "/images/res_011.webp",
+      "bgImage": "https://dgedu.link/media/edumaps/res_011.webp",
       "linkUrl": "/online",
       "linkLabel": "바로가기",
       "featured": true
@@ -24,7 +24,7 @@
       "type": "promo",
       "title": "EBS MATH로 즐기는 수학 학습",
       "subtitle": "영상·문제풀이로 배우는 무료 온라인 수학",
-      "bgImage": "/images/res_021.webp",
+      "bgImage": "https://dgedu.link/media/edumaps/res_021.webp",
       "linkUrl": "https://www.ebsmath.co.kr/",
       "linkLabel": "바로가기",
       "featured": true

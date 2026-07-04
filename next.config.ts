@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.dge.go.kr",
       },
+      {
+        protocol: "https",
+        hostname: "dgedu.link",
+      },
     ],
   },
 };

@@ -19,6 +19,20 @@ function doGet(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+// R2(edu-link 공유 버킷)에 올려둔 이미지의 베이스 URL. 파일명은 아이템 id와 동일(예: res_011.webp)
+var MEDIA_BASE_URL_ = "https://dgedu.link/media/edumaps";
+
+/**
+ * 이미지 URL을 결정한다: 시트에 직접 입력된 값이 있으면 그대로 쓰고,
+ * 비어 있으면 id 기준(res_***.webp)으로 R2 파일을 자동 참조한다.
+ * @return {string}
+ */
+function resolveImageUrl_(item) {
+  if (item.image_url) return item.image_url;
+  if (!item.id) return "";
+  return MEDIA_BASE_URL_ + "/" + item.id + ".webp";
+}
+
 /**
  * 시트(아이템 + 활용)를 프론트엔드가 소비하는 JSON 페이로드로 변환한다.
  * doGet(참고용 API)과 publishToGitHub(발행)에서 공용으로 사용한다.
@@ -69,7 +83,7 @@ function buildResourcesJson() {
         lat: parseFloat(item.lat) || 0,
         lng: parseFloat(item.lng) || 0
       },
-      image_url: item.image_url || "",
+      image_url: resolveImageUrl_(item),
       external_url: item.external_url || "",
       grade_topics: gradeTopics
     };

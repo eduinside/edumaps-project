@@ -7,6 +7,7 @@ import { Search, MapPin, MonitorPlay, Sparkles, TrendingUp } from "lucide-react"
 import HowToModal from "./HowToModal";
 import CategoryNav from "./CategoryNav";
 import HomeCarousel from "./HomeCarousel";
+import { mediaUrl } from "../lib/media";
 
 interface Props {
   initialData: any[];
@@ -15,7 +16,7 @@ interface Props {
 }
 
 const ONLINE_CATEGORIES = ["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"];
-const FALLBACK_IMAGE = "/images/res_000.webp";
+const FALLBACK_IMAGE = mediaUrl("res_000.webp");
 const EDU_LINK_API = process.env.NEXT_PUBLIC_EDU_LINK_API;
 
 function ResourceImage({ src, alt }: { src?: string; alt: string }) {
@@ -268,7 +269,7 @@ export default function LandingClient({ initialData, updatedTime, changelog }: P
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push("/")}>
             <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
-              <Image src="/images/daegu_logo.webp" alt="에듀맵스 로고" fill className="object-contain rounded-full" />
+              <Image src={mediaUrl("daegu_logo.webp")} alt="에듀맵스 로고" fill className="object-contain rounded-full" />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors">
               <span className="hidden sm:inline">대구 </span>에듀맵스

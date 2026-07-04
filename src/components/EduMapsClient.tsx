@@ -8,6 +8,7 @@ import MapComponent, { MapHandle } from "./MapComponent";
 import HowToModal from "./HowToModal";
 import { renderRichText } from "../lib/richText";
 import { trackResourceStat } from "../lib/trackResourceStat";
+import { mediaUrl } from "../lib/media";
 
 interface Props {
   initialData: any[];
@@ -224,7 +225,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
       <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-lg rounded-full z-20">
         <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push('/')}>
           <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
-            <Image src="/images/daegu_logo.webp" alt="에듀맵스 로고" fill className="object-contain rounded-full" />
+            <Image src={mediaUrl("daegu_logo.webp")} alt="에듀맵스 로고" fill className="object-contain rounded-full" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors"><span className="hidden sm:inline">대구 </span>에듀맵스</h1>
           <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
@@ -296,7 +297,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                         className="w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors text-left group"
                       >
                         <div className="shrink-0 w-8 h-8 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700">
-                          <img src={item.image_url || "/images/res_000.webp"} alt="" className="w-full h-full object-cover" />
+                          <img src={item.image_url || mediaUrl("res_000.webp")} alt="" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 truncate">{item.title}</p>
@@ -471,7 +472,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                   >
                     <div className="flex gap-4">
                       <div className={`relative ${activeTab === "GRADE" ? "w-20 h-20" : "w-16 h-16"} rounded-2xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <Image src={resource.image_url || "/images/res_000.webp"} alt={resource.title} fill className="object-cover" />
+                        <Image src={resource.image_url || mediaUrl("res_000.webp")} alt={resource.title} fill className="object-cover" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className={`font-bold text-slate-800 dark:text-slate-100 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1`}>{resource.title}</h3>
@@ -538,7 +539,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                         >
                           <div className="flex gap-3">
                             <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                              <Image src={resource.image_url || "/images/res_000.webp"} alt={resource.title} fill className="object-cover" />
+                              <Image src={resource.image_url || mediaUrl("res_000.webp")} alt={resource.title} fill className="object-cover" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-bold text-slate-800 dark:text-slate-100 text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">{resource.title}</h4>
@@ -583,7 +584,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
             }`}>
             {/* Top Image Banner */}
             <div className={`relative w-full shrink-0 ${activeTab === "ONLINE" ? "h-64" : "h-48"} bg-gradient-to-br from-emerald-50 to-slate-100 overflow-hidden flex items-center justify-center`}>
-              <Image src={selectedResource.image_url || "/images/res_000.webp"} alt={selectedResource.title} fill className="object-cover" />
+              <Image src={selectedResource.image_url || mediaUrl("res_000.webp")} alt={selectedResource.title} fill className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <button onClick={() => setSelectedResource(null)} className="absolute top-6 right-6 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors">
                 <X className="w-5 h-5" />

@@ -1,6 +1,7 @@
 "use client";
 
 import { X, Map, Info, HelpCircle, History } from "lucide-react";
+import { mediaUrl } from "../lib/media";
 
 interface ChangelogEntry {
   date: string;
@@ -95,7 +96,7 @@ export default function HowToModal({ isOpen, onClose, updatedTime, changelog }: 
 
         <div className="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 flex flex-row items-center justify-between gap-3">
           <a href="https://www.dge.go.kr/" target="_blank" rel="noopener noreferrer" className="shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <img src="/images/daegu_logo.webp" alt="대구교육청" width={60} height={60} className="object-contain" />
+            <img src={mediaUrl("daegu_logo.webp")} alt="대구교육청" width={60} height={60} className="object-contain" />
           </a>
           <div className="flex flex-wrap justify-end gap-2">
             <button
