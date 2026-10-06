@@ -195,8 +195,7 @@ export default function LandingClient({ initialData, updatedTime, changelog }: P
       if (gradeStr === null) {
         return topics.some((gt: any) => gt.month === monthLabel);
       }
-      const recGrades = (item.recommended_grade || []).map((g: any) => String(g));
-      if (!recGrades.includes(gradeStr)) return false;
+      // 활용 주제가 있으면 권장 학년 목록과 무관하게 연계로 본다(권장 학년 누락 데이터 대비)
       return topics.some((gt: any) => String(gt.grade) === gradeStr && gt.month === monthLabel);
     };
 

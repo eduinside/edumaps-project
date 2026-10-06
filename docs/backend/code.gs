@@ -147,9 +147,8 @@ function getSheetDataAsObjects(sheet) {
  */
 function verifyPassword(password) {
   var userPwd = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD');
-  if (!userPwd) {
-    userPwd = 'edumaps123!'; // 초깃값
-  }
+  // 기본 비밀번호 없음: 스크립트 속성 ADMIN_PASSWORD가 없으면 관리자 기능을 막는다.
+  if (!userPwd) return false;
   return password === userPwd;
 }
 

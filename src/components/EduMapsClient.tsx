@@ -755,7 +755,7 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
                 {selectedResource.type === "OFFLINE" && (
                   <button
                     onClick={() => {
-                      const url = `https://map.kakao.com/link/to/${selectedResource.title},${selectedResource.location.lat},${selectedResource.location.lng}`;
+                      const url = `https://map.kakao.com/link/to/${encodeURIComponent(selectedResource.title)},${selectedResource.location.lat},${selectedResource.location.lng}`;
                       window.open(url, '_blank');
                     }}
                     className="flex items-center justify-center gap-3 py-4 bg-emerald-500 text-white rounded-[1.5rem] text-sm font-black hover:bg-emerald-400 transition-all shadow-xl active:scale-95 shadow-emerald-100 dark:shadow-emerald-900/30"
