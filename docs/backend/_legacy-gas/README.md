@@ -1,3 +1,5 @@
+> ⚠️ **보관용(2026.10 폐기).** 데이터 정본은 D1로 이관되었습니다 → [데이터 운영 가이드](../../data/README.md). 아래는 이전 방식 기록입니다.
+
 # EduMaps Backend Guide (Google Apps Script)
 
 EduMaps의 데이터는 구글 스프레드시트에서 관리됩니다.
