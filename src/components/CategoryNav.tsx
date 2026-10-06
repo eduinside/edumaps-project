@@ -1,62 +1,34 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { MapPin, MonitorPlay, GraduationCap, Info } from "lucide-react";
 
 interface Props {
   onHowTo: () => void;
 }
 
+const tile =
+  "group flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand dark:border-slate-800 dark:bg-slate-900";
+
+const LINKS = [
+  { href: "/visitmap", label: "체험학습", Icon: MapPin, accent: "text-emerald-600 dark:text-emerald-400" },
+  { href: "/online", label: "온라인", Icon: MonitorPlay, accent: "text-sky-600 dark:text-sky-400" },
+  { href: "/roadmap", label: "학년별 로드맵", Icon: GraduationCap, accent: "text-violet-600 dark:text-violet-400" },
+];
+
 export default function CategoryNav({ onHowTo }: Props) {
-  const router = useRouter();
-
-  const items = [
-    {
-      key: "visitmap",
-      label: "체험학습",
-      Icon: MapPin,
-      accent: "text-emerald-500",
-      hover: "hover:border-emerald-200 dark:hover:border-emerald-700",
-      onClick: () => router.push("/visitmap"),
-    },
-    {
-      key: "online",
-      label: "온라인",
-      Icon: MonitorPlay,
-      accent: "text-sky-500",
-      hover: "hover:border-sky-200 dark:hover:border-sky-700",
-      onClick: () => router.push("/online"),
-    },
-    {
-      key: "roadmap",
-      label: "학년별 로드맵",
-      Icon: GraduationCap,
-      accent: "text-violet-500",
-      hover: "hover:border-violet-200 dark:hover:border-violet-700",
-      onClick: () => router.push("/roadmap"),
-    },
-    {
-      key: "howto",
-      label: "이용방법",
-      Icon: Info,
-      accent: "text-amber-500",
-      hover: "hover:border-amber-200 dark:hover:border-amber-700",
-      onClick: onHowTo,
-    },
-  ];
-
   return (
-    <nav aria-label="바로가기" className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3">
-      {items.map(({ key, label, Icon, accent, hover, onClick }) => (
-        <button
-          key={key}
-          onClick={onClick}
-          className={`group min-h-[88px] flex flex-col items-center justify-center gap-2 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all ${hover}`}
-        >
-          <Icon className={`w-7 h-7 ${accent} group-hover:scale-110 transition-transform`} strokeWidth={1.75} />
-          <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-200">{label}</span>
-        </button>
+    <nav aria-label="바로가기" className="mt-2 grid grid-cols-2 gap-3 md:grid-cols-4">
+      {LINKS.map(({ href, label, Icon, accent }) => (
+        <Link key={href} href={href} className={tile}>
+          <Icon className={`h-7 w-7 ${accent} transition-transform group-hover:scale-110`} strokeWidth={1.75} aria-hidden />
+          <span className="text-sm font-bold text-slate-800 dark:text-slate-100">{label}</span>
+        </Link>
       ))}
+      <button type="button" onClick={onHowTo} className={tile}>
+        <Info className="h-7 w-7 text-amber-600 transition-transform group-hover:scale-110 dark:text-amber-400" strokeWidth={1.75} aria-hidden />
+        <span className="text-sm font-bold text-slate-800 dark:text-slate-100">이용방법</span>
+      </button>
     </nav>
   );
 }

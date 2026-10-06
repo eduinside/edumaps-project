@@ -52,3 +52,6 @@ next-env.d.ts
 .wrangler/
 wrangler.toml
 
+
+# Cloudflare Pages Functions 로컬 변수
+.dev.vars

@@ -1,28 +1,48 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* 디자인 토큰: 브랜드 초록과 글꼴을 한곳에서 정의한다. 다크 모드는 시스템 설정을 따른다. */
+@theme {
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --color-brand: #059669;
+  --color-brand-hover: #047857;
+  --color-brand-soft: #ecfdf5;
+  --color-brand-soft-dark: rgb(6 78 59 / 0.35);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #020617;
+    --foreground: #e2e8f0;
   }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* 움직임 줄이기 설정을 존중한다 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @layer utilities {
@@ -33,27 +53,51 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
-  }
 
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
   @media (prefers-color-scheme: dark) {
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #475569;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #64748b;
+    .custom-scrollbar {
+      scrollbar-color: #475569 transparent;
     }
   }
+}
+
+/* 지도 마커(카카오 CustomOverlay) — DOM을 직접 만들기 때문에 전역 클래스로 둔다 */
+.edumaps-marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 2.5px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.edumaps-marker > span {
+  transform: rotate(45deg);
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #fff;
+}
+.edumaps-marker:hover,
+.edumaps-marker:focus-visible {
+  transform: rotate(-45deg) scale(1.15);
+  outline: none;
+}
+.edumaps-marker[aria-current="true"] {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.6), 0 4px 10px rgb(0 0 0 / 0.35);
+}
+@keyframes edumaps-pulse {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
 }

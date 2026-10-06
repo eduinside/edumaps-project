@@ -1,92 +1,287 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
-import Image from "next/image";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { Map, MapPin, MonitorPlay, BookOpen, X, Info, ChevronRight, ChevronLeft, ExternalLink, Navigation, History, Search, LocateFixed } from "lucide-react";
-import MapComponent, { MapHandle } from "./MapComponent";
-import HowToModal from "./HowToModal";
-import { renderRichText } from "../lib/richText";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, LocateFixed } from "lucide-react";
+import type { ChangelogEntry, Resource } from "../lib/resourceTypes";
+import { GRADES, PLACE_THEMES, DEFAULT_PLACE_COLOR, REGIONS, TABS, distanceKm, hasCoords, type TabKey } from "../lib/catalog";
 import { trackResourceStat } from "../lib/trackResourceStat";
-import { mediaUrl } from "../lib/media";
+import MapComponent, { type Insets, type MapHandle } from "./MapComponent";
+import HowToModal from "./HowToModal";
+import UrlSync from "./UrlSync";
+import Chip from "./ui/Chip";
+import Dialog from "./ui/Dialog";
+import MapHeader from "./map/MapHeader";
+import ResourceListItem from "./map/ResourceListItem";
+import ResourceDetail from "./map/ResourceDetail";
+import OnlineBoard from "./map/OnlineBoard";
 
 interface Props {
-  initialData: any[];
+  tab: TabKey;
+  initialData: Resource[];
   updatedTime: string;
-  changelog?: { date: string; text: string }[];
+  changelog?: ChangelogEntry[];
 }
 
-const categoryColorMap: Record<string, { border: string; bg: string; text: string; bgLight: string }> = {
-  "언어": { border: "#fb7185", bg: "#f43f5e", text: "#e11d48", bgLight: "#ffe4e6" },
-  "수리": { border: "#fb923c", bg: "#f97316", text: "#d97706", bgLight: "#fed7aa" },
-  "디지털": { border: "#34d399", bg: "#10b981", text: "#059669", bgLight: "#d1fae5" },
-  "외국어": { border: "#60a5fa", bg: "#3b82f6", text: "#1d4ed8", bgLight: "#dbeafe" },
-  "문화": { border: "#818cf8", bg: "#4f46e5", text: "#3730a3", bgLight: "#e0e7ff" },
-  "더 알아보기": { border: "#c084fc", bg: "#a855f7", text: "#7e22ce", bgLight: "#f3e8ff" },
+type Snap = "peek" | "half" | "full";
+const NEARBY_LIMIT = 10;
+const LOCATION_KEY = "edumaps_userLocation";
+
+// 모바일(가로 768px 미만) 여부. 정적 HTML은 데스크톱 기준으로 그리고 브라우저에서 맞춘다.
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return mobile;
+}
+
+// 창 높이(하단 시트 단계 계산용)
+function useViewportHeight() {
+  const [vh, setVh] = useState(800);
+  useEffect(() => {
+    const update = () => setVh(window.innerHeight);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return vh;
+}
+
+// 요소 높이를 따라간다(하단 시트·상세 높이만큼 지도 중심을 올리기 위해)
+function useHeight<T extends HTMLElement>() {
+  const [el, setEl] = useState<T | null>(null);
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    if (!el) return;
+    const ro = new ResizeObserver(() => setHeight(el.getBoundingClientRect().height));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [el]);
+  return [setEl, height] as const;
+}
+
+const firstTopicGrade = (r: Resource) => {
+  const grades = (r.grade_topics || []).map((gt) => gt.grade).sort((a, b) => a - b);
+  return grades[0] ?? null;
 };
 
-const getCategoryColor = (category: string | null) => {
-  return category && categoryColorMap[category] ? categoryColorMap[category] : { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" };
-};
-
-export default function EduMapsClient({ initialData, updatedTime, changelog }: Props) {
+export default function EduMapsClient({ tab, initialData, updatedTime, changelog }: Props) {
   const router = useRouter();
-  const params = useParams();
-  const searchParams = useSearchParams();
+  const isMobile = useIsMobile();
+  const vh = useViewportHeight();
+  const isMapTab = tab !== "online";
 
-  // URL 경로에 따른 활성 탭 설정 (visitmap, online, roadmap)
-  const activeTab = useMemo(() => {
-    const tab = params.tab as string;
-    if (tab === "online") return "ONLINE";
-    if (tab === "roadmap") return "GRADE";
-    return "OFFLINE";
-  }, [params.tab]);
-
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [selectedResource, setSelectedResource] = useState<any | null>(null);
-  const [centerOn, setCenterOn] = useState<{ lat: number, lng: number } | null>(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [headerQuery, setHeaderQuery] = useState("");
+  const [region, setRegion] = useState<string | null>(null);
+  const [onlineCategory, setOnlineCategory] = useState<string | null>(null);
+  const [onlineGrade, setOnlineGrade] = useState<number | null>(null);
+  const [nearbyMode, setNearbyMode] = useState(false);
+  // 세션 동안 내 위치를 기억한다(이 기기 안에서만). 정적 HTML 렌더에는 쓰이지 않는 값이라 바로 읽어도 된다.
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(() => {
     if (typeof window === "undefined") return null;
-    try { const s = sessionStorage.getItem("edumaps_userLocation"); return s ? JSON.parse(s) : null; } catch { return null; }
+    try {
+      const saved = sessionStorage.getItem(LOCATION_KEY);
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
   });
-  const [nearbyMode, setNearbyMode] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [locError, setLocError] = useState("");
+  const [centerOn, setCenterOn] = useState<{ lat: number; lng: number; key: number } | null>(null);
+  const [panelOpen, setPanelOpen] = useState(true);
+  const [snap, setSnap] = useState<Snap>("half");
+  const [dragHeight, setDragHeight] = useState<number | null>(null);
+  const [howToOpen, setHowToOpen] = useState(false);
+  // 온라인 탭으로 처음 들어오면 지도를 만들지 않는다. 지도 탭을 한 번 거치면 숨긴 채로 유지해 다시 만들지 않는다.
+  const [mapMounted, setMapMounted] = useState(isMapTab);
 
-  useEffect(() => {
-    if (userLocation) sessionStorage.setItem("edumaps_userLocation", JSON.stringify(userLocation));
-  }, [userLocation]);
+  const mapRef = useRef<MapHandle>(null);
+  const pushedDetailRef = useRef(false);
+  const trackedIdRef = useRef<string | null>(null);
+  const dragState = useRef<{ startY: number; startH: number; moved: boolean } | null>(null);
+  const [sheetRef, sheetHeight] = useHeight<HTMLElement>();
+  const [detailRef, detailHeight] = useHeight<HTMLElement>();
 
-  const headerSearchResults = useMemo(() => {
-    const q = headerQuery.trim().toLowerCase();
-    if (!q) return [];
-    return initialData.filter((item: any) => {
-      const haystack = [item.title, item.description, item.category, ...(item.tags || [])]
-        .filter(Boolean).join(" ").toLowerCase();
-      return haystack.includes(q);
-    }).slice(0, 8);
-  }, [headerQuery, initialData]);
+  const byId = useMemo(() => new Map(initialData.map((r) => [String(r.id), r])), [initialData]);
+  const selectedResource = selectedId ? byId.get(selectedId) ?? null : null;
 
-  const getDistanceKm = (lat1: number, lng1: number, lat2: number, lng2: number) => {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  if (isMapTab && !mapMounted) setMapMounted(true);
+
+  // 탭이 바뀌면 필터를 초기화한다(같은 컴포넌트가 유지되므로 렌더 중에 이전 탭과 비교)
+  const [prevTab, setPrevTab] = useState(tab);
+  if (prevTab !== tab) {
+    setPrevTab(tab);
+    setRegion(null);
+    setNearbyMode(false);
+    setOnlineCategory(null);
+    setOnlineGrade(null);
+    setLocError("");
+  }
+
+  const centerTo = useCallback((r: Resource) => {
+    if (hasCoords(r)) setCenterOn({ lat: r.location.lat, lng: r.location.lng, key: Date.now() });
+  }, []);
+
+  // 주소(?id=&grade=)가 상세의 정본이다: 뒤로가기로 상세가 닫히고, 주소를 그대로 공유할 수 있다.
+  const handleUrl = useCallback(
+    (params: URLSearchParams) => {
+      const id = params.get("id");
+      const gradeParam = params.get("grade");
+      const grade = gradeParam ? parseInt(gradeParam, 10) : null;
+      if (grade && grade >= 1 && grade <= 6) setSelectedGrade(grade);
+      if (!id) {
+        setSelectedId(null);
+        pushedDetailRef.current = false;
+        trackedIdRef.current = null;
+        return;
+      }
+      const resource = byId.get(id);
+      if (!resource) return;
+      setSelectedId(id);
+      if (trackedIdRef.current !== id) {
+        trackedIdRef.current = id;
+        trackResourceStat(resource.id, "click");
+        centerTo(resource);
+      }
+      if (tab === "roadmap" && !grade) {
+        setSelectedGrade((g) => (g !== null && resource.grade_topics?.some((gt) => gt.grade === g) ? g : firstTopicGrade(resource)));
+      }
+    },
+    [byId, tab, centerTo]
+  );
+
+  const writeUrl = (params: URLSearchParams, mode: "push" | "replace") => {
+    const qs = params.toString();
+    const url = `${window.location.pathname}${qs ? `?${qs}` : ""}`;
+    if (mode === "push") window.history.pushState(null, "", url);
+    else window.history.replaceState(null, "", url);
   };
 
-  const handleNearbyToggle = () => {
+  // 목록·마커·검색 어디서 고르든 같은 경로로 연다(로드맵이면 학년도 함께 맞춘다)
+  const openResource = (r: Resource) => {
+    const params = new URLSearchParams();
+    params.set("id", r.id);
+    if (tab === "roadmap") {
+      const grade = selectedGrade !== null && r.grade_topics?.some((gt) => gt.grade === selectedGrade) ? selectedGrade : firstTopicGrade(r);
+      if (grade) {
+        params.set("grade", String(grade));
+        setSelectedGrade(grade);
+      }
+    }
+    // 상세가 이미 열려 있으면 기록을 쌓지 않고 바꾼다 → 뒤로가기 한 번이면 닫힌다
+    const mode = selectedId && pushedDetailRef.current ? "replace" : "push";
+    writeUrl(params, mode);
+    if (mode === "push") pushedDetailRef.current = true;
+    setSelectedId(r.id);
+    if (trackedIdRef.current !== r.id) {
+      trackedIdRef.current = r.id;
+      trackResourceStat(r.id, "click");
+    }
+    centerTo(r);
+  };
+
+  const closeDetail = () => {
+    if (pushedDetailRef.current) {
+      pushedDetailRef.current = false;
+      window.history.back();
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      params.delete("id");
+      writeUrl(params, "replace");
+    }
+    setSelectedId(null);
+  };
+
+  const changeDetailGrade = (grade: number) => {
+    setSelectedGrade(grade);
+    const params = new URLSearchParams(window.location.search);
+    params.set("grade", String(grade));
+    writeUrl(params, "replace");
+  };
+
+  // ESC로 지도 탭의 상세를 닫는다(온라인 탭은 Dialog가 처리)
+  useEffect(() => {
+    if (!selectedResource || !isMapTab) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !howToOpen) closeDetail();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedResource, isMapTab, howToOpen]);
+
+  const changeTab = (next: TabKey, query = "") => {
+    pushedDetailRef.current = false;
+    setSelectedId(null);
+    if (next !== "roadmap") setSelectedGrade(null);
+    router.push(`/${next}${query ? `?${query}` : ""}`);
+  };
+
+  const pickSearchResult = (r: Resource) => {
+    if (r.type === "OFFLINE" ? tab === "visitmap" : tab === "online") openResource(r);
+    else changeTab(r.type === "OFFLINE" ? "visitmap" : "online", `id=${r.id}`);
+  };
+
+  const listResources = useMemo(() => {
+    if (tab === "visitmap") {
+      let list = initialData.filter((r) => r.type === "OFFLINE" && (!region || r.category === region));
+      if (nearbyMode && userLocation) {
+        list = [...list]
+          .filter(hasCoords)
+          .sort((a, b) => distanceKm(userLocation, a.location) - distanceKm(userLocation, b.location))
+          .slice(0, NEARBY_LIMIT);
+      }
+      return list;
+    }
+    if (tab === "roadmap") {
+      const list = initialData.filter((r) => (r.grade_topics?.length ?? 0) > 0 && (selectedGrade === null || r.grade_topics.some((gt) => gt.grade === selectedGrade)));
+      if (selectedGrade === null) return list;
+      // 활용 시트 순서(usage_index)를 존중해 정렬
+      const order = (r: Resource) => r.grade_topics.find((gt) => gt.grade === selectedGrade)?.usage_index ?? 9999;
+      return [...list].sort((a, b) => order(a) - order(b));
+    }
+    return [];
+  }, [tab, initialData, region, nearbyMode, userLocation, selectedGrade]);
+
+  // 지도에는 필터 결과를, 상세가 열려 있으면 그 장소도 함께 표시
+  const mapResources = useMemo(() => {
+    if (!isMapTab) return [];
+    if (selectedResource && selectedResource.type === "OFFLINE" && !listResources.includes(selectedResource)) return [...listResources, selectedResource];
+    return listResources;
+  }, [isMapTab, listResources, selectedResource]);
+
+  // 지역 선택·내 근처 시 해당 장소들이 보이도록 지도를 맞춘다
+  useEffect(() => {
+    if (tab !== "visitmap") return;
+    if (nearbyMode && userLocation) {
+      mapRef.current?.fitToPoints([userLocation, ...listResources.slice(0, 5).map((r) => r.location)]);
+    } else if (region) {
+      const points = listResources.filter(hasCoords).map((r) => r.location);
+      if (points.length) mapRef.current?.fitToPoints(points);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [region, nearbyMode, userLocation, tab]);
+
+  const toggleNearby = () => {
+    setLocError("");
     if (nearbyMode) {
       setNearbyMode(false);
       return;
     }
     if (userLocation) {
+      setRegion(null);
       setNearbyMode(true);
-      setSelectedCategory(null);
+      return;
+    }
+    if (!navigator.geolocation) {
+      setLocError("이 브라우저는 위치 찾기를 지원하지 않아요. 지역을 골라 주세요.");
       return;
     }
     setLocating(true);
@@ -94,708 +289,278 @@ export default function EduMapsClient({ initialData, updatedTime, changelog }: P
       (pos) => {
         const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         setUserLocation(loc);
+        try {
+          sessionStorage.setItem(LOCATION_KEY, JSON.stringify(loc));
+        } catch {}
+        setRegion(null);
         setNearbyMode(true);
-        setSelectedCategory(null);
         setLocating(false);
       },
       () => {
-        alert("위치 정보를 가져올 수 없습니다. 브라우저 설정을 확인해 주세요.");
+        setLocError("위치를 가져오지 못했어요. 브라우저의 위치 권한을 확인하거나 지역을 골라 주세요.");
         setLocating(false);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
   };
 
-  const handleHeaderSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const q = headerQuery.trim();
-    if (!q) return;
-    setSearchOpen(false);
-    setHeaderQuery("");
-    router.push(`/?q=${encodeURIComponent(q)}`);
+  // ── 모바일 하단 시트: 접힘·반·전체 3단계, 손잡이를 끌거나 눌러 조절 ──
+  const snapHeights: Record<Snap, number> = { peek: 150, half: Math.round(vh * 0.46), full: Math.max(vh - 150, 320) };
+  const sheetHeightPx = dragHeight ?? snapHeights[snap];
+
+  const onHandleDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    dragState.current = { startY: e.clientY, startH: sheetHeightPx, moved: false };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onHandleMove = (e: React.PointerEvent) => {
+    const d = dragState.current;
+    if (!d) return;
+    const dy = d.startY - e.clientY;
+    if (Math.abs(dy) > 6) d.moved = true;
+    if (d.moved) setDragHeight(Math.min(Math.max(d.startH + dy, 110), snapHeights.full));
+  };
+  const onHandleUp = () => {
+    const d = dragState.current;
+    dragState.current = null;
+    if (!d) return;
+    if (!d.moved) {
+      setSnap((s) => (s === "peek" ? "half" : s === "half" ? "full" : "peek"));
+    } else if (dragHeight !== null) {
+      const nearest = (Object.keys(snapHeights) as Snap[]).reduce((a, b) => (Math.abs(snapHeights[a] - dragHeight) <= Math.abs(snapHeights[b] - dragHeight) ? a : b));
+      setSnap(nearest);
+    }
+    setDragHeight(null);
   };
 
-  const navigateToHeaderResult = (item: any) => {
-    setSearchOpen(false);
-    setHeaderQuery("");
-    const path = item.type === "OFFLINE" ? `/visitmap?id=${item.id}` : item.type === "ONLINE" ? `/online?id=${item.id}` : `/roadmap?id=${item.id}`;
-    router.push(path);
-  };
-
-  // URL 파라미터가 있을 때 초기 상태 설정
-  useEffect(() => {
-    const gradeParam = searchParams.get("grade");
-    const idParam = searchParams.get("id");
-
-    if (idParam) {
-      const resource = initialData.find(r => r.id.toString() === idParam);
-      if (resource) {
-        trackResourceStat(resource.id, "click");
-        setSelectedResource(resource);
-        if (gradeParam) {
-          setSelectedGrade(parseInt(gradeParam));
-        } else if (activeTab === "GRADE" && resource.grade_topics && resource.grade_topics.length > 0) {
-          setSelectedGrade(resource.grade_topics[0].grade);
-        }
-        if (resource.location?.lat && resource.location?.lng) {
-          setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
-        }
-      }
-    } else if (gradeParam) {
-      setSelectedGrade(parseInt(gradeParam));
-    }
-  }, [searchParams, initialData, activeTab]);
-
-  // 탭 변경 시 URL 이동 함수
-  const handleTabChange = (tab: string, extraParams?: string) => {
-    setSelectedCategory(null);
-    setSelectedResource(null);
-    setSelectedGrade(null);
-    router.push(`/${tab}${extraParams ? `?${extraParams}` : ""}`);
-  };
-
-  const filteredResources = useMemo(() => {
-    let result = initialData.filter(resource => {
-      if (activeTab === "OFFLINE") {
-        if (resource.type !== "OFFLINE") return false;
-        if (selectedCategory && resource.category !== selectedCategory) return false;
-        return true;
-      }
-      if (activeTab === "ONLINE") {
-        if (resource.type !== "ONLINE") return false;
-        if (selectedCategory && resource.category !== selectedCategory) return false;
-        return true;
-      }
-      if (activeTab === "GRADE") {
-        const hasRoadmap = resource.grade_topics && resource.grade_topics.length > 0;
-        if (selectedGrade === null) return hasRoadmap;
-        return resource.grade_topics?.some((gt: any) => gt.grade === selectedGrade);
-      }
-      return true;
-    });
-
-    // 로드맵(GRADE) 탭인 경우 활용 시트 데이터 순서(usage_index)를 존중하여 정렬
-    if (activeTab === "GRADE" && selectedGrade !== null) {
-      result = [...result].sort((a, b) => {
-        const aTopic = a.grade_topics?.find((gt: any) => gt.grade === selectedGrade);
-        const bTopic = b.grade_topics?.find((gt: any) => gt.grade === selectedGrade);
-
-        const aIndex = aTopic ? aTopic.usage_index : 9999;
-        const bIndex = bTopic ? bTopic.usage_index : 9999;
-
-        return aIndex - bIndex;
-      });
-    }
-
-    if (activeTab === "OFFLINE" && nearbyMode && userLocation) {
-      result = [...result].sort((a, b) => {
-        const aDist = a.location?.lat ? getDistanceKm(userLocation.lat, userLocation.lng, a.location.lat, a.location.lng) : Infinity;
-        const bDist = b.location?.lat ? getDistanceKm(userLocation.lat, userLocation.lng, b.location.lat, b.location.lng) : Infinity;
-        return aDist - bDist;
-      });
-    }
-
-    return result;
-  }, [activeTab, selectedGrade, selectedCategory, initialData, nearbyMode, userLocation]);
-
-  const sidebarResources = useMemo(() => {
-    if (activeTab === "OFFLINE" && nearbyMode) return filteredResources.slice(0, 10);
-    return filteredResources;
-  }, [filteredResources, activeTab, nearbyMode]);
-
-  const mapRef = useRef<MapHandle>(null);
+  // 지도를 가리는 영역: 모바일은 머리(두 줄)+하단 시트/상세, 데스크톱은 머리+왼쪽 목록+오른쪽 상세
+  const mapInsets = useMemo<Insets>(
+    () =>
+      isMobile
+        ? { top: 136, right: 0, bottom: selectedResource ? detailHeight : sheetHeight, left: 0 }
+        : { top: 88, right: selectedResource ? 436 : 0, bottom: 0, left: panelOpen ? 376 : 0 },
+    [isMobile, selectedResource, detailHeight, sheetHeight, panelOpen]
+  );
 
   useEffect(() => {
-    if (activeTab !== "OFFLINE" || !nearbyMode || !userLocation) return;
-    const nearest = filteredResources.slice(0, 5).filter((r: any) => r.location?.lat)
-      .map((r: any) => ({ lat: r.location.lat, lng: r.location.lng }));
-    mapRef.current?.fitToPoints([userLocation, ...nearest]);
-  }, [nearbyMode, userLocation, activeTab, filteredResources]);
+    mapRef.current?.relayout();
+  }, [isMobile]);
 
-  useEffect(() => {
-    if (activeTab !== "OFFLINE" || !selectedCategory || nearbyMode) return;
-    const points = filteredResources.filter((r: any) => r.location?.lat)
-      .map((r: any) => ({ lat: r.location.lat, lng: r.location.lng }));
-    if (points.length) mapRef.current?.fitToPoints(points);
-  }, [selectedCategory, activeTab]);
+  const tabInfo = TABS.find((t) => t.key === tab)!;
+  const topicTitleFor = (r: Resource) => (tab === "roadmap" && selectedGrade !== null ? r.grade_topics.find((gt) => gt.grade === selectedGrade)?.topic_title ?? null : null);
+
+  const detail = selectedResource && (
+    <ResourceDetail
+      resource={selectedResource}
+      tab={tab}
+      selectedGrade={selectedGrade}
+      onGradeChange={changeDetailGrade}
+      onClose={closeDetail}
+      onOpenRoadmap={(r, g) => changeTab("roadmap", `id=${r.id}&grade=${g}`)}
+    />
+  );
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 dark:bg-slate-900 font-sans overflow-hidden">
-      {/* Floating Header */}
-      <header className="absolute top-4 left-4 right-4 flex items-center justify-between px-6 py-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md shadow-lg rounded-full z-20">
-        <div className="flex items-center gap-2 cursor-pointer group relative" onClick={() => router.push('/')}>
-          <div className="relative w-9 h-9 transition-transform group-hover:scale-110">
-            <Image src={mediaUrl("daegu_logo.webp")} alt="에듀맵스 로고" fill className="object-contain rounded-full" />
-          </div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100 group-hover:text-emerald-600 transition-colors"><span className="hidden sm:inline">대구 </span>에듀맵스</h1>
-          <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-            검색과 월별 추천 자료를 확인하세요
-          </span>
-        </div>
-        <nav className="hidden sm:flex gap-2">
-          <div className="group relative">
-            <button
-              onClick={() => handleTabChange("visitmap")}
-              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "OFFLINE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
-            >
-              <MapPin className="w-4 h-4" /> 체험학습
-            </button>
-            <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-              대구 지역의 오프라인 현장체험 장소를 지도로 확인하세요
-            </span>
-          </div>
-          <div className="group relative">
-            <button
-              onClick={() => handleTabChange("online")}
-              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "ONLINE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
-            >
-              <MonitorPlay className="w-4 h-4" /> 온라인
-            </button>
-            <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-              에듀테크 자원과 유용한 온라인 학습 사이트 모음
-            </span>
-          </div>
-          <div className="group relative">
-            <button
-              onClick={() => handleTabChange("roadmap")}
-              className={`text-sm font-bold px-5 py-2.5 rounded-full flex items-center gap-2 transition-all ${activeTab === "GRADE" ? "text-white bg-emerald-500 shadow-lg scale-105" : "text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"}`}
-            >
-              <BookOpen className="w-4 h-4" /> 학년별 로드맵
-            </button>
-            <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-slate-800 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-[9999] shadow-xl">
-              교과 단원과 연계된 학년별 맞춤 학습 코스
-            </span>
-          </div>
-        </nav>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            {searchOpen ? (
-              <form onSubmit={handleHeaderSearch} className="flex items-center gap-1 animate-in fade-in zoom-in duration-200">
-                <input
-                  autoFocus
-                  type="text"
-                  value={headerQuery}
-                  onChange={(e) => setHeaderQuery(e.target.value)}
-                  placeholder="전체 자원 검색..."
-                  className="w-40 sm:w-56 px-4 py-2 text-sm rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:focus:ring-emerald-800 focus:border-emerald-400 transition-all"
-                />
-                {/* 모바일: 제출 시 랜딩 검색 결과 페이지로 이동 */}
-                <button type="submit" className="sm:hidden p-2.5 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors">
-                  <Search className="w-4 h-4" />
-                </button>
-                <button type="button" onClick={() => { setSearchOpen(false); setHeaderQuery(""); }} className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                  <X className="w-4 h-4" />
-                </button>
-                {/* 데스크탑: 드롭다운 자동완성 */}
-                {headerSearchResults.length > 0 && (
-                  <div className="hidden sm:block absolute right-0 top-full mt-2 w-80 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    {headerSearchResults.map((item: any) => (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => navigateToHeaderResult(item)}
-                        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors text-left group"
-                      >
-                        <div className="shrink-0 w-8 h-8 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700">
-                          <img src={item.image_url || mediaUrl("res_000.webp")} alt="" className="w-full h-full object-cover" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 truncate">{item.title}</p>
-                          <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{item.category}</p>
-                        </div>
-                        <span className={`shrink-0 text-[9px] font-bold px-2 py-0.5 rounded-full ${item.type === "OFFLINE" ? "bg-emerald-50 text-emerald-600" : "bg-blue-50 text-blue-600"}`}>
-                          {item.type === "OFFLINE" ? "체험" : "온라인"}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </form>
-            ) : (
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="p-2.5 text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-full transition-colors"
-                aria-label="검색"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-5 py-2.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors flex items-center gap-1.5"
-          >
-            <Info className="w-4 h-4" /> <span className="hidden sm:inline">이용방법</span>
-          </button>
-        </div>
-      </header>
+    <div className="relative h-dvh w-full overflow-hidden bg-slate-50 dark:bg-slate-950">
+      <Suspense fallback={null}>
+        <UrlSync onChange={handleUrl} />
+      </Suspense>
 
+      <MapHeader tab={tab} resources={initialData} onTabChange={(t) => changeTab(t)} onPickResult={pickSearchResult} onHowTo={() => setHowToOpen(true)} />
 
-      {/* Main Content Area */}
-      <main className="flex-1 relative w-full h-full">
-        {/* Full Screen Map */}
-        <div className="absolute inset-0 z-0">
+      {/* 지도 (온라인 탭에서는 숨김) */}
+      {mapMounted && (
+        <div className={`absolute inset-0 z-0 ${isMapTab ? "" : "invisible"}`} aria-hidden={!isMapTab}>
           <MapComponent
             ref={mapRef}
-            className="w-full h-full"
-            resources={activeTab === "ONLINE" ? [] : filteredResources}
+            resources={mapResources}
+            selectedId={selectedId}
             centerOn={centerOn}
-            onMarkerClick={(resource) => {
-              trackResourceStat(resource.id, "click");
-              setSelectedResource(resource);
-            }}
-            userLocation={activeTab === "OFFLINE" || activeTab === "GRADE" ? userLocation : null}
+            onMarkerClick={openResource}
+            userLocation={tab === "visitmap" ? userLocation : null}
+            insets={mapInsets}
           />
-          {activeTab === "ONLINE" && (
-            <div className="absolute inset-0 bg-white/85 dark:bg-slate-900/85 backdrop-blur-[12px] z-[1] transition-all duration-700" />
-          )}
         </div>
+      )}
 
-        {/* Floating Sidebar */}
-        <div className={`${activeTab === "ONLINE" ? "sm:hidden" : ""} absolute top-24 left-4 z-10 w-full max-w-[340px] transition-all duration-500 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+2rem)]'}`}>
-          <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col max-h-[calc(100vh-8rem)]">
-            <div className="p-7 pb-4">
-              {/* 모바일 전용 탭 네비게이션 */}
-              <div className="sm:hidden grid grid-cols-3 gap-1.5 mb-4 p-1.5 bg-slate-100 dark:bg-slate-700 rounded-2xl">
-                <button
-                  onClick={() => handleTabChange("visitmap")}
-                  className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
-                    activeTab === "OFFLINE"
-                      ? "bg-white dark:bg-slate-600 text-emerald-600 dark:text-emerald-400 shadow-sm"
-                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                  }`}
-                >
-                  <MapPin className="w-4 h-4" />
-                  <span>체험학습</span>
-                </button>
-                <button
-                  onClick={() => handleTabChange("online")}
-                  className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
-                    activeTab === "ONLINE"
-                      ? "bg-white dark:bg-slate-600 text-emerald-600 dark:text-emerald-400 shadow-sm"
-                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                  }`}
-                >
-                  <MonitorPlay className="w-4 h-4" />
-                  <span>온라인</span>
-                </button>
-                <button
-                  onClick={() => handleTabChange("roadmap")}
-                  className={`flex flex-col items-center gap-1 py-2 px-1 rounded-xl text-xs font-bold transition-all ${
-                    activeTab === "GRADE"
-                      ? "bg-white dark:bg-slate-600 text-emerald-600 dark:text-emerald-400 shadow-sm"
-                      : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
-                  }`}
-                >
-                  <BookOpen className="w-4 h-4" />
-                  <span>로드맵</span>
-                </button>
-              </div>
+      {/* 지도 범례: 마커 색이 뜻하는 대표 주제 */}
+      {tab === "visitmap" && (
+        <ul aria-label="지도 표시 색" className="absolute right-4 top-24 z-10 hidden flex-col gap-1 rounded-xl bg-white/90 px-3 py-2 text-xs font-semibold text-slate-700 shadow-md backdrop-blur dark:bg-slate-900/90 dark:text-slate-200 md:flex">
+          {[...PLACE_THEMES, { tag: "", label: "체험", color: DEFAULT_PLACE_COLOR }].map((t) => (
+            <li key={t.label} className="flex items-center gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ background: t.color }} aria-hidden />
+              {t.label}
+            </li>
+          ))}
+        </ul>
+      )}
 
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-sm font-bold text-slate-600 dark:text-slate-300">
-                    {activeTab === "OFFLINE" ? "체험학습" : activeTab === "ONLINE" ? "온라인" : "학년별 로드맵"}
-                  </h2>
-                  <span className="px-2.5 py-1 bg-emerald-500 text-white text-xs font-black rounded-full">{sidebarResources.length}</span>
-                </div>
-                <button onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-              </div>
+      {/* 온라인 탭 본문 */}
+      {tab === "online" && (
+        <main className="absolute inset-0 z-10 overflow-y-auto pt-[8.5rem] md:pt-24">
+          <OnlineBoard
+            resources={initialData}
+            category={onlineCategory}
+            grade={onlineGrade}
+            selectedId={selectedId}
+            onCategoryChange={setOnlineCategory}
+            onGradeChange={setOnlineGrade}
+            onSelect={openResource}
+          />
+        </main>
+      )}
 
-              <div className="flex flex-wrap gap-2">
-                {activeTab === "GRADE" && (
-                  <>
-                    <button onClick={() => { setSelectedGrade(null); mapRef.current?.resetView(); }} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
-                    {[1, 2, 3, 4, 5, 6].map(grade => (
-                      <button key={grade} onClick={() => setSelectedGrade(grade === selectedGrade ? null : grade)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedGrade === grade ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{grade}학년</button>
-                    ))}
-                  </>
-                )}
-                {activeTab === "OFFLINE" && (
-                  <>
-                    <button onClick={() => { setSelectedCategory(null); setNearbyMode(false); mapRef.current?.resetView(); }} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null && !nearbyMode ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
-                    <button onClick={handleNearbyToggle} className={`px-4 py-2 text-sm font-bold rounded-full transition-all flex items-center gap-1.5 ${nearbyMode ? "bg-blue-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>
-                      <LocateFixed className={`w-3.5 h-3.5 ${locating ? "animate-spin" : ""}`} />{locating ? "탐색중" : "내 근처"}
-                    </button>
-                    {["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군", "군위군"].map(region => (
-                      <button key={region} onClick={() => { setSelectedCategory(region === selectedCategory ? null : region); setNearbyMode(false); }} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === region ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{region}</button>
-                    ))}
-                  </>
-                )}
-                {activeTab === "ONLINE" && (
-                  <>
-                    <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 text-sm font-bold rounded-full transition-all ${selectedCategory === null ? "bg-emerald-500 text-white shadow-lg" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>전체</button>
-                    {["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"].map(cat => {
-                      const colors = getCategoryColor(cat);
-                      const isSelected = selectedCategory === cat;
-                      return (
-                        <button
-                          key={cat}
-                          onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)}
-                          className="px-4 py-2 text-sm font-bold rounded-full transition-all"
-                          style={{
-                            backgroundColor: isSelected ? colors.bg : colors.bgLight,
-                            color: isSelected ? "white" : colors.text,
-                            boxShadow: isSelected ? `0 10px 15px -3px ${colors.bg}40` : "none"
-                          }}
-                        >
-                          {cat}
-                        </button>
-                      );
-                    })}
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-4 pb-8 space-y-3 custom-scrollbar">
-              {sidebarResources.length === 0 ? (
-                <div className="py-20 text-center text-slate-400 dark:text-slate-500 text-sm">해당 조건의 자원이 없습니다.</div>
-              ) : (
-                sidebarResources.map((resource) => (
-                  <div
-                    key={resource.id}
-                    onClick={() => {
-                      trackResourceStat(resource.id, "click");
-                      setSelectedResource(resource);
-                      if (resource.location?.lat && resource.location?.lng) {
-                        setCenterOn({ lat: resource.location.lat, lng: resource.location.lng });
-                      }
-                      if (activeTab === "GRADE" && selectedGrade === null && resource.grade_topics?.length > 0) {
-                        const grades = resource.grade_topics.map((gt: any) => gt.grade).sort((a: number, b: number) => a - b);
-                        setSelectedGrade(grades[0]);
-                      }
-                    }}
-                    className={`group ${activeTab === "GRADE" ? "p-5" : "p-4"} rounded-3xl transition-all cursor-pointer border ${selectedResource?.id === resource.id ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 shadow-md" : "bg-white dark:bg-slate-800 border-transparent hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-sm"}`}
-                  >
-                    <div className="flex gap-4">
-                      <div className={`relative ${activeTab === "GRADE" ? "w-20 h-20" : "w-16 h-16"} rounded-2xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                        <Image src={resource.image_url || mediaUrl("res_000.webp")} alt={resource.title} fill className="object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className={`font-bold text-slate-800 dark:text-slate-100 ${activeTab === "GRADE" ? "text-base" : "text-sm"} group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1`}>{resource.title}</h3>
-                        <div className="flex flex-wrap gap-1 mt-1 mb-1">
-                          {(() => {
-                            const colors = activeTab === "GRADE"
-                              ? { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" }
-                              : getCategoryColor(resource.category);
-                            return <span className="text-[9px] font-bold px-1.5 py-0.5 rounded border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{resource.category}</span>;
-                          })()}
-                          {resource.tags?.map((tag: string) => (
-                            <span key={tag} className="text-[9px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">{tag}</span>
-                          ))}
-                        </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-1">{resource.description}</p>
-                        {nearbyMode && userLocation && resource.location?.lat && (
-                          <span className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-blue-500">
-                            <LocateFixed className="w-3 h-3" />
-                            {getDistanceKm(userLocation.lat, userLocation.lng, resource.location.lat, resource.location.lng).toFixed(1)}km
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Padlet-style layout for ONLINE tab on desktop */}
-        {activeTab === "ONLINE" && (
-          <div className="hidden sm:flex w-full absolute left-0 right-0 bottom-0 top-[100px] z-10 flex-row gap-4 px-4 py-6 overflow-x-auto">
-            {["언어", "수리", "디지털", "외국어", "문화", "더 알아보기"].map((category) => {
-              const categoryResources = filteredResources.filter(r => r.category === category);
-              const colors = getCategoryColor(category);
-              return (
-                <div key={category} className="flex-1 min-w-[280px] flex flex-col bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-[2rem] shadow-lg border overflow-hidden max-h-[calc(100vh-8rem)]" style={{ borderColor: colors.border }}>
-                  {/* Column Header */}
-                  <div className="px-5 py-4 border-b bg-gradient-to-r to-white/30" style={{ borderBottomColor: colors.border, backgroundImage: `linear-gradient(to right, ${colors.bgLight}, rgba(255,255,255,0.3))` }}>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold" style={{ color: colors.text }}>{category}</h3>
-                      <span className="px-2.5 py-1 text-white text-xs font-black rounded-full" style={{ backgroundColor: colors.bg }}>{categoryResources.length}</span>
-                    </div>
-                  </div>
-
-                  {/* Items List */}
-                  <div className="flex-1 overflow-y-auto px-4 pb-6 space-y-3 custom-scrollbar">
-                    {categoryResources.length === 0 ? (
-                      <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">항목 없음</div>
-                    ) : (
-                      categoryResources.map((resource) => (
-                        <div
-                          key={resource.id}
-                          onClick={() => {
-                            trackResourceStat(resource.id, "click");
-                            setSelectedResource(resource);
-                          }}
-                          className={`group p-3 rounded-2xl transition-all cursor-pointer border ${
-                            selectedResource?.id === resource.id
-                              ? "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 shadow-md"
-                              : "bg-white dark:bg-slate-800 border-transparent hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-sm"
-                          }`}
-                        >
-                          <div className="flex gap-3">
-                            <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-sm bg-gradient-to-br from-emerald-50 to-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                              <Image src={resource.image_url || mediaUrl("res_000.webp")} alt={resource.title} fill className="object-cover" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-bold text-slate-800 dark:text-slate-100 text-xs group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">{resource.title}</h4>
-                              <div className="flex flex-wrap gap-0.5 mt-1">
-                                {resource.tags && resource.tags.map((tag: string) => (
-                                  <span key={tag} className="text-[8px] font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded">{tag}</span>
-                                ))}
-                              </div>
-                              <p className="text-[9px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{resource.description}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Background overlay when modal is open */}
-        {selectedResource && activeTab === "ONLINE" && (
-          <div className="hidden sm:block absolute inset-0 z-20 bg-black/30 backdrop-blur-sm" onClick={() => setSelectedResource(null)} />
-        )}
-
-        {/* Sidebar Toggle Button (Hidden when sidebar is open) */}
-        {!isSidebarOpen && (
+      {/* 목록 패널: 모바일은 하단 시트, 데스크톱은 왼쪽 패널 */}
+      {isMapTab && (panelOpen || isMobile) && (
+        <aside
+          ref={sheetRef}
+          aria-label={`${tabInfo.label} 목록`}
+          style={{ "--sheet-h": `${sheetHeightPx}px` } as React.CSSProperties}
+          className={`fixed inset-x-0 bottom-0 z-20 flex h-[var(--sheet-h)] flex-col rounded-t-3xl border border-slate-200/70 bg-white shadow-[0_-8px_30px_rgb(0_0_0/0.12)] dark:border-slate-700/70 dark:bg-slate-900 md:absolute md:bottom-4 md:left-4 md:right-auto md:top-24 md:h-auto md:w-[360px] md:rounded-2xl md:shadow-xl ${dragHeight === null ? "transition-[height] duration-300" : ""} ${selectedResource && isMobile ? "invisible" : ""}`}
+        >
+          {/* 모바일 손잡이: 끌거나 눌러서 높이 조절 */}
           <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="absolute top-24 left-4 z-10 p-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-full shadow-xl text-emerald-500 hover:bg-white dark:hover:bg-slate-700 transition-all animate-in fade-in zoom-in"
+            type="button"
+            aria-label={snap === "full" ? "목록 접기" : "목록 더 펼치기"}
+            onPointerDown={onHandleDown}
+            onPointerMove={onHandleMove}
+            onPointerUp={onHandleUp}
+            onPointerCancel={onHandleUp}
+            className="flex h-7 w-full shrink-0 touch-none items-center justify-center md:hidden"
           >
-            <ChevronRight className="w-6 h-6" />
+            <span className="h-1.5 w-10 rounded-full bg-slate-300 dark:bg-slate-600" />
           </button>
-        )}
 
-        {/* Floating Detail Panel */}
-        {selectedResource && (
-          <div className={`absolute z-30 transition-all duration-500 ease-in-out bg-white dark:bg-slate-800 shadow-2xl border border-slate-100 dark:border-slate-700 overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300 ${activeTab === "ONLINE"
-            ? "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[calc(100%-3rem)] sm:max-w-[500px] sm:max-h-[calc(100vh-8rem)] shadow-emerald-200/50"
-            : "rounded-t-[2.5rem] rounded-b-none sm:rounded-[2.5rem] left-0 right-0 bottom-0 w-full max-h-[75vh] sm:bottom-auto sm:top-24 sm:left-auto sm:right-4 sm:w-[420px] sm:max-h-[85vh] slide-in-from-right-4"
-            }`}>
-            {/* Top Image Banner */}
-            <div className={`relative w-full shrink-0 ${activeTab === "ONLINE" ? "h-64" : "h-48"} bg-gradient-to-br from-emerald-50 to-slate-100 overflow-hidden flex items-center justify-center`}>
-              <Image src={selectedResource.image_url || mediaUrl("res_000.webp")} alt={selectedResource.title} fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <button onClick={() => setSelectedResource(null)} className="absolute top-6 right-6 p-2 bg-black/20 backdrop-blur-md rounded-full text-white hover:bg-black/40 transition-colors">
-                <X className="w-5 h-5" />
+          <div className="shrink-0 px-4 pb-2 md:pt-4">
+            <div className="mb-2 flex items-center gap-2">
+              <h1 className="text-base font-extrabold text-slate-900 dark:text-slate-50">{tabInfo.label}</h1>
+              <span className="rounded-full bg-brand px-2 py-0.5 text-xs font-bold text-white">{listResources.length}</span>
+              {nearbyMode && <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">가까운 {NEARBY_LIMIT}곳</span>}
+              <button
+                type="button"
+                onClick={() => setPanelOpen(false)}
+                aria-label="목록 패널 접기"
+                className="ml-auto hidden h-9 w-9 place-items-center rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 md:grid"
+              >
+                <ChevronLeft className="h-5 w-5" />
               </button>
-              <div className="absolute bottom-6 left-8">
-                <span className="px-3 py-1 bg-emerald-500 text-white text-[11px] font-black rounded-lg mb-3 inline-block shadow-lg shadow-emerald-500/30">
-                  {selectedResource.type === "OFFLINE" ? "현장체험" : "온라인 학습"}
-                </span>
-                <h2 className="text-2xl font-black text-white drop-shadow-xl tracking-tight">{selectedResource.title}</h2>
-              </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
-              <div className="flex flex-wrap gap-2">
-                {(() => {
-                  const colors = activeTab === "GRADE"
-                    ? { border: "#cbd5e1", bg: "#64748b", text: "#475569", bgLight: "#f1f5f9" }
-                    : getCategoryColor(selectedResource.category);
-                  return <span className="text-[11px] font-black px-3 py-1.5 rounded-full border" style={{ color: colors.text, backgroundColor: colors.bgLight, borderColor: colors.border }}>{selectedResource.category}</span>;
-                })()}
-                {selectedResource.tags?.map((tag: string) => (
-                  <span key={tag} className="text-[11px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-full">{tag}</span>
-                ))}
-              </div>
-
-              {((): React.ReactNode => {
-                const topics: any[] = selectedResource.grade_topics || [];
-                const matchingTopics = topics.filter((gt: any) => gt.grade === selectedGrade);
-                if (activeTab !== 'GRADE' || !selectedGrade || matchingTopics.length === 0) return (
-                <div className="space-y-4">
-                  <div className="bg-slate-50 dark:bg-slate-700/50 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-600">
-                    <p className="text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{selectedResource.description || "상세 설명이 등록되어 있지 않습니다."}</p>
-                  </div>
-
-                  {/* 온라인 탭 전용: 권장 학년 배지 */}
-                  {activeTab === "ONLINE" && selectedResource.recommended_grade?.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-2 px-1">
-                      <span className="text-xs font-bold text-slate-400 dark:text-slate-500">권장 학년</span>
-                      {(() => {
-                        const grades = selectedResource.recommended_grade.map((g: any) => String(g));
-                        const allGrades = grades.length === 6 && ['1', '2', '3', '4', '5', '6'].every(g => grades.includes(g));
-                        if (allGrades) {
-                          return (
-                            <span className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
-                              모든 학년
-                            </span>
-                          );
-                        }
-                        return grades.map((g: string) => (
-                          <span
-                            key={g}
-                            className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800"
-                          >
-                            {g}학년
-                          </span>
-                        ));
-                      })()}
-                    </div>
-                  )}
-                </div>
-                );
-                const uniqueGrades = Array.from(new globalThis.Map(topics.map((gt: any) => [gt.grade, gt])).values())
-                  .sort((a: any, b: any) => a.grade - b.grade);
-                return (
-                  <div className="bg-emerald-50/50 dark:bg-emerald-900/20 p-6 rounded-[2rem] border border-emerald-100 dark:border-emerald-800 space-y-5 shadow-inner">
-                    {uniqueGrades.length > 1 && (
-                      <>
-                        <div className="flex flex-wrap gap-1">
-                          {uniqueGrades.map((gt: any) => (
-                            <button
-                              key={gt.grade}
-                              onClick={() => setSelectedGrade(gt.grade)}
-                              className={`px-2.5 py-1 text-xs font-black rounded-full transition-all ${selectedGrade === gt.grade ? 'bg-emerald-500 text-white shadow-md' : 'bg-white dark:bg-slate-700 border border-emerald-200 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-slate-600'}`}
-                            >
-                              {gt.grade}학년
-                            </button>
-                          ))}
-                        </div>
-                        <hr className="border-emerald-100" />
-                      </>
-                    )}
-                    {matchingTopics.map((gt: any, idx: number) => (
-                      <div key={idx} className={idx > 0 ? 'pt-2 border-t border-emerald-100' : ''}>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white text-sm font-black shadow-lg shadow-emerald-500/20">{selectedGrade}</div>
-                            <span className="text-base font-black text-emerald-800 dark:text-emerald-300">학년{matchingTopics.length > 1 ? ` (${idx + 1}/${matchingTopics.length})` : ''}</span>
-                          </div>
-                          <div className="flex gap-1.5">
-                            {gt.subject && <span className="px-3 py-1.5 bg-white dark:bg-slate-700 border border-emerald-200 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold rounded-xl shadow-sm">{gt.subject}</span>}
-                            {gt.month && <span className="px-3 py-1.5 bg-white dark:bg-slate-700 border border-emerald-200 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold rounded-xl shadow-sm">{gt.month}</span>}
-                          </div>
-                        </div>
-                        <div className="mb-3">
-                          <h4 className="text-lg font-black text-slate-800 dark:text-slate-100 mb-2 leading-snug">&ldquo;{gt.topic_title}&rdquo;</h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium opacity-90">{renderRichText(gt.description)}</p>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="bg-white/70 dark:bg-slate-700/50 p-4 rounded-2xl border border-emerald-50 dark:border-slate-600">
-                            <h5 className="text-xs font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-2 mb-3"><Info className="w-4 h-4" /> 탐구 질문</h5>
-                            <ul className="space-y-2">
-                              {gt.inquiry_questions?.map((q: string, i: number) => (
-                                <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span>
-                                  <span>{renderRichText(q)}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div className="bg-white/70 dark:bg-slate-700/50 p-4 rounded-2xl border border-emerald-50 dark:border-slate-600">
-                            <h5 className="text-xs font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-2 mb-3"><History className="w-4 h-4" /> 사후 활동</h5>
-                            <ul className="space-y-2">
-                              {gt.post_activities?.map((a: string, i: number) => (
-                                <li key={i} className="text-[13px] text-slate-600 dark:text-slate-300 flex gap-2.5 font-medium">
-                                  <span className="text-emerald-400 font-black">•</span>
-                                  <span>{renderRichText(a)}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                );
-              })()}
-
-              {/* 방문형 탭: 권장 학년 뱃지 */}
-              {activeTab === "OFFLINE" && selectedResource.recommended_grade?.length > 0 && (
-                <div className="flex flex-wrap items-center gap-2 px-1">
-                  <span className="text-xs font-bold text-slate-400">권장 학년</span>
-                  {(() => {
-                    const grades = selectedResource.recommended_grade.map((g: any) => String(g));
-                    const allGrades = grades.length === 6 && ['1', '2', '3', '4', '5', '6'].every(g => grades.includes(g));
-                    if (allGrades) {
-                      return (
-                        <span className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
-                          모든 학년
-                        </span>
-                      );
-                    }
-                    return grades.map((g: string) => (
-                      <span
-                        key={g}
-                        className="px-3 py-1 text-xs font-black rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100"
-                      >
-                        {g}학년
-                      </span>
-                    ));
-                  })()}
-                </div>
-              )}
-            </div>
-
-            <div className="p-8 pt-0 mt-auto shrink-0 space-y-4">
-              <div className={`${selectedResource.type === "ONLINE" ? "flex flex-col" : "grid grid-cols-2"} gap-4`}>
-                {selectedResource.external_url && (
-                  <a
-                    href={selectedResource.external_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackResourceStat(selectedResource.id, "download")}
-                    className={`flex items-center justify-center gap-3 py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-[1.5rem] text-sm font-black hover:bg-slate-800 dark:hover:bg-slate-600 transition-all shadow-xl active:scale-95 ${selectedResource.type === "ONLINE" ? "w-full" : ""}`}
-                  >
-                    <ExternalLink className="w-5 h-5" /> 웹사이트
-                  </a>
-                )}
-                {selectedResource.type === "OFFLINE" && (
-                  <button
+            <div className="scrollbar-hide -mx-4 flex gap-1.5 overflow-x-auto px-4 py-0.5 md:mx-0 md:flex-wrap md:px-0" role="group" aria-label={tab === "visitmap" ? "지역" : "학년"}>
+              {tab === "visitmap" && (
+                <>
+                  <Chip
+                    size="sm"
+                    selected={region === null && !nearbyMode}
                     onClick={() => {
-                      const url = `https://map.kakao.com/link/to/${encodeURIComponent(selectedResource.title)},${selectedResource.location.lat},${selectedResource.location.lng}`;
-                      window.open(url, '_blank');
+                      setRegion(null);
+                      setNearbyMode(false);
+                      mapRef.current?.resetView();
                     }}
-                    className="flex items-center justify-center gap-3 py-4 bg-emerald-500 text-white rounded-[1.5rem] text-sm font-black hover:bg-emerald-400 transition-all shadow-xl active:scale-95 shadow-emerald-100 dark:shadow-emerald-900/30"
                   >
-                    <Navigation className="w-5 h-5" /> 길찾기
-                  </button>
-                )}
-              </div>
-
-              {(activeTab === "OFFLINE" || activeTab === "ONLINE") && selectedResource.grade_topics && selectedResource.grade_topics.length > 0 && (
-                (() => {
-                  const sortedTopics = [...selectedResource.grade_topics].sort((a: any, b: any) => a.grade - b.grade);
-                  return (
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 px-1">
-                        <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
-                        <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">학년별 로드맵</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {sortedTopics.map((gt: any) => (
-                          <button
-                            key={gt.grade}
-                            onClick={() => handleTabChange("roadmap", `id=${selectedResource.id}&grade=${gt.grade}`)}
-                            className="flex-1 min-w-[80px] flex flex-col items-center gap-1 py-3 px-3 bg-gradient-to-br from-emerald-50 to-cyan-50 dark:from-emerald-900/30 dark:to-cyan-900/30 text-emerald-700 dark:text-emerald-400 border-2 border-emerald-200 dark:border-emerald-700 rounded-2xl text-xs font-black hover:from-emerald-100 hover:to-cyan-100 dark:hover:from-emerald-900/50 dark:hover:to-cyan-900/50 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all shadow-sm active:scale-95"
-                          >
-                            <span className="text-base font-black text-emerald-500">{gt.grade}학년</span>
-                            {gt.topic_title && <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 opacity-75 line-clamp-1 text-center">{gt.topic_title}</span>}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })()
+                    전체
+                  </Chip>
+                  <Chip size="sm" selected={nearbyMode} onClick={toggleNearby} selectedClass="bg-blue-600 text-white">
+                    <LocateFixed className={`h-3.5 w-3.5 ${locating ? "animate-spin" : ""}`} aria-hidden />
+                    {locating ? "찾는 중" : "내 근처"}
+                  </Chip>
+                  {REGIONS.map((r) => (
+                    <Chip
+                      key={r}
+                      size="sm"
+                      selected={region === r}
+                      onClick={() => {
+                        setRegion(region === r ? null : r);
+                        setNearbyMode(false);
+                      }}
+                    >
+                      {r}
+                    </Chip>
+                  ))}
+                </>
+              )}
+              {tab === "roadmap" && (
+                <>
+                  <Chip
+                    size="sm"
+                    selected={selectedGrade === null}
+                    onClick={() => {
+                      setSelectedGrade(null);
+                      mapRef.current?.resetView();
+                    }}
+                  >
+                    전체
+                  </Chip>
+                  {GRADES.map((g) => (
+                    <Chip key={g} size="sm" selected={selectedGrade === g} onClick={() => setSelectedGrade(selectedGrade === g ? null : g)}>
+                      {g}학년
+                    </Chip>
+                  ))}
+                </>
               )}
             </div>
+            {locError && (
+              <p role="alert" className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-[13px] text-amber-900 dark:bg-amber-950/50 dark:text-amber-200">
+                {locError}
+              </p>
+            )}
           </div>
-        )}
-      </main>
 
-      <HowToModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} updatedTime={updatedTime} changelog={changelog} />
+          <ul className="custom-scrollbar min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-contain px-2 pb-6">
+            {listResources.length === 0 ? (
+              <li className="py-16 text-center text-[15px] text-slate-500 dark:text-slate-400">해당 조건의 자원이 없습니다.</li>
+            ) : (
+              listResources.map((r) => (
+                <li key={r.id}>
+                  <ResourceListItem
+                    resource={r}
+                    active={selectedId === r.id}
+                    onSelect={openResource}
+                    topicTitle={topicTitleFor(r)}
+                    distance={nearbyMode && userLocation && hasCoords(r) ? distanceKm(userLocation, r.location) : null}
+                  />
+                </li>
+              ))
+            )}
+          </ul>
+        </aside>
+      )}
+
+      {/* 데스크톱: 접은 목록 다시 펼치기 */}
+      {isMapTab && !panelOpen && !isMobile && (
+        <button
+          type="button"
+          onClick={() => setPanelOpen(true)}
+          aria-label="목록 패널 펼치기"
+          className="absolute left-4 top-24 z-20 grid h-12 w-12 place-items-center rounded-full bg-white text-brand shadow-xl hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </button>
+      )}
+
+      {/* 상세: 지도 탭은 오른쪽 패널(모바일은 하단 시트), 온라인 탭은 가운데 창 */}
+      {isMapTab && selectedResource && (
+        <section
+          ref={detailRef}
+          role="dialog"
+          aria-labelledby="resource-detail-title"
+          className="fixed inset-x-0 bottom-0 z-40 flex max-h-[62dvh] flex-col overflow-hidden rounded-t-3xl border border-slate-200/70 bg-white shadow-[0_-8px_30px_rgb(0_0_0/0.18)] animate-in fade-in slide-in-from-bottom-8 dark:border-slate-700/70 dark:bg-slate-900 md:absolute md:bottom-auto md:left-auto md:right-4 md:top-24 md:max-h-[calc(100dvh-7rem)] md:w-[420px] md:rounded-2xl md:shadow-2xl md:slide-in-from-bottom-0 md:slide-in-from-right-4"
+        >
+          {detail}
+        </section>
+      )}
+
+      {tab === "online" && (
+        <Dialog
+          open={!!selectedResource}
+          onClose={closeDetail}
+          labelledBy="resource-detail-title"
+          className="max-w-lg max-md:mb-0 max-md:mt-auto max-md:w-full max-md:max-w-none max-md:rounded-b-none"
+        >
+          <div className="flex max-h-[min(88dvh,900px)] flex-col">{detail}</div>
+        </Dialog>
+      )}
+
+      <HowToModal isOpen={howToOpen} onClose={() => setHowToOpen(false)} updatedTime={updatedTime} changelog={changelog} />
     </div>
   );
 }

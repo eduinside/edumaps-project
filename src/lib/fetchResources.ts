@@ -1,9 +1,10 @@
 import rawData from "../data/resources.json";
+import type { ChangelogEntry, Resource } from "./resourceTypes";
 
-export type ChangelogEntry = { date: string; text: string };
+export type { ChangelogEntry };
 
 export type ResourcesPayload = {
-  items: any[];
+  items: Resource[];
   // 데이터 발행(GitHub 커밋) 시각. 배열 형태의 구버전 데이터에는 없으므로 null.
   generatedAt: string | null;
   // '최근 업데이트 내용' 항목. 시트에 없으면 빈 배열 → 컴포넌트가 기본값으로 폴백.
@@ -13,12 +14,13 @@ export type ResourcesPayload = {
 /**
  * 빌드 시점에 로컬 resources.json을 읽어 정적 페이지로 렌더링한다.
  *
- * 데이터는 GAS '발행' 버튼이 GitHub에 커밋 → Cloudflare Pages 자동 빌드로 갱신된다.
+ * 데이터는 D1(edumaps_*)에서 `npm run data:publish`로 생성·커밋 → Cloudflare Pages 자동 빌드로 갱신된다.
  * 신/구 두 형태를 모두 수용한다:
  *   - 신: { generatedAt, items: [...] }
  *   - 구: [...] (배열, generatedAt 없음 → 빌드 시각으로 폴백)
  */
 export async function fetchResources(): Promise<ResourcesPayload> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data = rawData as any;
 
   if (Array.isArray(data)) {
