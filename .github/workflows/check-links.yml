@@ -1,0 +1,41 @@
+# 월 1회 외부 링크·이미지 점검 → 문제가 있으면 이슈 "외부 링크 점검 결과" 생성/갱신
+# 스크립트는 Node 내장 기능만 사용하므로 npm ci 없이 실행
+name: check-links
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # 매월 1일 09:00 KST (00:00 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 링크 점검
+        id: check
+        run: node scripts/data/check-links.mjs --out link-report.md
+
+      - name: 이슈 생성 또는 갱신
+        if: steps.check.outputs.problems != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: 외부 링크 점검 결과
+        run: |
+          num=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number,title \
+            --jq "map(select(.title == env.TITLE)) | .[0].number // empty")
+          if [ -n "$num" ]; then
+            gh issue edit "$num" --body-file link-report.md
+            gh issue comment "$num" --body "$(date -u +%Y-%m-%d) 점검 결과로 본문을 갱신했습니다."
+          else
+            gh issue create --title "$TITLE" --body-file link-report.md
+          fi

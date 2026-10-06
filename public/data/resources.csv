@@ -1,0 +1,90 @@
+﻿id,type,title,category,tags,recommended_grade,description,lat,lng,external_url,image_url,topic_count
+res_011,ONLINE,초등 어휘싹,언어,영상자료|문제풀이,1|2|3|4,학년별 주요 어휘를 다섯 고개 놀이로 배우며 문해력을 키워요,,,https://ssac.dgedu.link/,https://dgedu.link/media/edumaps/res_011.webp,0
+res_012,ONLINE,초등 개념싹,언어,영상자료|문제풀이,3|4|5|6,"사회, 수학, 과학 교과서에 나오는 주요 개념을 익혀요",,,https://ssac.dgedu.link/,https://dgedu.link/media/edumaps/res_012.webp,0
+res_013,ONLINE,책열매,언어,로그인필요|문제풀이|자료검색,1|2|3|4|5|6,인공지능이 나를 위해 책을 추천하고 낱말 학습을 도와줘요,,,https://ireading.kr/index.do,https://dgedu.link/media/edumaps/res_013.webp,0
+res_014,ONLINE,국가기초학력지원포털,언어,로그인필요|문제풀이|자료검색,1|2|3|4|5|6,기초학습자료와 학습준비도 검사 도구를 제공해요,,,https://www.basics.go.kr/,https://dgedu.link/media/edumaps/res_014.webp,0
+res_015,ONLINE,다국어 동화,언어,영상자료|자료검색,1|2|3|4|5|6,다양한 언어의 동화 세상을 여행해 보세요,,,https://nlcy.go.kr/MANY/main/index.do,https://dgedu.link/media/edumaps/res_015.webp,0
+res_016,ONLINE,한국어기초사전,언어,자료검색,3|4|5|6,쉬운 뜻풀이로 우리말 어휘를 찾아보는 국립국어원 학습사전이에요,,,https://krdict.korean.go.kr/kor/mainAction,https://dgedu.link/media/edumaps/res_016.webp,0
+res_017,ONLINE,온용어,언어,자료검색,3|4|5|6,국립국어원 전문 분야 용어지식 플랫폼,,,https://kli.korean.go.kr/term?lang=kr,https://dgedu.link/media/edumaps/res_017.webp,0
+res_021,ONLINE,EBS MATH,수리,로그인필요|영상자료|문제풀이,3|4|5|6,다양한 콘텐츠로 재미있는 수학 학습을 제공해요,,,https://www.ebsmath.co.kr/,https://dgedu.link/media/edumaps/res_021.webp,0
+res_022,ONLINE,짜잔수학,수리,문제풀이,3|4|5|6,"학년, 학기, 단원, 난이도를 선택하면 수학 문제가 짜잔!",,,https://aig.edunet.net/,https://dgedu.link/media/edumaps/res_022.webp,0
+res_023,ONLINE,똑똑! 수학탐험대,수리,로그인필요|문제풀이,1|2|3|4|5|6,수학 실력을 진단하고 인공지능이 나에게 필요한 활동을 추천해요,,,https://www.toctocmath.kr/,https://dgedu.link/media/edumaps/res_023.webp,0
+res_024,ONLINE,알지오매스 키즈,수리,로그인필요|영상자료,1|2|3|4|5|6,"평면, 입체도형 등을 통해 수학적 사고력과 탐구력을 길러요",,,https://www.algeomath.kr/kids,https://dgedu.link/media/edumaps/res_024.webp,0
+res_025,ONLINE,애스크매스,수리,로그인필요|영상자료|문제풀이,1|2|3|4|5|6,"수학교육 소식, 수학 학습 진단과 다양한 콘텐츠를 체험해요",,,https://askmath.kosac.re.kr/main.do,https://dgedu.link/media/edumaps/res_025.webp,0
+res_026,ONLINE,매쓰포올,수리,문제풀이,1|2|3|4|5|6,무료로 제공되는 수학 학습지로 실력을 길러요,,,https://mathforall.kr/,https://dgedu.link/media/edumaps/res_026.webp,0
+res_027,ONLINE,일일수학,수리,문제풀이,1|2|3|4|5|6,교과서 진도에 맞춘 전학년 연산문제지를 무료로 프린트하여 풀 수 있어요,,,https://11math.com/,https://dgedu.link/media/edumaps/res_027.webp,0
+res_031,ONLINE,AI 디지털 교육자료,디지털,로그인필요|영상자료|문제풀이,3|4|5|6,가정에서도 AI 디지털 교육자료로 자기주도학습을 해요,,,https://www.edupath.kr/,https://dgedu.link/media/edumaps/res_031.webp,0
+res_032,ONLINE,코드닷오알지,디지털,로그인필요|영상자료|문제풀이,1|2|3|4|5|6,재미있는 활동을 통해 코딩의 기초를 쉽게 익혀요,,,https://code.org/ko/students,https://dgedu.link/media/edumaps/res_032.webp,0
+res_033,ONLINE,EBS 이솦,디지털,영상자료,1|2|3|4|5|6,온라인으로 다양한 소프트웨어 체험을 할 수 있는 SW교실,,,https://www.ebssw.kr/,https://dgedu.link/media/edumaps/res_033.webp,0
+res_034,ONLINE,엔트리,디지털,로그인필요|문제풀이|자료검색,1|2|3|4|5|6,상상한 것을 코딩을 통해 만들고 여러 사람들과 함께 공유해요,,,https://playentry.org/,https://dgedu.link/media/edumaps/res_034.webp,0
+res_035,ONLINE,소프트웨어야 놀자,디지털,영상자료|자료검색,1|2|3|4|5|6,SW의 기초부터 학습할 수 있는 다양한 영상을 제공해요,,,https://www.playsw.or.kr/,https://dgedu.link/media/edumaps/res_035.webp,0
+res_036,ONLINE,블록리 게임,디지털,문제풀이,3|4|5|6,블록코딩으로 놀며 프로그래밍의 원리를 배울 수 있어요,,,https://blockly.games/?lang=ko,https://dgedu.link/media/edumaps/res_036.webp,0
+res_041,ONLINE,AI 펭톡,외국어,로그인필요|영상자료|문제풀이,1|2|3|4|5|6,AI 펭수와 함께 하는 게임처럼 즐거운 영어 말하기,,,https://pengtalk-student.ebse.co.kr/,https://dgedu.link/media/edumaps/res_041.webp,0
+res_042,ONLINE,EBS Kids,외국어,영상자료|자료검색,1|2|3|4|5|6,이야기를 읽고 들으며 자연스럽게 키우는 영어 읽기 실력,,,https://www.youtube.com/@EBSKidsWorld/playlists,https://dgedu.link/media/edumaps/res_042.webp,0
+res_043,ONLINE,EBS English 펀리딩,외국어,로그인필요|영상자료|문제풀이,3|4|5|6,이야기를 읽고 들으며 자연스럽게 영어 읽기 실력을 키워요,,,https://www.ebse.co.kr/apps/funReading/funMain.do,https://dgedu.link/media/edumaps/res_043.webp,0
+res_044,ONLINE,Oxford OWL,외국어,로그인필요|문제풀이,1|2|3|4|5|6,수준별 책 읽기와 워크시트를 활용한 독후 활동으로 영어 읽기 정복,,,https://www.oxfordowl.co.uk/for-home/find-a-book/library-page,https://dgedu.link/media/edumaps/res_044.webp,0
+res_045,ONLINE,구글 Read Along,외국어,로그인필요|영상자료|문제풀이,1|2|3|4,"파닉스부터 읽기, 말하기, 퀴즈까지 차근차근 배워나가는 영어 학습",,,https://readalong.google.com/,https://dgedu.link/media/edumaps/res_045.webp,0
+res_046,ONLINE,스토리라인,외국어,영상자료|자료검색,1|2|3|4|5|6,유명 배우들이 영어 동화책을 읽어주는 영상을 볼 수 있어요,,,https://storylineonline.net/,https://dgedu.link/media/edumaps/res_046.webp,0
+res_051,ONLINE,얼씨구 국악여행,문화,영상자료,3|4|5|6,"소고, 단소, 소금의 연주 방법을 배워요",,,https://www.youtube.com/playlist?list=PL5hgB-lWdFZL1OT4HOfyVCKTZiLsnCuya,https://dgedu.link/media/edumaps/res_051.webp,0
+res_052,ONLINE,알쏭달쏭 음악감상,문화,영상자료,3|4|5|6,널리 활용되는 감상곡의 작곡가와 배경을 알아보아요,,,https://www.youtube.com/playlist?list=PL5hgB-lWdFZKCRMq1romg-iLfs0-kzGzA,https://dgedu.link/media/edumaps/res_052.webp,0
+res_053,ONLINE,두근두근 미술교실,문화,영상자료,3|4|5|6,미술 교과의 9가지 주제 관련 이론과 활동을 배워요,,,https://www.youtube.com/playlist?list=PL5hgB-lWdFZLtF02pLj1_iRLbWHRGAVU-,https://dgedu.link/media/edumaps/res_053.webp,0
+res_054,ONLINE,어린이 국악누리,문화,영상자료,1|2|3|4,국립국악원이 준비한 고품질 국악 콘텐츠를 활용해 보세요,,,https://academy.gugak.go.kr/open/children/main.do,https://dgedu.link/media/edumaps/res_054.webp,0
+res_055,ONLINE,구글 아트 앤 컬쳐,문화,영상자료|자료검색,1|2|3|4|5|6,"전세계 박물관, 미술관의 전시품을 손쉽게 살펴봐요",,,https://artsandculture.google.com,https://dgedu.link/media/edumaps/res_055.webp,0
+res_056,ONLINE,크롬 뮤직랩,문화,영상자료,1|2|3|4|5|6,음악을 재미있는 방법으로 배우고 만들 수 있어요,,,https://musiclab.chromeexperiments.com/,https://dgedu.link/media/edumaps/res_056.webp,1
+res_057,ONLINE,어린이민속사전,문화,자료검색,1|2|3|4|5|6,명절과 세시풍속을 배울 수 있어요,,,https://www.nfm.go.kr/kids/elecontents/index.do,https://dgedu.link/media/edumaps/res_057.webp,0
+res_058,ONLINE,국립고궁박물관 온라인박물관,문화,자료검색,1|2|3|4|5|6,조선왕실 유물을 온라인으로 만날 수 있어요,,,https://www.gogung.go.kr/onlinemuseum/main/main.do,https://dgedu.link/media/edumaps/res_058.webp,0
+res_061,ONLINE,대구교육포털 에듀나비,더 알아보기,로그인필요|영상자료|자료검색,1|2|3|4|5|6,대구교육 맞춤서비스를 제공하는 누리집,,,https://www.edunavi.kr/portal/main.do,https://dgedu.link/media/edumaps/res_061.webp,0
+res_062,ONLINE,대구학부모교육,더 알아보기,영상자료,1|2|3|4|5|6,자녀의 성장을 돕는 교육 정보와 학부모를 위한 교육 영상 자료,,,https://www.youtube.com/@대구학부모교육,https://dgedu.link/media/edumaps/res_062.webp,0
+res_063,ONLINE,메이커활동,더 알아보기,영상자료|자료검색,5|6,직접 만들며 실력 쑥쑥 메이커활동 기본 도구 사용법,,,https://www.youtube.com/playlist?list=PLPhnrj-tuZvw4g8HdI0rEqcGVGOGWmEcg,https://dgedu.link/media/edumaps/res_063.webp,0
+res_064,ONLINE,마음챙김 5분 명상,더 알아보기,영상자료,1|2|3|4|5|6,몸과 마음이 지칠 때 5분 투자 명상을 통해 집중력 쑥! 행복 쑥!,,,https://www.youtube.com/watch?v=XJ83FhVMJO4&list=PLhuVsVmRlLyXPBoydZ0m3hJEC0-rF0pgh,https://dgedu.link/media/edumaps/res_064.webp,0
+res_065,ONLINE,우리역사넷,더 알아보기,자료검색,5|6,고대부터 현대 역사까지 초등학생을 위한 우리 역사 이야기,,,https://contents.history.go.kr/front/newEh/main.do,https://dgedu.link/media/edumaps/res_065.webp,0
+res_066,ONLINE,주니어 커리어넷,더 알아보기,영상자료|문제풀이|자료검색,3|4|5|6,적성 검사로 나를 이해하고 전문 상담으로 꿈을 찾아봐요,,,https://www.career.go.kr/cloud/j/main/home,https://dgedu.link/media/edumaps/res_066.webp,0
+res_067,ONLINE,어린이 정부포털,더 알아보기,자료검색,3|4|5|6,대한민국 정부와 공공에서 제공하는 어린이 서비스를 모아두었어요,,,https://kids.gov.kr/,https://dgedu.link/media/edumaps/res_067.webp,0
+res_068,ONLINE,성평등가족부 어린이,더 알아보기,영상자료|문제풀이|자료검색,3|4|5|6,"우리 모두 평등해요 행복한 가족, 밝은 세상을 만들어요",,,https://www.mogef.go.kr/kids/index.jsp,https://dgedu.link/media/edumaps/res_068.webp,0
+res_069,ONLINE,에듀넷 실감형콘텐츠,더 알아보기,자료검색,3|4|5|6,실감형 콘텐츠로 다양한 학습주제를 체험할 수 있어요,,,https://www.edunet.net/webImmrsvConts/list/530,https://dgedu.link/media/edumaps/res_069.webp,0
+res_070,ONLINE,어린이 지도여행,더 알아보기,영상자료|문제풀이|자료검색,3|4|5|6,지도 속 숨어있는 재미있는 이야기 지도와 함께 여행을 떠나요,,,https://www.ngii.go.kr/child/content.do?sq=148,https://dgedu.link/media/edumaps/res_070.webp,0
+res_071,ONLINE,국토정보플랫폼,더 알아보기,자료검색,3|4|5|6,"지도 기반의 공간정보(통계, 역사, 도로 등)를 총망라한 사이트",,,https://map.ngii.go.kr/,https://dgedu.link/media/edumaps/res_071.webp,1
+res_072,ONLINE,대구지도포털,더 알아보기,자료검색,3|4|5|6,우리 지역을 2D·3D 지도와 항공사진 등으로 살펴보아요,,,https://gis.go.kr/intro.do,https://dgedu.link/media/edumaps/res_072.webp,0
+res_073,ONLINE,어린이 기상교실,더 알아보기,영상자료|자료검색,3|4|5|6,"날씨, 기후, 지진! 기상청과 함께 놀면서 배우는 날씨 이야기",,,https://www.kma.go.kr/kids/,https://dgedu.link/media/edumaps/res_073.webp,0
+res_074,ONLINE,기상청 기후변화과학,더 알아보기,영상자료|자료검색,3|4|5|6,기후변화와 기후위기 대응에 대해 익힐 수 있어요,,,https://www.climate.go.kr/edu/,https://dgedu.link/media/edumaps/res_074.webp,0
+res_111,OFFLINE,삼국유사테마파크,군위군,체험|관람|놀이|역사,1|2|3|4|5|6,삼국유사 전시·조형물 및 교육·체험 제공,36.1614561,128.6968859,https://gunwi3964.co.kr/gunwi/main.do,https://dgedu.link/media/edumaps/res_111.webp,0
+res_112,OFFLINE,사라온이야기마을,군위군,체험|관람|놀이|역사,1|2|3|4|5|6,조선 역사·지혜를 체험하는 세 가지 테마 마을 체험·교육·전시 제공,36.2363329,128.5673951,https://saraon.gunwi.go.kr:6450/,https://dgedu.link/media/edumaps/res_112.webp,0
+res_121,OFFLINE,낙동강승전기념관,남구,관람|역사,5|6,6.25 전쟁과 관련된 다양한 역사적 자료와 전시 제공,35.8271907,128.5887067,http://www.nakdongwar.or.kr/,https://dgedu.link/media/edumaps/res_121.webp,2
+res_122,OFFLINE,고산골공룡공원,남구,관람|생태,1|2|3|4|5|6,고산골 일대 1억년 전 중생대 백악기의 흔적을 볼 수 있는 곳,35.8294673,128.6037566,https://nam.daegu.kr/tour/index.do?menu_id=00003601,https://dgedu.link/media/edumaps/res_122.webp,3
+res_123,OFFLINE,앞산공원,남구,체험|관람|생태,1|2|3|4|5|6,대구에서 가장 큰 자연공원으로 대구를 대표하는 공원,35.828921,128.589141,https://tour.daegu.go.kr/index.do?menu_id=00002942&menu_link=/front/tour/tourMapsView.do?tourId=KOATTR_114,https://dgedu.link/media/edumaps/res_123.webp,0
+res_124,OFFLINE,대구도서관,남구,관람|문화예술,1|2|3|4|5|6,미래를 여는 지식문화공간 대구 최초의 직영·대표 도서관,35.8420817,128.5918751,https://library.daegu.go.kr/dglib/index.do,https://dgedu.link/media/edumaps/res_124.webp,0
+res_131,OFFLINE,대구수목원,달서구,체험|관람|생태,1|2|3|4|5|6,다채로운 식물을 살펴볼 수 있는 자연 생태 공간,35.80122,128.520284,https://www.daegu.go.kr/cts/index.do?menu_id=00000952&servletPath=%2Fcts,https://dgedu.link/media/edumaps/res_131.webp,5
+res_132,OFFLINE,대구인공지능교육센터,달서구,체험|관람|문화예술,1|2|3|4|5|6,인공지능을 중심으로 창의력을 기르는 교육 기관,35.853959,128.496238,https://www.dge.go.kr/dgai,https://dgedu.link/media/edumaps/res_132.webp,1
+res_133,OFFLINE,달서목재문화관,달서구,체험|관람|문화예술,1|2|3|4,목재 및 목재 제품에 관한 다양한 체험 공간,35.823416,128.557193,https://www.dalseowood.kr/index.do,https://dgedu.link/media/edumaps/res_133.webp,0
+res_134,OFFLINE,달서선사관,달서구,체험|관람|역사,1|2|3|4|5|6,선사시대 유물이 전시된 공간,35.8203011,128.5171133,https://dalseomuseum.kr/,https://dgedu.link/media/edumaps/res_134.webp,2
+res_135,OFFLINE,녹색에너지체험관,달서구,체험|관람|생태,1|2|3|4|5|6,다양한 에너지 및 에너지 절약에 대해 배울 수 있는 공간,35.83460480000001,128.4882897,https://dco.energy.or.kr/green_tk/,https://dgedu.link/media/edumaps/res_135.webp,1
+res_141,OFFLINE,달성화석박물관,달성군,체험|관람|생태|역사,1|2|3|4|5|6,여러 화석을 소장한 공립 화석 전문 박물관,35.6845561,128.4644605,https://fossilmuseum.dssiseol.or.kr/,https://dgedu.link/media/edumaps/res_141.webp,2
+res_142,OFFLINE,국립대구과학관,달성군,체험|관람|문화예술|생태,1|2|3|4|5|6,국내 최초 다양한 주제의 상설전시 및 과학 문화 체험,35.686998,128.465466,https://www.dnsm.or.kr/,https://dgedu.link/media/edumaps/res_142.webp,6
+res_143,OFFLINE,디아크문화관,달성군,관람|문화예술|생태,1|2|3|4|5|6,물과 자연과 문화가 오롯이 담긴 건축 예술품,35.8388375,128.4682031,https://www.riverguide.go.kr/kor/page.do?menuIdx=381,https://dgedu.link/media/edumaps/res_143.webp,1
+res_144,OFFLINE,달성습지생태학습관,달성군,체험|관람|생태,1|2|3|4|5|6,달성 습지 보전과 생태관광 활용을 위한 문화 확산 공간,35.8166414,128.4868747,https://dswetland.daegu.go.kr/index.do,https://dgedu.link/media/edumaps/res_144.webp,4
+res_145,OFFLINE,사문진역사공원,달성군,관람|생태,1|2|3|4,국내 최초 피아노 유입지로 여러 즐길거리가 있는 공원,35.811332,128.477695,https://www.dssiseol.or.kr/pages/sisul/page.html?mc=1058,https://dgedu.link/media/edumaps/res_145.webp,0
+res_146,OFFLINE,화원역사문화체험관,달성군,체험|관람|역사,1|2|3|4|5|6,낙동강·화원 역사를 미디어아트와 체험으로 즐기는 실내 복합문화공간,35.812803,128.480584,https://www.dssiseol.or.kr/pages/sisul/page.html?mc=1564,https://dgedu.link/media/edumaps/res_146.webp,0
+res_151,OFFLINE,대구섬유박물관,동구,체험|관람|문화예술|역사,1|2|3|4|5|6,섬유 관련 전시와 어린이체험실 운영,35.9189809,128.6399047,https://www.dtmuseum.org/main,https://dgedu.link/media/edumaps/res_151.webp,4
+res_152,OFFLINE,국립대구기상과학관,동구,체험|관람|생태,1|2|3|4|5|6,기상·기후에 대한 교육과 체험 운영,35.8782158,128.6539001,https://science.kma.go.kr/daegu/,https://dgedu.link/media/edumaps/res_152.webp,4
+res_153,OFFLINE,대구시민안전테마파크,동구,체험|관람|생태,1|2,각종 재난과 안전사고 예방을 위한 체험 운영,35.9891717,128.691943,https://www.daegu.go.kr/safe119/index.do,https://dgedu.link/media/edumaps/res_153.webp,2
+res_154,OFFLINE,봉무나비생태원,동구,체험|관람|생태,1|2|3,나비 및 곤충의 전시 및 체험 운영,35.9213461,128.6506826,https://dong.daegu.kr/nabipark/main.do,https://dgedu.link/media/edumaps/res_154.webp,2
+res_155,OFFLINE,대구방짜유기박물관,동구,체험|관람|문화예술|역사,1|2|3,방짜유기를 테마로 한 전문박물관,35.965647,128.700844,https://www.bangjja.or.kr/,https://dgedu.link/media/edumaps/res_155.webp,0
+res_161,OFFLINE,대구광역시교육청교육역사관,북구,체험|관람|놀이|역사,1|2|3|4|5|6,대구교육의 발자취와 소중한 교육 유산을 보존·계승하는 공간,35.897541,128.61209,https://www.dge.go.kr/dme/main.do,https://dgedu.link/media/edumaps/res_161.webp,1
+res_162,OFFLINE,경북대학교박물관,북구,체험|관람|문화예술|역사,3|4|5|6,대구·경북 지역 유물을 수집·보존·관리·전시,35.8887118,128.613693,https://museum.knu.ac.kr/,https://dgedu.link/media/edumaps/res_162.webp,0
+res_171,OFFLINE,서구어린이도서관,서구,체험|관람|문화예술,1|2|3|4|5|6,다양한 체험으로 상상력과 창의성을 키우는 문화·학습 허브,35.8743119,128.5463842,https://library.daegu.go.kr/seogulib/index.do,https://dgedu.link/media/edumaps/res_171.webp,0
+res_172,OFFLINE,이현공원,서구,체험|관람|생태|역사,1|2|3|4|5|6,자연 속 휴식과 생태체험을 즐길 수 있는 도심 공원,35.8732606,128.5436128,https://www.dgs.go.kr/portal/contents.do?mid=0402000000,https://dgedu.link/media/edumaps/res_172.webp,0
+res_181,OFFLINE,국립대구박물관,수성구,체험|관람|문화예술|역사,1|2|3|4|5|6,"대구·경북의 문화유산 보존, 전시, 교육 프로그램 운영",35.8456135,128.6379176,https://daegu.museum.go.kr/kor/index.do,https://dgedu.link/media/edumaps/res_181.webp,3
+res_182,OFFLINE,대구창의융합교육원,수성구,체험|관람|놀이,1|2|3|4|5|6,"재미있는 과학, 수학 체험 프로그램 제공",35.8450833,128.6270121,https://www.dge.go.kr/dicce/main.do,https://dgedu.link/media/edumaps/res_182.webp,4
+res_183,OFFLINE,대구어린이세상,수성구,체험|관람|문화예술|놀이,1|2|3|4|5|6,오감을 활용한 참여형 체험활동,35.8466356,128.6277986,https://dcw.daegu.go.kr/ko/page/main.do,https://dgedu.link/media/edumaps/res_183.webp,2
+res_184,OFFLINE,대구녹색학습원,수성구,체험|관람|생태,1|2|3|4|5|6,생태 체험 및 환경 보전 체험활동 제공,35.837091,128.701899,https://www.dge.go.kr/dggreen/main.do,https://dgedu.link/media/edumaps/res_184.webp,7
+res_185,OFFLINE,대구미술관,수성구,체험|관람|문화예술,1|2|3|4|5|6,재미있는 현대미술을 경험할 수 있는 문화 놀이터,35.827262,128.67447,https://daeguartmuseum.or.kr/,https://dgedu.link/media/edumaps/res_185.webp,0
+res_186,OFFLINE,대구아트웨이,수성구,체험|관람|문화예술,1|2|3|4|5|6,범어역 지하에서 다양한 문화예술 프로그램을 체험할 수 있는 공간,35.85901,128.626991,https://daeguartway.kr/,https://dgedu.link/media/edumaps/res_186.webp,0
+res_191,OFFLINE,대구예술발전소,중구,체험|관람|문화예술,1|2|3|4|5|6,실험적 예술 창작 및 미디어 아트 전시 공간 운영,35.8755076,128.5845613,https://www.daeguartfactory.kr/,https://dgedu.link/media/edumaps/res_191.webp,2
+res_192,OFFLINE,대구근대역사관,중구,관람|역사,5|6,대구 근현대사를 한눈에 조명할 수 있는 공간,35.8717871,128.5911694,https://www.dmhm.or.kr,https://dgedu.link/media/edumaps/res_192.webp,1
+res_193,OFFLINE,국채보상운동기념도서관,중구,체험|관람|문화예술|역사,4|5|6,우리말 이야기와 대구의 역사문화를 체험하며 배우는 참여형 공간,35.868464,128.6016669,https://library.daegu.go.kr/gukbo/index.do,https://dgedu.link/media/edumaps/res_193.webp,2
+res_194,OFFLINE,달성공원,중구,체험|관람|생태,1|2|3|4|5|6,대구에서 가장 오래된 도심공원으로 동물원도 운영. 공원 내 향토역사관 방문 가능,35.874004,128.5780991,https://tour.daegu.go.kr/index.do?menu_id=00002943&menu_link=/front/tour/tourMapsView.do?tourId=KOATTR_124,https://dgedu.link/media/edumaps/res_194.webp,1
+res_195,OFFLINE,향촌문화관,중구,체험|관람|문화예술|역사,3|4|5|6,대구 근대도시와 생활문화를 전시·체험으로 배우는 문화교육 공간,35.8733774,128.5941989,https://www.hyangchon.or.kr/,https://dgedu.link/media/edumaps/res_195.webp,2
+res_196,OFFLINE,서문시장,중구,체험|관람,1|2|3|4|5|6,대구를 대표하는 전통시장으로 다양한 먹거리와 시장 문화 체험,35.8688875,128.5807946,https://www.dtmsa.or.kr/tradition/21,https://dgedu.link/media/edumaps/res_196.webp,1
+res_197,OFFLINE,대구향교,중구,체험|관람|문화예술,3|4|5|6,600년 역사의 대구향교에서 배우는 성현의 지혜와 선비정신,35.859856,128.596012,http://www.daeguhyanggyo.org/,https://dgedu.link/media/edumaps/res_197.webp,0
+res_198,OFFLINE,대구약령시한의약박물관,중구,체험|관람|문화예술|역사,1|2|3|4|5|6,대구 한방의 역사를 알아보고 다양한 한방 체험을 할 수 있는 공간,35.868401,128.589868,https://www.daegu.go.kr/dgom/index.do,https://dgedu.link/media/edumaps/res_198.webp,0
+res_199,OFFLINE,한방의료체험타운,중구,체험|관람|문화예술|역사,1|2|3|4|5|6,대구약령시를 알리고 한의학을 쉽게 접할 수 있는 공간,35.868401,128.590941,http://kmeditown.go.kr/,https://dgedu.link/media/edumaps/res_199.webp,0

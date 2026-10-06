@@ -1,0 +1,17 @@
+{
+  // 에듀맵스 — 데이터 스크립트(scripts/data) 전용 설정. 사이트 자체는 100% 정적이며 런타임에 D1을 부르지 않는다.
+  // 저장소 루트에 두지 않는 이유: pages_build_output_dir가 있는 루트 설정은 CF Pages가 프로젝트 설정으로 읽어
+  // 대시보드의 환경변수·시크릿 관리 방식이 바뀌고, D1 바인딩이 Pages Function에 노출된다.
+  // 공유 D1 'edu-link-db'(edu-link·edu-kit과 같은 DB). 테이블은 edumaps_ 접두어만 사용(db/schema.sql).
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "edumaps",
+  "compatibility_date": "2026-10-01",
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "edu-link-db",
+      "database_id": "e5fa6f54-6063-48f9-9cf3-0517381dd005"
+    }
+  ]
+}
